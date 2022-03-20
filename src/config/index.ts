@@ -1,7 +1,7 @@
 import { chains, chainMap } from "./chains";
 import tokens from "./tokens";
 import constants from "./constants";
-import { ENV } from "types/environment";
+import { ENV } from "../types/environment";
 
 let hyphenBaseUrl;
 if (process.env.REACT_APP_ENV === ENV.production) {

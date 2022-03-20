@@ -1,11 +1,11 @@
-import { useHyphen } from "context/Hyphen";
-import { Status } from "hooks/useLoading";
+import { useHyphen } from "../../context/Hyphen";
+import { Status } from "../../hooks/useLoading";
 import Skeleton from "react-loading-skeleton";
 
 import React from "react";
-import { useTransaction, ValidationErrors } from "context/Transaction";
+import { useTransaction, ValidationErrors } from "../../context/Transaction";
 import { twMerge } from "tailwind-merge";
-import { useChains } from "context/Chains";
+import { useChains } from "../../context/Chains";
 import CustomTooltip from "./CustomTooltip";
 import { Listbox } from "@headlessui/react";
 

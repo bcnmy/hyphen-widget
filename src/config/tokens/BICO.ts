@@ -1,8 +1,8 @@
 import { TokenConfig } from ".";
 import { GOERLI } from "../chains/constants/Goerli";
-import { POLYGON } from "config/chains/constants/Polygon";
-import { ETHEREUM } from "config/chains/constants/Ethereum";
-import { MUMBAI } from "config/chains/constants/Mumbai";
+import { POLYGON } from "../../config/chains/constants/Polygon";
+import { ETHEREUM } from "../../config/chains/constants/Ethereum";
+import { MUMBAI } from "../../config/chains/constants/Mumbai";
 import bicoIcon from "../../assets/images/tokens/bico-icon.svg";
 
 export const BICO: TokenConfig = {

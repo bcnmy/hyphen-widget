@@ -3,11 +3,11 @@ import Skeleton from "react-loading-skeleton";
 import { HiExclamation, HiInformationCircle } from "react-icons/hi";
 import { Transition } from "react-transition-group";
 import { twMerge } from "tailwind-merge";
-import { useChains } from "context/Chains";
-import { useToken } from "context/Token";
-import { useTransaction } from "context/Transaction";
-import { Status } from "hooks/useLoading";
-import isToChainEthereum from "utils/isToChainEthereum";
+import { useChains } from "../../context/Chains";
+import { useToken } from "../../context/Token";
+import { useTransaction } from "../../context/Transaction";
+import { Status } from "../../hooks/useLoading";
+import isToChainEthereum from "../../utils/isToChainEthereum";
 import CustomTooltip from "./CustomTooltip";
 
 interface ITransactionFeeProps {}

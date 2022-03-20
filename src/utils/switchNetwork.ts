@@ -1,4 +1,4 @@
-import { ChainConfig } from "config/chains";
+import { ChainConfig } from "../config/chains";
 import { ethers } from "ethers";
 
 export async function switchNetwork(

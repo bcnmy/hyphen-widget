@@ -10,7 +10,7 @@ import {
   useState,
 } from "react";
 
-import lpmanagerABI from "contracts/lpmanager.abi.json";
+import lpmanagerABI from "../contracts/lpmanager.abi.json";
 
 // @ts-ignore
 import { RESPONSE_CODES } from "@biconomy/hyphen";
@@ -19,15 +19,15 @@ import {
   DEFAULT_FIXED_DECIMAL_POINT,
   LP_FEE_FRACTION,
   NATIVE_ADDRESS,
-} from "config/constants";
+} from "../config/constants";
 import { useChains } from "./Chains";
 import { useHyphen } from "./Hyphen";
 import { useToken } from "./Token";
 import { useTokenApproval } from "./TokenApproval";
-import config from "config";
-import toFixed from "utils/toFixed";
-import formatRawEthValue from "utils/formatRawEthValue";
-import useAsync, { Status } from "hooks/useLoading";
+import config from "../config";
+import toFixed from "../utils/toFixed";
+import formatRawEthValue from "../utils/formatRawEthValue";
+import useAsync, { Status } from "../hooks/useLoading";
 import { useWalletProvider } from "./WalletProvider";
 import { IoMdReturnLeft } from "react-icons/io";
 import { useBiconomy } from "./Biconomy";

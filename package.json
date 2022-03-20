@@ -78,8 +78,9 @@
     "@types/react-notifications-component": "^3.1.1",
     "@types/react-transition-group": "^4.4.4",
     "@types/tailwindcss": "^2.2.4",
-    "autoprefixer": "^10.4.0",
-    "postcss": "^8.4.5",
-    "tailwindcss": "^3.0.2"
+    "autoprefixer": "^9",
+    "parcel-bundler": "^1.12.5",
+    "postcss": "^7",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   }
 }

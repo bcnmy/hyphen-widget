@@ -1,7 +1,7 @@
-import Select from "components/Select";
-import { ChainConfig } from "config/chains";
-import { useChains } from "context/Chains";
-import { useWalletProvider } from "context/WalletProvider";
+import Select from "../../components/Select";
+import { ChainConfig } from "../../config/chains";
+import { useChains } from "../../context/Chains";
+import { useWalletProvider } from "../../context/WalletProvider";
 import React, { useMemo } from "react";
 import { HiArrowRight } from "react-icons/hi";
 import CustomTooltip from "./CustomTooltip";

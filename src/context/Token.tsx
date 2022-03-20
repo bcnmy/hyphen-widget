@@ -7,17 +7,17 @@ import {
   useState,
 } from "react";
 
-import { ChainConfig } from "config/chains";
-import { config } from "config";
-import { TokenConfig } from "config/tokens";
-import { useChains } from "context/Chains";
-import { useWalletProvider } from "context/WalletProvider";
+import { ChainConfig } from "../config/chains";
+import { config } from "../config";
+import { TokenConfig } from "../config/tokens";
+import { useChains } from "../context/Chains";
+import { useWalletProvider } from "../context/WalletProvider";
 import { BigNumber, ethers } from "ethers";
 
-import erc20ABI from "contracts/erc20.abi.json";
-import toFixed from "utils/toFixed";
-import useAsync, { Status } from "hooks/useLoading";
-import formatRawEthValue from "utils/formatRawEthValue";
+import erc20ABI from "../contracts/erc20.abi.json";
+import toFixed from "../utils/toFixed";
+import useAsync, { Status } from "../hooks/useLoading";
+import formatRawEthValue from "../utils/formatRawEthValue";
 
 interface ITokenBalance {
   formattedBalance: string;

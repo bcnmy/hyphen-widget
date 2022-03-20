@@ -1,9 +1,9 @@
-import { useWalletProvider } from "context/WalletProvider";
-import { useChains } from "context/Chains";
-import { useToken } from "context/Token";
-import { Status } from "hooks/useLoading";
-import { useBiconomy } from "context/Biconomy";
-import { useHyphen } from "context/Hyphen";
+import { useWalletProvider } from "../context/WalletProvider";
+import { useChains } from "../context/Chains";
+import { useToken } from "../context/Token";
+import { Status } from "../hooks/useLoading";
+import { useBiconomy } from "../context/Biconomy";
+import { useHyphen } from "../context/Hyphen";
 import { BigNumber } from "ethers";
 
 export {};

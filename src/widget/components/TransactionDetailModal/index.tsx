@@ -1,5 +1,5 @@
 import { Dialog } from "@headlessui/react";
-import { DEFAULT_FIXED_DECIMAL_POINT } from "config/constants";
+import { DEFAULT_FIXED_DECIMAL_POINT } from "../../../config/constants";
 import { formatDistanceStrict } from "date-fns";
 import {
   HiOutlineArrowNarrowRight,

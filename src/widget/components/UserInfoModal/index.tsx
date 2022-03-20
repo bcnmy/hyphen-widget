@@ -3,8 +3,8 @@ import { gql, NetworkStatus, useQuery } from "@apollo/client";
 import { BigNumber, ethers } from "ethers";
 import { Dialog } from "@headlessui/react";
 import Skeleton from "react-loading-skeleton";
-import { useWalletProvider } from "context/WalletProvider";
-import { apolloClients } from "context/GraphQL";
+import { useWalletProvider } from "../../../context/WalletProvider";
+import { apolloClients } from "../../../context/GraphQL";
 import { IoMdClose } from "react-icons/io";
 import {
   HiOutlineClipboardCopy,
@@ -15,13 +15,13 @@ import {
 } from "react-icons/hi";
 import Modal from "../../../components/Modal";
 import { getProviderInfo } from "web3modal";
-import { useChains } from "context/Chains";
+import { useChains } from "../../../context/Chains";
 import { tokens } from "../../../config/tokens";
 import { ChainConfig } from "../../../config/chains";
 import TransactionDetailModal from "../TransactionDetailModal";
-import useModal from "hooks/useModal";
+import useModal from "../../../hooks/useModal";
 import { twMerge } from "tailwind-merge";
-import { DEFAULT_FIXED_DECIMAL_POINT } from "config/constants";
+import { DEFAULT_FIXED_DECIMAL_POINT } from "../../../config/constants";
 
 export interface IUserInfoModalProps {
   isVisible: boolean;

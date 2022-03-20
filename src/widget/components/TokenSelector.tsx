@@ -1,10 +1,10 @@
-import Select from "components/Select";
-import { TokenConfig } from "config/tokens";
-import { useChains } from "context/Chains";
-import { useHyphen } from "context/Hyphen";
-import { useToken } from "context/Token";
-import { useTransaction, ValidationErrors } from "context/Transaction";
-import { Status } from "hooks/useLoading";
+import Select from "../../components/Select";
+import { TokenConfig } from "../../config/tokens";
+import { useChains } from "../../context/Chains";
+import { useHyphen } from "../../context/Hyphen";
+import { useToken } from "../../context/Token";
+import { useTransaction, ValidationErrors } from "../../context/Transaction";
+import { Status } from "../../hooks/useLoading";
 import React, { useMemo } from "react";
 import Skeleton from "react-loading-skeleton";
 import { twMerge } from "tailwind-merge";

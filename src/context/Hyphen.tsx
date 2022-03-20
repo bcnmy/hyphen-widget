@@ -13,9 +13,9 @@ import { Hyphen, RESPONSE_CODES, SIGNATURE_TYPES } from "@biconomy/hyphen";
 import { useWalletProvider } from "./WalletProvider";
 import { useChains } from "./Chains";
 import { useToken } from "./Token";
-import useAsync, { Status } from "hooks/useLoading";
+import useAsync, { Status } from "../hooks/useLoading";
 import { useBiconomy } from "./Biconomy";
-import { ENV } from "types/environment";
+import { ENV } from "../types/environment";
 
 type PoolInfo = {
   minDepositAmount: number;

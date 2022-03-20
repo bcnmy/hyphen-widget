@@ -3,15 +3,15 @@ import { IoMdClose } from "react-icons/io";
 import Skeleton from "react-loading-skeleton";
 
 import { Dialog } from "@headlessui/react";
-import Modal from "components/Modal";
-import { useTransaction } from "context/Transaction";
-import useAsync, { Status } from "hooks/useLoading";
-import { ITransferRecord } from "context/TransactionInfoModal";
+import Modal from "../../components/Modal";
+import { useTransaction } from "../../context/Transaction";
+import useAsync, { Status } from "../../hooks/useLoading";
+import { ITransferRecord } from "../../context/TransactionInfoModal";
 import {
   HiOutlineArrowNarrowRight,
   HiOutlineArrowSmRight,
 } from "react-icons/hi";
-import { useChains } from "context/Chains";
+import { useChains } from "../../context/Chains";
 
 export interface ITransferInfoModal {
   transferRecord: ITransferRecord;

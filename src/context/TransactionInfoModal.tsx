@@ -1,7 +1,7 @@
-import { ChainConfig } from "config/chains";
-import { TokenConfig } from "config/tokens";
-import useModal from "hooks/useModal";
-import TransferInfoModal from "widget/components/TransferInfoModal";
+import { ChainConfig } from "../config/chains";
+import { TokenConfig } from "../config/tokens";
+import useModal from "../hooks/useModal";
+import TransferInfoModal from "../widget/components/TransferInfoModal";
 import { createContext, useCallback, useContext, useState } from "react";
 
 export interface ITransferRecord {

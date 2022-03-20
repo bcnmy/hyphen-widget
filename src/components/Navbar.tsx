@@ -1,4 +1,4 @@
-import { useWalletProvider } from "context/WalletProvider";
+import { useWalletProvider } from "../context/WalletProvider";
 
 interface INavbarProps {
   showUserInfoModal: () => void;

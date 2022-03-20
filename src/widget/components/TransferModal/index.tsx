@@ -1,4 +1,4 @@
-import PrimaryButtonLight from "components/Buttons/PrimaryButtonLight";
+import PrimaryButtonLight from "../../../components/Buttons/PrimaryButtonLight";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { formatDistanceStrict } from "date-fns";
 import { IoMdClose } from "react-icons/io";
@@ -6,22 +6,22 @@ import { twMerge } from "tailwind-merge";
 import Skeleton from "react-loading-skeleton";
 
 import { Dialog } from "@headlessui/react";
-import Modal from "components/Modal";
-import { useTransaction } from "context/Transaction";
+import Modal from "../../../components/Modal";
+import { useTransaction } from "../../../context/Transaction";
 import { Transition as TransitionReact } from "react-transition-group";
-import { Status } from "hooks/useLoading";
-import { PrimaryButtonDark } from "components/Buttons/PrimaryButtonDark";
-import Spinner from "components/Buttons/Spinner";
+import { Status } from "../../../hooks/useLoading";
+import { PrimaryButtonDark } from "../../../components/Buttons/PrimaryButtonDark";
+import Spinner from "../../../components/Buttons/Spinner";
 import AnimateHeight from "react-animate-height";
-import { useChains } from "context/Chains";
-// import { useHyphen } from "context/Hyphen";
-import { useToken } from "context/Token";
+import { useChains } from "../../../context/Chains";
+// import { useHyphen } from "../context/Hyphen";
+import { useToken } from "../../../context/Token";
 import { HiOutlineArrowSmRight } from "react-icons/hi";
-import SpinnerDark from "components/Buttons/SpinnerDark";
+import SpinnerDark from "../../../components/Buttons/SpinnerDark";
 import {
   ITransferRecord,
   useTransactionInfoModal,
-} from "context/TransactionInfoModal";
+} from "../../../context/TransactionInfoModal";
 import CustomTooltip from "../CustomTooltip";
 // import { MANUAL_EXIT_RETRIES } from "../../../../config/constants";
 
