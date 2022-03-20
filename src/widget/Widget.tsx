@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 
-import { useWalletProvider } from "../../context/WalletProvider";
-import { useNavigate } from "react-router-dom";
-import { useChains } from "../../context/Chains";
+import { useWalletProvider } from "../context/WalletProvider";
+import { useChains } from "../context/Chains";
 
 import NetworkSelectors from "./components/NetworkSelectors";
 import TokenSelector from "./components/TokenSelector";
@@ -33,7 +32,6 @@ const Home: React.FC<HomeProps> = () => {
   const { changeTransferAmountInputValue } = useTransaction()!;
   const { isBiconomyAllowed, setIsBiconomyToggledOn, isBiconomyEnabled } =
     useBiconomy()!;
-  const navigate = useNavigate();
   const { isLoggedIn, connect } = useWalletProvider()!;
   const {
     isVisible: isApprovalModalVisible,
@@ -58,7 +56,7 @@ const Home: React.FC<HomeProps> = () => {
         console.error(e);
       });
     })();
-  }, [isLoggedIn, navigate, connect]);
+  }, [isLoggedIn, connect]);
 
   return (
     <div className="grid grid-rows-[4rem_1fr_3rem] w-full min-h-screen">

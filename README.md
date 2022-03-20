@@ -1,6 +1,9 @@
-# Getting Started with Create React App
+# Hyphen Widget
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is based on [Hyphen-UI](https://github.com/bcnmy/hyphen-ui/). Provide the UI as a widget that can be embedded in any page.
+
+## Usage
+To be writen
 
 ## Available Scripts
 

@@ -6,7 +6,7 @@ import {
   HiOutlineArrowSmRight,
 } from "react-icons/hi";
 import { IoMdClose } from "react-icons/io";
-import Modal from "../../../../components/Modal";
+import Modal from "../../../components/Modal";
 import { ITransactionDetails } from "../UserInfoModal";
 
 export interface ITransactionDetailModal {

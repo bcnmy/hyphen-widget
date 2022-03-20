@@ -13,11 +13,11 @@ import {
   HiOutlineArrowSmRight,
   HiOutlineRefresh,
 } from "react-icons/hi";
-import Modal from "../../../../components/Modal";
+import Modal from "../../../components/Modal";
 import { getProviderInfo } from "web3modal";
 import { useChains } from "context/Chains";
-import { tokens } from "../../../../config/tokens";
-import { ChainConfig } from "../../../../config/chains";
+import { tokens } from "../../../config/tokens";
+import { ChainConfig } from "../../../config/chains";
 import TransactionDetailModal from "../TransactionDetailModal";
 import useModal from "hooks/useModal";
 import { twMerge } from "tailwind-merge";
