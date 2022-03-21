@@ -30,3 +30,6 @@ window.hyphenWidget = {
     );
   },
 };
+
+export const HyphenWidget = Widget;
+export default Widget;

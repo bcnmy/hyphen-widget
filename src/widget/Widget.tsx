@@ -59,8 +59,7 @@ const Home: React.FC<HomeProps> = () => {
   }, [isLoggedIn, connect]);
 
   return (
-    <div className="grid grid-rows-[4rem_1fr_3rem] w-full min-h-screen">
-      <Navbar showUserInfoModal={showUserInfoModal} />
+    <>
       <ApprovalModal
         isVisible={isApprovalModalVisible}
         onClose={hideApprovalModal}
@@ -77,7 +76,7 @@ const Home: React.FC<HomeProps> = () => {
         onClose={hideUserInfoModal}
       />
       <ErrorModal error={executeApproveTokenError} title={"Approval Error"} />
-      <div className="my-14">
+      <div className="my-0">
         <div className="max-w-xl mx-auto">
           <div className="relative z-10">
             <div className="flex flex-col gap-2 p-6 bg-white shadow-lg rounded-3xl">
@@ -138,8 +137,7 @@ const Home: React.FC<HomeProps> = () => {
           <TransactionFee />
         </div>
       </div>
-      <Footer />
-    </div>
+    </>
   );
 };
 

@@ -2,24 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background-image: radial-gradient(farthest-side at 50% 10%, #615ccd, black);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
 .web3modal-modal-lightbox {
   z-index: 100 !important;
-}
-
-body {
-  --toastify-color-progress-light: #615ccd;
-}
-
-html,
-body,
-#root {
-  margin: 0;
-  padding: 0;
 }
 
 @font-face {
@@ -43,21 +27,9 @@ body,
   src: local("Inter"), url(./assets/fonts/inter/Inter-Bold.ttf) format("ttf");
 }
 
-html {
-  min-height: 100%;
-  display: flex;
-  background-color: #615ccd;
-}
-
 .glassy-outline {
   box-shadow: 0 2px 1px hsla(0, 0%, 100%, 0.5) inset,
     0 -3px 1px hsla(250, 70%, 5%, 0.3) inset, 0 -2px 6px hsla(0, 0%, 100%, 0.25);
-}
-
-body,
-#root {
-  flex: 1;
-  display: flex;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
