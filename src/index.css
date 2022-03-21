@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.web3modal-modal-lightbox {
+#hyphen-widget .web3modal-modal-lightbox {
   z-index: 100 !important;
 }
 
@@ -27,29 +27,29 @@
   src: local("Inter"), url(./assets/fonts/inter/Inter-Bold.ttf) format("ttf");
 }
 
-.glassy-outline {
+#hyphen-widget .glassy-outline {
   box-shadow: 0 2px 1px hsla(0, 0%, 100%, 0.5) inset,
     0 -3px 1px hsla(250, 70%, 5%, 0.3) inset, 0 -2px 6px hsla(0, 0%, 100%, 0.25);
 }
 
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
+#hyphen-widget input[type="number"]::-webkit-inner-spin-button,
+#hyphen-widget input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
   margin: 0;
 }
 
-code {
+#hyphen-widget code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
-* {
+#hyphen-widget * {
   box-sizing: border-box;
 }
 
-.custom-tooltip {
+#hyphen-widget .custom-tooltip {
   max-width: 160px !important;
   width: auto !important;
   font-size: 10px !important;
