@@ -11,25 +11,39 @@ import AppProviders from './context';
 
 declare global {
   interface Window {
-    hyphenWidget: {
-      init: () => void;
-    };
+    HyphenWidget: HyphenWidget | typeof HyphenWidget;
   }
 }
 
-window.hyphenWidget = {
-  init() {
+interface WidgetProps {
+  expose: (self: HyphenWidget) => void;
+}
+interface WidgetState {}
+class HyphenWidget extends React.Component<WidgetProps, WidgetState> {
+  constructor(props: WidgetProps) {
+    super(props);
+    props.expose(this);
+  }
+
+  render() {
+    return <Widget />;
+  }
+
+  static init(ele: HTMLElement) {
+    let widget;
     ReactDOM.render(
       <React.StrictMode>
         <ToastContainer className="font-sans font-semibold" />
         <AppProviders>
-          <Widget />
+          <HyphenWidget expose={(component) => (widget = component)} />
         </AppProviders>
       </React.StrictMode>,
-      document.getElementById('hyphen-widget')
+      ele
     );
-  },
-};
+    return widget;
+  }
+}
 
-export const HyphenWidget = Widget;
+window.HyphenWidget = HyphenWidget;
+
 export default Widget;

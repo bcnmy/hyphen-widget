@@ -6,8 +6,6 @@ import { useChains } from "../context/Chains";
 import NetworkSelectors from "./components/NetworkSelectors";
 import TokenSelector from "./components/TokenSelector";
 import AmountInput from "./components/AmountInput";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import TransactionFee from "./components/TransactionFee";
 import ChangeReceiverAddress from "./components/ChangeReceiverAddress";
 import CallToAction from "./components/CallToAction";
@@ -25,9 +23,9 @@ import CustomTooltip from "./components/CustomTooltip";
 import { FaInfoCircle } from "react-icons/fa";
 import { HiInformationCircle } from "react-icons/hi";
 
-interface HomeProps {}
+interface WidgetProps {}
 
-const Home: React.FC<HomeProps> = () => {
+const Home: React.FC<WidgetProps> = (props) => {
   const { areChainsReady } = useChains()!;
   const { changeTransferAmountInputValue } = useTransaction()!;
   const { isBiconomyAllowed, setIsBiconomyToggledOn, isBiconomyEnabled } =
@@ -76,7 +74,7 @@ const Home: React.FC<HomeProps> = () => {
         onClose={hideUserInfoModal}
       />
       <ErrorModal error={executeApproveTokenError} title={"Approval Error"} />
-      <div className="my-0">
+      <div className="my-0 hyphen-widget-popup">
         <div className="max-w-xl mx-auto">
           <div className="relative z-10">
             <div className="flex flex-col gap-2 p-6 bg-white shadow-lg rounded-3xl">
