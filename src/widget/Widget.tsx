@@ -1,46 +1,45 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-import { useWalletProvider } from "../context/WalletProvider";
-import { useChains } from "../context/Chains";
+import { useWalletProvider } from '../context/WalletProvider';
+import { useChains } from '../context/Chains';
 
-import NetworkSelectors from "./components/NetworkSelectors";
-import TokenSelector from "./components/TokenSelector";
-import AmountInput from "./components/AmountInput";
-import TransactionFee from "./components/TransactionFee";
-import ChangeReceiverAddress from "./components/ChangeReceiverAddress";
-import CallToAction from "./components/CallToAction";
-import { Toggle } from "../components/Toggle";
-import useModal from "../hooks/useModal";
-import ApprovalModal from "./components/ApprovalModal";
-import { useTokenApproval } from "../context/TokenApproval";
-import ErrorModal from "./components/ErrorModal";
-import TransferModal from "./components/TransferModal";
-import UserInfoModal from "./components/UserInfoModal";
-import { useTransaction } from "../context/Transaction";
-import { useBiconomy } from "../context/Biconomy";
-import { twMerge } from "tailwind-merge";
-import CustomTooltip from "./components/CustomTooltip";
-import { FaInfoCircle } from "react-icons/fa";
-import { HiInformationCircle } from "react-icons/hi";
+import NetworkSelectors from './components/NetworkSelectors';
+import TokenSelector from './components/TokenSelector';
+import AmountInput from './components/AmountInput';
+import TransactionFee from './components/TransactionFee';
+import ChangeReceiverAddress from './components/ChangeReceiverAddress';
+import CallToAction from './components/CallToAction';
+import { Toggle } from '../components/Toggle';
+import useModal from '../hooks/useModal';
+import ApprovalModal from './components/ApprovalModal';
+import { useTokenApproval } from '../context/TokenApproval';
+import ErrorModal from './components/ErrorModal';
+import TransferModal from './components/TransferModal';
+import { useTransaction } from '../context/Transaction';
+import { useBiconomy } from '../context/Biconomy';
+import CustomTooltip from './components/CustomTooltip';
+import { HiInformationCircle } from 'react-icons/hi';
 
-interface WidgetProps {
+export interface WidgetProps {
   sourceChain?: string;
   destinationChain?: string;
   token?: string;
   amount?: string;
   receiver?: string;
-  lockSourceChain?: boolean;
-  lockDestinationChain?: boolean;
-  lockToken?: boolean;
-  lockAmount?: boolean;
   onSourceChainChange?: (prev: string, to: string) => any;
   onDestinationChainChange?: (prev: string, to: string) => any;
   onTokenChange?: (prev: string, to: string) => any;
   onAmountChange?: (prev: string, to: string) => any;
   onReceiverChange?: (prev: string, to: string) => any;
+
+  lockSourceChain?: boolean;
+  lockDestinationChain?: boolean;
+  lockToken?: boolean;
+  lockAmount?: boolean;
+  lockReceiver?: boolean;
 }
 
-const Home: React.FC<WidgetProps> = (props) => {
+const Widget: React.FC<WidgetProps> = (props) => {
   const { areChainsReady } = useChains()!;
   const { changeTransferAmountInputValue } = useTransaction()!;
   const { isBiconomyAllowed, setIsBiconomyToggledOn, isBiconomyEnabled } =
@@ -75,11 +74,11 @@ const Home: React.FC<WidgetProps> = (props) => {
       <TransferModal
         isVisible={isTransferModalVisible}
         onClose={() => {
-          changeTransferAmountInputValue("");
+          changeTransferAmountInputValue('');
           hideTransferlModal();
         }}
       />
-      <ErrorModal error={executeApproveTokenError} title={"Approval Error"} />
+      <ErrorModal error={executeApproveTokenError} title={'Approval Error'} />
       <div className="my-0 hyphen-widget-modal">
         <div className="max-w-xl mx-auto">
           <div className="relative z-10">
@@ -98,8 +97,8 @@ const Home: React.FC<WidgetProps> = (props) => {
                   <div
                     className={
                       !isBiconomyAllowed
-                        ? "flex opacity-50 cursor-not-allowed"
-                        : "flex"
+                        ? 'flex opacity-50 cursor-not-allowed'
+                        : 'flex'
                     }
                     data-tip
                     data-for="whyGaslessDisabled"
@@ -145,4 +144,4 @@ const Home: React.FC<WidgetProps> = (props) => {
   );
 };
 
-export default Home;
+export default Widget;

@@ -1,5 +1,5 @@
 import { ChainConfig } from 'config/chains';
-import { WidgetOptions } from 'index';
+import { HyphenWidgetOptions } from 'index';
 import React from 'react';
 import { BiconomyProvider } from './Biconomy';
 import { ChainsProvider } from './Chains';
@@ -13,7 +13,7 @@ import { TransactionInfoModalProvider } from './TransactionInfoModal';
 import { WalletProviderProvider } from './WalletProvider';
 
 export const AppProviders: React.FC<{
-  options: WidgetOptions;
+  options: HyphenWidgetOptions;
   chains: ChainConfig[];
 }> = ({ children, options, chains }) => {
   return (
