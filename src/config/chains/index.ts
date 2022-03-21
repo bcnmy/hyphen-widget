@@ -1,16 +1,25 @@
-import { ENV } from "../../types/environment";
-import { chainMap } from "./chainMap";
+import { ENV } from '../../types/environment';
+import { chainMap } from './chainMap';
 
-import { MUMBAI } from "./constants/Mumbai";
-import { AVALANCHE } from "./constants/Avalanche";
-import { GOERLI } from "./constants/Goerli";
-import { FUJI } from "./constants/Fuji";
-import { RINKEBY } from "./constants/Rinkeby";
-import { ETHEREUM } from "./constants/Ethereum";
-import { POLYGON } from "./constants/Polygon";
+import { MUMBAI } from './constants/Mumbai';
+import { AVALANCHE } from './constants/Avalanche';
+import { GOERLI } from './constants/Goerli';
+import { FUJI } from './constants/Fuji';
+import { RINKEBY } from './constants/Rinkeby';
+import { ETHEREUM } from './constants/Ethereum';
+import { POLYGON } from './constants/Polygon';
+
+export type Chains =
+  | 'Avalanche'
+  | 'Ethereum'
+  | 'Fuji'
+  | 'Goerli'
+  | 'Polygon'
+  | 'Mumbai'
+  | 'Rinkeby';
 
 export type ChainConfig = {
-  name: string;
+  name: Chains;
   image?: string;
   subText: string;
   chainId: number;
@@ -29,15 +38,13 @@ export type ChainConfig = {
   explorerUrl: string;
 };
 
-export let chains: ChainConfig[];
+export const chains: ChainConfig[] = [
+  POLYGON,
+  ETHEREUM,
+  AVALANCHE,
+  MUMBAI,
+  GOERLI,
+  FUJI,
+  RINKEBY,
+];
 export { chainMap };
-
-if (process.env.REACT_APP_ENV === ENV.test) {
-  chains = [MUMBAI, GOERLI, FUJI, RINKEBY];
-} else if (process.env.REACT_APP_ENV === ENV.production) {
-  chains = [POLYGON, ETHEREUM, AVALANCHE];
-} else if (process.env.REACT_APP_ENV === ENV.staging) {
-  chains = [MUMBAI, GOERLI, FUJI, RINKEBY];
-} else {
-  chains = [MUMBAI, GOERLI, FUJI, RINKEBY];
-}

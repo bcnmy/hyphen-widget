@@ -26,11 +26,9 @@ interface IChainsContext {
   chainsList: ChainConfig[];
 }
 
-const chainsList = config.chains;
-
 const ChainsContext = createContext<IChainsContext | null>(null);
 
-const ChainsProvider: React.FC = (props) => {
+const ChainsProvider: React.FC<{ chains: ChainConfig[] }> = (props) => {
   const { currentChainId } = useWalletProvider()!;
 
   const [fromChain, setFromChain] = useState<ChainConfig>();
@@ -53,10 +51,10 @@ const ChainsProvider: React.FC = (props) => {
   useEffect(() => {
     setToChain(undefined);
     if (!currentChainId) {
-      setFromChain(chainsList[0]);
+      setFromChain(props.chains[0]);
       return;
     }
-    let currentMetamaskChain = chainsList.find(
+    let currentMetamaskChain = props.chains.find(
       (chain) => chain.chainId === currentChainId
     );
     // console.log({ currentChainId, chainsList });
@@ -64,9 +62,9 @@ const ChainsProvider: React.FC = (props) => {
       setFromChain(currentMetamaskChain);
       // console.log(currentMetamaskChain);
     } else {
-      setFromChain(chainsList[0]);
+      setFromChain(props.chains[0]);
     }
-  }, [currentChainId]);
+  }, [currentChainId, props.chains]);
 
   useEffect(() => {
     (async () => {
@@ -134,7 +132,7 @@ const ChainsProvider: React.FC = (props) => {
         compatibleToChainsForCurrentFromChain,
         fromChain,
         toChain,
-        chainsList,
+        chainsList: props.chains,
       }}
       {...props}
     />

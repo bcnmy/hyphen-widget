@@ -56,7 +56,7 @@
     "test": "craco test",
     "eject": "react-scripts eject",
     "build:lib": "REACT_APP_ENV=production REACT_APP_INFURA_ID=https://mainnet.infura.io/v3/c9c349cef85a436eaad2f5ef6c067f3a parcel build src/index.tsx --no-source-maps --dist-dir build-lib",
-    "start:lib": "REACT_APP_ENV=production REACT_APP_INFURA_ID=https://mainnet.infura.io/v3/c9c349cef85a436eaad2f5ef6c067f3a parcel watch src/index.tsx --no-source-maps --dist-dir build-lib"
+    "start:lib": "REACT_APP_ENV=local REACT_APP_INFURA_ID=https://mainnet.infura.io/v3/c9c349cef85a436eaad2f5ef6c067f3a parcel watch src/index.tsx --no-source-maps --dist-dir build-lib"
   },
   "eslintConfig": {
     "extends": [

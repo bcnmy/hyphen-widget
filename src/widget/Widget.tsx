@@ -23,7 +23,22 @@ import CustomTooltip from "./components/CustomTooltip";
 import { FaInfoCircle } from "react-icons/fa";
 import { HiInformationCircle } from "react-icons/hi";
 
-interface WidgetProps {}
+interface WidgetProps {
+  sourceChain?: string;
+  destinationChain?: string;
+  token?: string;
+  amount?: string;
+  receiver?: string;
+  lockSourceChain?: boolean;
+  lockDestinationChain?: boolean;
+  lockToken?: boolean;
+  lockAmount?: boolean;
+  onSourceChainChange?: (prev: string, to: string) => any;
+  onDestinationChainChange?: (prev: string, to: string) => any;
+  onTokenChange?: (prev: string, to: string) => any;
+  onAmountChange?: (prev: string, to: string) => any;
+  onReceiverChange?: (prev: string, to: string) => any;
+}
 
 const Home: React.FC<WidgetProps> = (props) => {
   const { areChainsReady } = useChains()!;
@@ -40,11 +55,6 @@ const Home: React.FC<WidgetProps> = (props) => {
     isVisible: isTransferModalVisible,
     hideModal: hideTransferlModal,
     showModal: showTransferModal,
-  } = useModal();
-  const {
-    isVisible: isUserInfoModalVisible,
-    hideModal: hideUserInfoModal,
-    showModal: showUserInfoModal,
   } = useModal();
   const { executeApproveTokenError } = useTokenApproval()!;
 
@@ -69,12 +79,8 @@ const Home: React.FC<WidgetProps> = (props) => {
           hideTransferlModal();
         }}
       />
-      <UserInfoModal
-        isVisible={isUserInfoModalVisible}
-        onClose={hideUserInfoModal}
-      />
       <ErrorModal error={executeApproveTokenError} title={"Approval Error"} />
-      <div className="my-0 hyphen-widget-popup">
+      <div className="my-0 hyphen-widget-modal">
         <div className="max-w-xl mx-auto">
           <div className="relative z-10">
             <div className="flex flex-col gap-2 p-6 bg-white shadow-lg rounded-3xl">
