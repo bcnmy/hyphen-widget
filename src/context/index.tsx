@@ -23,7 +23,7 @@ export const AppProviders: React.FC<{
           <NotificationsProvider>
             <TokenProvider>
               <BiconomyProvider>
-                <HyphenProvider>
+                <HyphenProvider test={options.test}>
                   <TokenApprovalProvider>
                     <TransactionProvider>
                       <TransactionInfoModalProvider>
