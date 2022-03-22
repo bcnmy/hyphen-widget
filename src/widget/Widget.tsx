@@ -51,6 +51,7 @@ interface WidgetSetFunctions {
 const Widget: React.FC<
   HyphenWidgetOptions & WidgetSetFunctions & Inputs & InputConfig
 > = (props) => {
+  const [firstLoad, setFirstLoad] = useState(0);
   const {
     chainsList,
     areChainsReady,
@@ -68,7 +69,12 @@ const Widget: React.FC<
   } = useTransaction()!;
   const { isBiconomyAllowed, setIsBiconomyToggledOn, isBiconomyEnabled } =
     useBiconomy()!;
-  const { tokensList, changeSelectedToken } = useToken()!;
+  const {
+    tokensList,
+    compatibleTokensForCurrentChains,
+    changeSelectedToken,
+    selectedToken,
+  } = useToken()!;
   const { isLoggedIn, connect } = useWalletProvider()!;
   const {
     isVisible: isApprovalModalVisible,
@@ -189,7 +195,7 @@ const Widget: React.FC<
   }, [state.amount]);
 
   useEffect(() => {
-    setFunctions.setAmount('');
+    if (firstLoad === 3) setFunctions.setAmount('');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.sourceChain, state.destinationChain, state.token]);
 
@@ -213,7 +219,9 @@ const Widget: React.FC<
       changeFromChain(
         chainsList.find((e) => e.name === state.sourceChain) as ChainConfig
       );
-      setFunctions.setDestinationChain(undefined);
+      if (firstLoad) {
+        setFunctions.setDestinationChain(undefined);
+      }
     } else if (toChain?.name !== state.destinationChain) {
       if (
         compatibleToChainsForCurrentFromChain?.find(
@@ -225,7 +233,7 @@ const Widget: React.FC<
             (e) => e.name === state.destinationChain
           ) as ChainConfig
         );
-      } else {
+      } else if (firstLoad) {
         setFunctions.setDestinationChain(undefined);
       }
     }
@@ -238,6 +246,51 @@ const Widget: React.FC<
     } as React.FormEvent<HTMLInputElement>);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.receiver]);
+
+  useEffect(() => {
+    if (
+      firstLoad === 0 &&
+      !toChain &&
+      chainsList &&
+      compatibleToChainsForCurrentFromChain
+    ) {
+      changeToChain(
+        chainsList.find((e) => e.name === state.destinationChain) as ChainConfig
+      );
+      setFirstLoad(1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    chainsList,
+    firstLoad,
+    toChain,
+    state.destinationChain,
+    compatibleToChainsForCurrentFromChain,
+  ]);
+
+  useEffect(() => {
+    if (
+      firstLoad === 1 &&
+      toChain &&
+      compatibleTokensForCurrentChains &&
+      areChainsReady
+    ) {
+      changeSelectedToken(
+        tokensList.find((t) => t.symbol === state.token) as TokenConfig
+      );
+      changeTransferAmountInputValue(state.amount);
+      setFirstLoad(2);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [firstLoad, state.token, toChain, tokensList, areChainsReady]);
+
+  useEffect(() => {
+    if (firstLoad === 2 && fromChain && toChain && selectedToken) {
+      changeTransferAmountInputValue(state.amount);
+      setFirstLoad(3);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [firstLoad, fromChain, selectedToken, state.amount, toChain]);
 
   return (
     <>
@@ -299,7 +352,12 @@ const Widget: React.FC<
                   setFromChain={setFunctions.setSourceChain}
                   setToChain={setFunctions.setDestinationChain}
                   swapFromToChains={() => {
-                    if (!state.destinationChain) return;
+                    if (
+                      !state.destinationChain ||
+                      state.lockDestinationChain ||
+                      state.lockSourceChain
+                    )
+                      return;
                     setFunctions.setSourceChain(state.destinationChain);
                     setFunctions.setDestinationChain(state.sourceChain);
                   }}

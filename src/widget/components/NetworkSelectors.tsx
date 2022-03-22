@@ -75,6 +75,7 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
         <button
           className="bg-hyphen-purple border-hyphen-purple/10 text-hyphen-purple rounded-full border bg-opacity-20 p-2 transition-all"
           onClick={swapFromToChains}
+          disabled={lockSourceChain || lockDestinationChain}
         >
           <HiArrowRight />
         </button>

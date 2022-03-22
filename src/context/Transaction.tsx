@@ -119,11 +119,6 @@ const TransactionProvider: React.FC = (props) => {
     isReceiverValid: false,
   });
 
-  // reset the input after conditions change
-  useEffect(() => {
-    setTransferAmountInputValue('');
-  }, [fromChain, toChain, selectedToken]);
-
   const transferAmount = useMemo(
     () => parseFloat(transferAmountInputValue),
     [transferAmountInputValue]
