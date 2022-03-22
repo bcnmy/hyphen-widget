@@ -65,7 +65,6 @@ const Widget: React.FC<
     changeTransferAmountInputValue,
     transactionAmountValidationErrors,
     changeReceiver,
-    receiver,
   } = useTransaction()!;
   const { isBiconomyAllowed, setIsBiconomyToggledOn, isBiconomyEnabled } =
     useBiconomy()!;
