@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { useWalletProvider } from '../context/WalletProvider';
 import { useChains } from '../context/Chains';
@@ -19,18 +19,16 @@ import { useTransaction } from '../context/Transaction';
 import { useBiconomy } from '../context/Biconomy';
 import CustomTooltip from './components/CustomTooltip';
 import { HiInformationCircle } from 'react-icons/hi';
+import { HyphenWidgetOptions, InputConfig, Inputs } from '../';
+import { stat } from 'fs';
 
 export interface WidgetProps {
-  sourceChain?: string;
-  destinationChain?: string;
-  token?: string;
-  amount?: string;
-  receiver?: string;
-  onSourceChainChange?: (prev: string, to: string) => any;
-  onDestinationChainChange?: (prev: string, to: string) => any;
-  onTokenChange?: (prev: string, to: string) => any;
-  onAmountChange?: (prev: string, to: string) => any;
-  onReceiverChange?: (prev: string, to: string) => any;
+  sourceChain: string;
+  destinationChain: string;
+  token: string;
+  amount: string;
+  receiver: string;
+  gasless: boolean;
 
   lockSourceChain?: boolean;
   lockDestinationChain?: boolean;
@@ -39,9 +37,21 @@ export interface WidgetProps {
   lockReceiver?: boolean;
 }
 
-const Widget: React.FC<WidgetProps> = (props) => {
+interface WidgetSetFunctions {
+  setSourceChain: (newValue: string) => void;
+  setDestinationChain: (newValue: string) => void;
+  setToken: (newValue: string) => void;
+  setAmount: (newValue: string) => void;
+  setReceiver: (newValue: string) => void;
+  setGasless: (newValue: boolean) => void;
+}
+
+const Widget: React.FC<
+  HyphenWidgetOptions & WidgetSetFunctions & Inputs & InputConfig
+> = (props) => {
   const { areChainsReady } = useChains()!;
-  const { changeTransferAmountInputValue } = useTransaction()!;
+  const { changeTransferAmountInputValue, transactionAmountValidationErrors } =
+    useTransaction()!;
   const { isBiconomyAllowed, setIsBiconomyToggledOn, isBiconomyEnabled } =
     useBiconomy()!;
   const { isLoggedIn, connect } = useWalletProvider()!;
@@ -57,6 +67,72 @@ const Widget: React.FC<WidgetProps> = (props) => {
   } = useModal();
   const { executeApproveTokenError } = useTokenApproval()!;
 
+  const [state, setState] = useState<HyphenWidgetOptions & WidgetProps>({
+    test: props.test,
+    apiKeys: props.apiKeys,
+    rpcUrls: props.rpcUrls,
+    popupMode: props.popupMode,
+    widgetMode: props.widgetMode,
+    lockSourceChain: props.lockSourceChain,
+    lockDestinationChain: props.lockDestinationChain,
+    lockToken: props.lockToken,
+    lockAmount: props.lockAmount,
+    lockReceiver: props.lockReceiver,
+    sourceChain: props.defaultSourceChain || props.sourceChain || 'Mumbai',
+    destinationChain:
+      props.defaultDestinationChain || props.destinationChain || 'Goerli',
+    token: props.defaultToken || props.token || 'ETH',
+    amount: props.defaultAmount || props.amount || '',
+    receiver: props.defaultReceiver || props.receiver || '',
+    gasless: props.defaultGaslessMode || props.gasless || false,
+  });
+
+  const setFunctions: WidgetSetFunctions = useMemo(() => {
+    let isDefaultMode = !(
+      props.sourceChain ||
+      props.destinationChain ||
+      props.token ||
+      props.amount ||
+      props.receiver ||
+      props.gasless
+    );
+
+    return {
+      setSourceChain: isDefaultMode
+        ? (newValue) => setState((prev) => ({ ...prev, sourceChain: newValue }))
+        : props.setSourceChain,
+      setDestinationChain: isDefaultMode
+        ? (newValue) =>
+            setState((prev) => ({ ...prev, destinationChain: newValue }))
+        : props.setDestinationChain,
+      setToken: isDefaultMode
+        ? (newValue) => setState((prev) => ({ ...prev, token: newValue }))
+        : props.setToken,
+      setAmount: isDefaultMode
+        ? (newValue) => setState((prev) => ({ ...prev, amount: newValue }))
+        : props.setAmount,
+      setReceiver: isDefaultMode
+        ? (newValue) => setState((prev) => ({ ...prev, receiver: newValue }))
+        : props.setReceiver,
+      setGasless: isDefaultMode
+        ? (newValue) => setState((prev) => ({ ...prev, gasless: newValue }))
+        : props.setGasless,
+    };
+  }, [
+    props.amount,
+    props.destinationChain,
+    props.gasless,
+    props.receiver,
+    props.setAmount,
+    props.setDestinationChain,
+    props.setGasless,
+    props.setReceiver,
+    props.setSourceChain,
+    props.setToken,
+    props.sourceChain,
+    props.token,
+  ]);
+
   useEffect(() => {
     (async () => {
       await connect().catch((e) => {
@@ -64,6 +140,16 @@ const Widget: React.FC<WidgetProps> = (props) => {
       });
     })();
   }, [isLoggedIn, connect]);
+
+  useEffect(() => {
+    setIsBiconomyToggledOn(!!state.gasless);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.gasless]);
+
+  useEffect(() => {
+    changeTransferAmountInputValue(state.amount);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.amount]);
 
   return (
     <>
@@ -109,7 +195,7 @@ const Widget: React.FC<WidgetProps> = (props) => {
                     <Toggle
                       label="Gasless Mode"
                       enabled={isBiconomyEnabled}
-                      onToggle={(enabled) => setIsBiconomyToggledOn(enabled)}
+                      onToggle={(enabled) => setFunctions.setGasless(enabled)}
                     />
                   </div>
                 </div>
@@ -124,9 +210,14 @@ const Widget: React.FC<WidgetProps> = (props) => {
                 <NetworkSelectors />
               </div>
               <div className="grid grid-cols-[1fr_34px_1fr] items-center gap-2 p-4 rounded-xl bg-hyphen-purple bg-opacity-[0.05] border-hyphen-purple border border-opacity-10 hover:border-opacity-30">
-                <AmountInput disabled={!areChainsReady} />
+                <AmountInput
+                  disabled={state.lockAmount || !areChainsReady}
+                  amount={state.amount}
+                  setAmount={setFunctions.setAmount}
+                  error={transactionAmountValidationErrors}
+                />
                 <div></div>
-                <TokenSelector disabled={!areChainsReady} />
+                <TokenSelector disabled={state.lockToken || !areChainsReady} />
               </div>
 
               <ChangeReceiverAddress />

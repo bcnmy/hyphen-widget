@@ -13,9 +13,9 @@ import { TransactionInfoModalProvider } from './TransactionInfoModal';
 import { WalletProviderProvider } from './WalletProvider';
 
 export const AppProviders: React.FC<{
-  options: HyphenWidgetOptions;
+  test: boolean;
   chains: ChainConfig[];
-}> = ({ children, options, chains }) => {
+}> = ({ children, test, chains }) => {
   return (
     <WalletProviderProvider>
       <ChainsProvider chains={chains}>
@@ -23,7 +23,7 @@ export const AppProviders: React.FC<{
           <NotificationsProvider>
             <TokenProvider>
               <BiconomyProvider>
-                <HyphenProvider test={options.test}>
+                <HyphenProvider test={test}>
                   <TokenApprovalProvider>
                     <TransactionProvider>
                       <TransactionInfoModalProvider>
