@@ -3,8 +3,10 @@ import { HiOutlineChevronDown } from 'react-icons/hi';
 import { useTransaction } from '../../context/Transaction';
 
 function ChangeReceiverAddress({
-  setReceiver: changeReceiver,
+  lockReceiver,
+  setReceiver,
 }: {
+  lockReceiver?: boolean;
   setReceiver: (address: string) => void;
 }) {
   const {
@@ -27,8 +29,9 @@ function ChangeReceiverAddress({
             <input
               type="text"
               value={receiverAddress}
-              onChange={(evt) => changeReceiver(evt.target.value)}
+              onChange={(evt) => setReceiver(evt.target.value)}
               className="w-full h-12 px-4 text-base border border-gray-200 rounded-lg focus:border-gray-500 focus-visible:outline-none"
+              disabled={lockReceiver}
             />
             <span className="px-4 text-sm text-red-600">
               Note: Please do not enter a Smart Contract address.

@@ -9,12 +9,16 @@ interface INetworkSelectorsProps {
   setFromChain: (newValue: string) => void;
   setToChain: (newValue: string) => void;
   swapFromToChains: () => void;
+  lockSourceChain?: boolean;
+  lockDestinationChain?: boolean;
 }
 
 const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
   setFromChain,
   setToChain,
   swapFromToChains,
+  lockSourceChain,
+  lockDestinationChain,
 }) => {
   const { isLoggedIn } = useWalletProvider()!;
   const {
@@ -64,6 +68,7 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
             chainsList && setFromChain(opt.name);
           }}
           label={'source'}
+          disabled={lockSourceChain}
         />
       </div>
       <div className="mb-1.5 flex items-end">
@@ -76,7 +81,7 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
       </div>
       <div data-tip data-for="networkSelect">
         <Select
-          disabled={!isLoggedIn}
+          disabled={!isLoggedIn || lockDestinationChain}
           options={toChainOptions}
           selected={selectedToChain}
           setSelected={(opt) => {

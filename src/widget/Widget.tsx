@@ -303,6 +303,8 @@ const Widget: React.FC<
                     setFunctions.setSourceChain(state.destinationChain);
                     setFunctions.setDestinationChain(state.sourceChain);
                   }}
+                  lockSourceChain={state.lockSourceChain}
+                  lockDestinationChain={state.lockDestinationChain}
                 />
               </div>
               <div className="grid grid-cols-[1fr_34px_1fr] items-center gap-2 p-4 rounded-xl bg-hyphen-purple bg-opacity-[0.05] border-hyphen-purple border border-opacity-10 hover:border-opacity-30">
@@ -321,7 +323,10 @@ const Widget: React.FC<
                 />
               </div>
 
-              <ChangeReceiverAddress setReceiver={setFunctions.setReceiver} />
+              <ChangeReceiverAddress
+                setReceiver={setFunctions.setReceiver}
+                lockReceiver={state.lockReceiver}
+              />
 
               <CallToAction
                 onApproveButtonClick={showApprovalModal}
