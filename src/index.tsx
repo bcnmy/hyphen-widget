@@ -19,6 +19,7 @@ declare global {
 interface HyphenWidgetProps {
   expose: (self: HyphenWidget) => void;
   options: HyphenWidgetOptions & Inputs & InputConfig;
+  skipToastContainer?: boolean;
 }
 
 export interface HyphenWidgetOptions {
@@ -106,7 +107,9 @@ class HyphenWidget extends React.Component<
 
     return (
       <>
-        <ToastContainer className="font-sans font-semibold" />
+        {this.props.skipToastContainer ? null : (
+          <ToastContainer className="font-sans font-semibold" />
+        )}
         <AppProviders
           test={!!this.state.test}
           chains={chainsCopy.filter((e) => e.rpcUrl && e.biconomy.apiKey)}
