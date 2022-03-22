@@ -1,14 +1,14 @@
-import React from "react";
-import Skeleton from "react-loading-skeleton";
-import { HiExclamation, HiInformationCircle } from "react-icons/hi";
-import { Transition } from "react-transition-group";
-import { twMerge } from "tailwind-merge";
-import { useChains } from "../../context/Chains";
-import { useToken } from "../../context/Token";
-import { useTransaction } from "../../context/Transaction";
-import { Status } from "../../hooks/useLoading";
-import isToChainEthereum from "../../utils/isToChainEthereum";
-import CustomTooltip from "./CustomTooltip";
+import React from 'react';
+import Skeleton from 'react-loading-skeleton';
+import { HiExclamation, HiInformationCircle } from 'react-icons/hi';
+import { Transition } from 'react-transition-group';
+import { twMerge } from 'tailwind-merge';
+import { useChains } from '../../context/Chains';
+import { useToken } from '../../context/Token';
+import { useTransaction } from '../../context/Transaction';
+import { Status } from '../../hooks/useLoading';
+import isToChainEthereum from '../../utils/isToChainEthereum';
+import CustomTooltip from './CustomTooltip';
 
 interface ITransactionFeeProps {}
 
@@ -35,13 +35,16 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
     >
       {(state) => (
         <div
-          className={twMerge(
-            "transition-transform transform-gpu",
-            (state === "exiting" || state === "exited") && "-translate-y-full"
-          )}
+          className={
+            'transaction-fee ' +
+            twMerge(
+              'transition-transform transform-gpu',
+              (state === 'exiting' || state === 'exited') && '-translate-y-full'
+            )
+          }
         >
-          <div className="mx-10 bg-white border-b rounded-b-lg bg-opacity-10 border-white/10 border-x">
-            <div className="flex flex-col p-4 text-sm text-white/75 gap-y-2">
+          <div className="mx-10 bg-black border-b rounded-b-lg bg-opacity-10 border-white/10 border-x shadow-lg">
+            <div className="flex flex-col p-4 text-sm text-gray-500 gap-y-2">
               {showEthereumDisclaimer ? (
                 <article className="flex items-start p-2 mb-2 text-sm text-red-600 bg-red-100 rounded-xl">
                   <HiExclamation className="w-auto h-6 mr-2" />
