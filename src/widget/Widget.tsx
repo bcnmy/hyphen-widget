@@ -65,6 +65,7 @@ const Widget: React.FC<
     changeTransferAmountInputValue,
     transactionAmountValidationErrors,
     changeReceiver,
+    receiver,
   } = useTransaction()!;
   const { isBiconomyAllowed, setIsBiconomyToggledOn, isBiconomyEnabled } =
     useBiconomy()!;
@@ -187,6 +188,11 @@ const Widget: React.FC<
     changeTransferAmountInputValue(state.amount);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.amount]);
+
+  useEffect(() => {
+    setFunctions.setAmount('');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.sourceChain, state.destinationChain, state.token]);
 
   useEffect(() => {
     fromChain &&

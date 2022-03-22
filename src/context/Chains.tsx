@@ -5,13 +5,13 @@ import {
   useEffect,
   useMemo,
   useState,
-} from "react";
+} from 'react';
 
 // @ts-ignore
-import { ethers } from "ethers";
-import { ChainConfig } from "../config/chains";
-import { config } from "../config";
-import { useWalletProvider } from "./WalletProvider";
+import { ethers } from 'ethers';
+import { ChainConfig } from '../config/chains';
+import { config } from '../config';
+import { useWalletProvider } from './WalletProvider';
 
 interface IChainsContext {
   areChainsReady: boolean;
@@ -29,8 +29,6 @@ interface IChainsContext {
 const ChainsContext = createContext<IChainsContext | null>(null);
 
 const ChainsProvider: React.FC<{ chains: ChainConfig[] }> = (props) => {
-  const { currentChainId } = useWalletProvider()!;
-
   const [fromChain, setFromChain] = useState<ChainConfig>();
   const [toChain, setToChain] = useState<ChainConfig>();
 
@@ -45,26 +43,6 @@ const ChainsProvider: React.FC<{ chains: ChainConfig[] }> = (props) => {
     if (!toChain) return undefined;
     return new ethers.providers.JsonRpcProvider(toChain.rpcUrl);
   }, [toChain]);
-
-  // default from chain to current metamak chain on startup
-  // else if default chain is not supported, then use the first supported chain
-  useEffect(() => {
-    setToChain(undefined);
-    if (!currentChainId) {
-      setFromChain(props.chains[0]);
-      return;
-    }
-    let currentMetamaskChain = props.chains.find(
-      (chain) => chain.chainId === currentChainId
-    );
-    // console.log({ currentChainId, chainsList });
-    if (currentMetamaskChain) {
-      setFromChain(currentMetamaskChain);
-      // console.log(currentMetamaskChain);
-    } else {
-      setFromChain(props.chains[0]);
-    }
-  }, [currentChainId, props.chains]);
 
   useEffect(() => {
     (async () => {
@@ -107,7 +85,7 @@ const ChainsProvider: React.FC<{ chains: ChainConfig[] }> = (props) => {
       ) {
         setToChain(chain);
       } else {
-        throw new Error("To Chain not supported for current from chain");
+        throw new Error('To Chain not supported for current from chain');
       }
     },
     [fromChain]
