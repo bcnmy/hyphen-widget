@@ -90,6 +90,8 @@ class HyphenWidget extends React.Component<
   HyphenWidgetProps,
   HyphenWidgetOptions & Inputs & InputConfig
 > {
+  private element?: Element;
+
   constructor(props: HyphenWidgetProps) {
     super(props);
     props.expose(this);
@@ -120,6 +122,16 @@ class HyphenWidget extends React.Component<
     );
   }
 
+  setElement(element: Element) {
+    if (this.element) throw new Error('Cannot override element ref');
+    this.element = element;
+  }
+
+  destroy() {
+    if (!this.element) throw new Error('Element ref not found');
+    ReactDOM.unmountComponentAtNode(this.element);
+  }
+
   static init(
     ele: HTMLElement,
     options: HyphenWidgetOptions & DefaultInputs & InputConfig
@@ -128,7 +140,10 @@ class HyphenWidget extends React.Component<
     ReactDOM.render(
       <React.StrictMode>
         <HyphenWidget
-          expose={(component) => (widget = component)}
+          expose={(component) => {
+            widget = component;
+            widget.setElement(ele);
+          }}
           options={options}
         />
       </React.StrictMode>,
