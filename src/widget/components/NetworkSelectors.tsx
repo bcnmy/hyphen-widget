@@ -1,22 +1,26 @@
-import Select from "../../components/Select";
-import { ChainConfig } from "../../config/chains";
-import { useChains } from "../../context/Chains";
-import { useWalletProvider } from "../../context/WalletProvider";
-import React, { useMemo } from "react";
-import { HiArrowRight } from "react-icons/hi";
-import CustomTooltip from "./CustomTooltip";
+import Select from '../../components/Select';
+import { useChains } from '../../context/Chains';
+import { useWalletProvider } from '../../context/WalletProvider';
+import React, { useMemo } from 'react';
+import { HiArrowRight } from 'react-icons/hi';
+import CustomTooltip from './CustomTooltip';
 
-interface INetworkSelectorsProps {}
+interface INetworkSelectorsProps {
+  setFromChain: (newValue: string) => void;
+  setToChain: (newValue: string) => void;
+  swapFromToChains: () => void;
+}
 
-const NetworkSelectors: React.FC<INetworkSelectorsProps> = () => {
+const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
+  setFromChain,
+  setToChain,
+  swapFromToChains,
+}) => {
   const { isLoggedIn } = useWalletProvider()!;
   const {
     chainsList,
     fromChain,
     toChain,
-    changeFromChain,
-    changeToChain,
-    switchChains,
     compatibleToChainsForCurrentFromChain,
   } = useChains()!;
 
@@ -57,20 +61,15 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = () => {
           options={fromChainOptions}
           selected={selectedFromChain}
           setSelected={(opt) => {
-            chainsList &&
-              changeFromChain(
-                chainsList.find(
-                  (chain) => chain.chainId === opt.id
-                ) as ChainConfig
-              );
+            chainsList && setFromChain(opt.name);
           }}
-          label={"source"}
+          label={'source'}
         />
       </div>
       <div className="mb-1.5 flex items-end">
         <button
           className="bg-hyphen-purple border-hyphen-purple/10 text-hyphen-purple rounded-full border bg-opacity-20 p-2 transition-all"
-          onClick={switchChains}
+          onClick={swapFromToChains}
         >
           <HiArrowRight />
         </button>
@@ -81,14 +80,9 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = () => {
           options={toChainOptions}
           selected={selectedToChain}
           setSelected={(opt) => {
-            chainsList &&
-              changeToChain(
-                chainsList.find(
-                  (chain) => chain.chainId === opt.id
-                ) as ChainConfig
-              );
+            chainsList && setToChain(opt.name);
           }}
-          label={"destination"}
+          label={'destination'}
         />
         {!isLoggedIn && (
           <CustomTooltip id="networkSelect" text="Please connect your wallet" />

@@ -6,7 +6,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import Widget, { WidgetProps } from './widget/Widget';
+import Widget from './widget/Widget';
 import AppProviders from './context';
 import { Chains, chains } from './config/chains';
 
@@ -60,7 +60,7 @@ interface ExternalControlledInputs {
   receiver?: string;
   gasless?: boolean;
   setSourceChain: (newValue: string) => void;
-  setDestinationChain: (newValue: string) => void;
+  setDestinationChain: (newValue: string | undefined) => void;
   setToken: (newValue: string) => void;
   setAmount: (newValue: string) => void;
   setReceiver: (newValue: string) => void;
@@ -87,19 +87,20 @@ export interface InputConfig {
 }
 class HyphenWidget extends React.Component<
   HyphenWidgetProps,
-  HyphenWidgetOptions & WidgetProps
+  HyphenWidgetOptions & Inputs & InputConfig
 > {
   constructor(props: HyphenWidgetProps) {
     super(props);
     props.expose(this);
+    this.state = props.options;
   }
 
   render() {
     const chainsCopy = [...chains];
     for (const chain of chainsCopy) {
-      if (this.props.options.apiKeys[chain.name]) {
-        chain.biconomy.apiKey = this.props.options.apiKeys[chain.name]!;
-        chain.rpcUrl = this.props.options.rpcUrls[chain.name] || chain.rpcUrl;
+      if (this.state.apiKeys[chain.name]) {
+        chain.biconomy.apiKey = this.state.apiKeys[chain.name]!;
+        chain.rpcUrl = this.state.rpcUrls[chain.name] || chain.rpcUrl;
       }
     }
 
@@ -107,10 +108,10 @@ class HyphenWidget extends React.Component<
       <>
         <ToastContainer className="font-sans font-semibold" />
         <AppProviders
-          test={!!this.props.options.test}
+          test={!!this.state.test}
           chains={chainsCopy.filter((e) => e.rpcUrl && e.biconomy.apiKey)}
         >
-          <Widget {...this.props.options} />
+          <Widget {...this.state} />
         </AppProviders>
       </>
     );

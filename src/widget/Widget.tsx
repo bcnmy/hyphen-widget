@@ -20,11 +20,13 @@ import { useBiconomy } from '../context/Biconomy';
 import CustomTooltip from './components/CustomTooltip';
 import { HiInformationCircle } from 'react-icons/hi';
 import { HyphenWidgetOptions, InputConfig, Inputs } from '../';
-import { stat } from 'fs';
+import { useToken } from '../context/Token';
+import { TokenConfig } from '../config/tokens';
+import { ChainConfig } from '../config/chains';
 
 export interface WidgetProps {
   sourceChain: string;
-  destinationChain: string;
+  destinationChain: string | undefined;
   token: string;
   amount: string;
   receiver: string;
@@ -39,7 +41,7 @@ export interface WidgetProps {
 
 interface WidgetSetFunctions {
   setSourceChain: (newValue: string) => void;
-  setDestinationChain: (newValue: string) => void;
+  setDestinationChain: (newValue: string | undefined) => void;
   setToken: (newValue: string) => void;
   setAmount: (newValue: string) => void;
   setReceiver: (newValue: string) => void;
@@ -49,11 +51,24 @@ interface WidgetSetFunctions {
 const Widget: React.FC<
   HyphenWidgetOptions & WidgetSetFunctions & Inputs & InputConfig
 > = (props) => {
-  const { areChainsReady } = useChains()!;
-  const { changeTransferAmountInputValue, transactionAmountValidationErrors } =
-    useTransaction()!;
+  const {
+    chainsList,
+    areChainsReady,
+    fromChain,
+    toChain,
+    changeFromChain,
+    changeToChain,
+    switchChains,
+    compatibleToChainsForCurrentFromChain,
+  } = useChains()!;
+  const {
+    changeTransferAmountInputValue,
+    transactionAmountValidationErrors,
+    changeReceiver,
+  } = useTransaction()!;
   const { isBiconomyAllowed, setIsBiconomyToggledOn, isBiconomyEnabled } =
     useBiconomy()!;
+  const { tokensList, changeSelectedToken } = useToken()!;
   const { isLoggedIn, connect } = useWalletProvider()!;
   const {
     isVisible: isApprovalModalVisible,
@@ -86,6 +101,28 @@ const Widget: React.FC<
     receiver: props.defaultReceiver || props.receiver || '',
     gasless: props.defaultGaslessMode || props.gasless || false,
   });
+
+  useEffect(() => {
+    setState({
+      test: props.test,
+      apiKeys: props.apiKeys,
+      rpcUrls: props.rpcUrls,
+      popupMode: props.popupMode,
+      widgetMode: props.widgetMode,
+      lockSourceChain: props.lockSourceChain,
+      lockDestinationChain: props.lockDestinationChain,
+      lockToken: props.lockToken,
+      lockAmount: props.lockAmount,
+      lockReceiver: props.lockReceiver,
+      sourceChain: props.defaultSourceChain || props.sourceChain || 'Mumbai',
+      destinationChain:
+        props.defaultDestinationChain || props.destinationChain || 'Goerli',
+      token: props.defaultToken || props.token || 'ETH',
+      amount: props.defaultAmount || props.amount || '',
+      receiver: props.defaultReceiver || props.receiver || '',
+      gasless: props.defaultGaslessMode || props.gasless || false,
+    });
+  }, [props]);
 
   const setFunctions: WidgetSetFunctions = useMemo(() => {
     let isDefaultMode = !(
@@ -151,6 +188,52 @@ const Widget: React.FC<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.amount]);
 
+  useEffect(() => {
+    fromChain &&
+      changeSelectedToken(
+        tokensList.find((t) => t.symbol === state.token) as TokenConfig
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.token]);
+
+  useEffect(() => {
+    if (
+      fromChain?.name === state.destinationChain &&
+      toChain?.name === state.sourceChain
+    )
+      return switchChains();
+    if (!chainsList) return;
+
+    if (fromChain?.name !== state.sourceChain) {
+      changeFromChain(
+        chainsList.find((e) => e.name === state.sourceChain) as ChainConfig
+      );
+      setFunctions.setDestinationChain(undefined);
+    } else if (toChain?.name !== state.destinationChain) {
+      if (
+        compatibleToChainsForCurrentFromChain?.find(
+          (e) => e.name === state.destinationChain
+        )
+      ) {
+        changeToChain(
+          chainsList.find(
+            (e) => e.name === state.destinationChain
+          ) as ChainConfig
+        );
+      } else {
+        setFunctions.setDestinationChain(undefined);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.destinationChain, state.sourceChain]);
+
+  useEffect(() => {
+    changeReceiver({
+      currentTarget: { value: state.receiver },
+    } as React.FormEvent<HTMLInputElement>);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.receiver]);
+
   return (
     <>
       <ApprovalModal
@@ -207,7 +290,15 @@ const Widget: React.FC<
                 )}
               </div>
               <div className="grid grid-cols-[1fr_34px_1fr] gap-2 p-4 rounded-xl bg-hyphen-purple bg-opacity-[0.05] border-hyphen-purple border border-opacity-10 hover:border-opacity-30">
-                <NetworkSelectors />
+                <NetworkSelectors
+                  setFromChain={setFunctions.setSourceChain}
+                  setToChain={setFunctions.setDestinationChain}
+                  swapFromToChains={() => {
+                    if (!state.destinationChain) return;
+                    setFunctions.setSourceChain(state.destinationChain);
+                    setFunctions.setDestinationChain(state.sourceChain);
+                  }}
+                />
               </div>
               <div className="grid grid-cols-[1fr_34px_1fr] items-center gap-2 p-4 rounded-xl bg-hyphen-purple bg-opacity-[0.05] border-hyphen-purple border border-opacity-10 hover:border-opacity-30">
                 <AmountInput
@@ -217,10 +308,15 @@ const Widget: React.FC<
                   error={transactionAmountValidationErrors}
                 />
                 <div></div>
-                <TokenSelector disabled={state.lockToken || !areChainsReady} />
+                <TokenSelector
+                  disabled={state.lockToken || !areChainsReady}
+                  token={state.token}
+                  setAmount={setFunctions.setAmount}
+                  setToken={setFunctions.setToken}
+                />
               </div>
 
-              <ChangeReceiverAddress />
+              <ChangeReceiverAddress setReceiver={setFunctions.setReceiver} />
 
               <CallToAction
                 onApproveButtonClick={showApprovalModal}
