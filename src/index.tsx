@@ -28,6 +28,16 @@ export interface HyphenWidgetOptions {
   rpcUrls: { [key in Chains]?: string };
   popupMode?: boolean;
   widgetMode?: boolean;
+  onDeposit?: (hash: string) => any;
+  onExit?: (hash: string) => any;
+  onChange?: (obj: {
+    sourceChain?: string;
+    destinationChain?: string;
+    token?: string;
+    amount?: string;
+    receiver?: string;
+    gasless: boolean;
+  }) => any;
 }
 
 interface DefaultInputs {

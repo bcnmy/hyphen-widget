@@ -63,10 +63,23 @@ const Widget: React.FC<
     compatibleToChainsForCurrentFromChain,
   } = useChains()!;
   const {
+    transferAmount,
     changeTransferAmountInputValue,
     transactionAmountValidationErrors,
     changeReceiver,
+    receiver,
+    executeDepositValue,
+    exitHash,
   } = useTransaction()!;
+
+  useEffect(() => {
+    if (executeDepositValue?.hash && props.onDeposit)
+      props.onDeposit(executeDepositValue?.hash);
+  }, [executeDepositValue?.hash, props, props.onDeposit]);
+  useEffect(() => {
+    if (exitHash && props.onExit) props.onExit(exitHash);
+  }, [exitHash, props, props.onExit]);
+
   const { isBiconomyAllowed, setIsBiconomyToggledOn, isBiconomyEnabled } =
     useBiconomy()!;
   const {
@@ -174,6 +187,26 @@ const Widget: React.FC<
     props.setToken,
     props.sourceChain,
     props.token,
+  ]);
+  useEffect(() => {
+    if (props.onChange) {
+      props.onChange({
+        amount: transferAmount?.toString(),
+        destinationChain: toChain?.name,
+        gasless: isBiconomyEnabled,
+        receiver: receiver.receiverAddress,
+        sourceChain: fromChain?.name,
+        token: selectedToken?.symbol,
+      });
+    }
+  }, [
+    fromChain?.name,
+    isBiconomyEnabled,
+    props,
+    receiver.receiverAddress,
+    selectedToken?.symbol,
+    toChain?.name,
+    transferAmount,
   ]);
 
   useEffect(() => {
