@@ -104,7 +104,7 @@ class HyphenWidget extends React.Component<
 
   constructor(props: HyphenWidgetProps) {
     super(props);
-    props.expose(this);
+    props.expose && props.expose(this);
     this.state = props.options;
   }
 
@@ -161,10 +161,6 @@ class HyphenWidget extends React.Component<
     );
     return widget;
   }
-}
-
-if (window) {
-  window.HyphenWidget = HyphenWidget;
 }
 
 export default HyphenWidget;
