@@ -167,4 +167,4 @@ if (window) {
   window.HyphenWidget = HyphenWidget;
 }
 
-export default Widget;
+export default HyphenWidget;
