@@ -6,15 +6,6 @@
     "@apollo/client": "^3.5.7",
     "@biconomy/hyphen": "^0.0.20",
     "@biconomy/mexa": "^2.0.24",
-    "@craco/craco": "^6.4.3",
-    "@headlessui/react": "^1.4.2",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@types/jest": "^26.0.15",
-    "@types/node": "^12.0.0",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
     "@walletconnect/web3-provider": "^1.6.6",
     "assert": "^2.0.0",
     "awesome-debounce-promise": "^2.1.0",
@@ -39,14 +30,11 @@
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "tailwind-merge": "^1.0.0",
-    "typescript": "^4.1.2",
-    "web-vitals": "^1.0.1",
-    "web3modal": "^1.9.4",
-    "webpack": "^5.65.0"
+    "web3modal": "^1.9.4"
   },
   "scripts": {
-    "build:lib": "REACT_APP_ENV=production REACT_APP_INFURA_ID=https://mainnet.infura.io/v3/c9c349cef85a436eaad2f5ef6c067f3a parcel build src/index.tsx --dist-dir build",
-    "start:lib": "REACT_APP_ENV=local REACT_APP_INFURA_ID=https://mainnet.infura.io/v3/c9c349cef85a436eaad2f5ef6c067f3a parcel watch src/index.tsx --dist-dir build"
+    "build": "REACT_APP_ENV=production REACT_APP_INFURA_ID=https://mainnet.infura.io/v3/c9c349cef85a436eaad2f5ef6c067f3a webpack",
+    "start": "REACT_APP_ENV=local REACT_APP_INFURA_ID=https://mainnet.infura.io/v3/c9c349cef85a436eaad2f5ef6c067f3a webpack --watch"
   },
   "eslintConfig": {
     "extends": [
@@ -67,14 +55,30 @@
     ]
   },
   "devDependencies": {
+    "@headlessui/react": "^1.4.2",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/jest": "^26.0.15",
+    "@types/node": "^12.0.0",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
     "@types/react-notifications-component": "^3.1.1",
     "@types/react-transition-group": "^4.4.4",
     "@types/tailwindcss": "^2.2.4",
     "autoprefixer": "^10.4.0",
-    "parcel": "^2.3.2",
+    "css-loader": "^6.7.1",
+    "mini-css-extract-plugin": "^2.6.0",
+    "node-polyfill-webpack-plugin": "^1.1.4",
     "postcss": "^8.4.5",
+    "postcss-loader": "^6.2.1",
     "querystring-es3": "^0.2.1",
     "tailwindcss": "^3.0.2",
-    "url": "^0.11.0"
+    "ts-loader": "^9.2.8",
+    "typescript": "^4.1.2",
+    "url": "^0.11.0",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2"
   }
 }
