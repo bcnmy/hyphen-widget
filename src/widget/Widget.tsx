@@ -23,7 +23,7 @@ import { HyphenWidgetOptions, InputConfig, Inputs } from '../';
 import { useToken } from '../context/Token';
 import { TokenConfig } from '../config/tokens';
 import { ChainConfig } from '../config/chains';
-
+import logo from '../assets/images/hyphen-logo.svg';
 export interface WidgetProps {
   sourceChain: string | undefined;
   destinationChain: string | undefined;
@@ -345,7 +345,12 @@ const Widget: React.FC<
         <div className="max-w-xl mx-auto">
           <div className="relative z-10">
             <div className="flex flex-col gap-2 p-6 bg-white shadow-lg rounded-3xl">
-              <div className="flex items-center justify-end mb-2">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center">
+                  <a href="https://hyphen.biconomy.io/">
+                    <img src={logo} alt="Hyphen" />
+                  </a>
+                </div>
                 <div className="flex items-center">
                   <HiInformationCircle
                     data-tip
