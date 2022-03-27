@@ -41,12 +41,14 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
   const toChainOptions = useMemo(() => {
     if (!compatibleToChainsForCurrentFromChain) return [];
     else
-      return compatibleToChainsForCurrentFromChain.map((chain) => ({
-        id: chain.chainId,
-        name: chain.name,
-        image: chain.image,
-      }));
-  }, [compatibleToChainsForCurrentFromChain]);
+      return compatibleToChainsForCurrentFromChain
+        .map((chain) => ({
+          id: chain.chainId,
+          name: chain.name,
+          image: chain.image,
+        }))
+        .filter((f) => chainsList.find((e) => e.chainId === f.id));
+  }, [chainsList, compatibleToChainsForCurrentFromChain]);
 
   const selectedFromChain = useMemo(() => {
     if (!fromChain) return undefined;

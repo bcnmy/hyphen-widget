@@ -25,7 +25,7 @@ export const AppProviders: React.FC<{
               <BiconomyProvider>
                 <HyphenProvider test={test}>
                   <TokenApprovalProvider>
-                    <TransactionProvider>
+                    <TransactionProvider test={test}>
                       <TransactionInfoModalProvider>
                         {children}
                       </TransactionInfoModalProvider>

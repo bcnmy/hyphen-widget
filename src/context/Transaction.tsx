@@ -83,15 +83,18 @@ const TransactionContext = createContext<ITransactionContext | null>(null);
 const getTokenGasPrice = (
   tokenAddress: string,
   networkId: number,
+  test: boolean,
   fetchOptions: any
 ) =>
   fetch(
-    `${config.hyphen.baseURL}${config.hyphen.getTokenGasPricePath}?tokenAddress=${tokenAddress}&networkId=${networkId}`,
+    `${config.hyphen.baseURL[test ? 'test' : 'prod']}${
+      config.hyphen.getTokenGasPricePath
+    }?tokenAddress=${tokenAddress}&networkId=${networkId}`,
     fetchOptions
   );
 const getTokenGasPriceDebounced = AwesomeDebouncePromise(getTokenGasPrice, 500);
 
-const TransactionProvider: React.FC = (props) => {
+const TransactionProvider: React.FC<{ test: boolean }> = (props) => {
   const { selectedToken, selectedTokenBalance } = useToken()!;
   const { toChainRpcUrlProvider } = useChains()!;
   const { poolInfo, hyphen } = useHyphen()!;
@@ -192,6 +195,7 @@ const TransactionProvider: React.FC = (props) => {
     let fetchResponse = await getTokenGasPriceDebounced(
       selectedToken[toChain.chainId].address,
       toChain.chainId,
+      props.test,
       fetchOptions
     );
 

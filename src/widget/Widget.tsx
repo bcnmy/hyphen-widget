@@ -25,7 +25,7 @@ import { TokenConfig } from '../config/tokens';
 import { ChainConfig } from '../config/chains';
 
 export interface WidgetProps {
-  sourceChain: string;
+  sourceChain: string | undefined;
   destinationChain: string | undefined;
   token: string;
   amount: string;
@@ -112,9 +112,8 @@ const Widget: React.FC<
     lockToken: props.lockToken,
     lockAmount: props.lockAmount,
     lockReceiver: props.lockReceiver,
-    sourceChain: props.defaultSourceChain || props.sourceChain || 'Mumbai',
-    destinationChain:
-      props.defaultDestinationChain || props.destinationChain || 'Goerli',
+    sourceChain: props.defaultSourceChain || props.sourceChain,
+    destinationChain: props.defaultDestinationChain || props.destinationChain,
     token: props.defaultToken || props.token || 'ETH',
     amount: props.defaultAmount || props.amount || '',
     receiver: props.defaultReceiver || props.receiver || '',
@@ -133,9 +132,8 @@ const Widget: React.FC<
       lockToken: props.lockToken,
       lockAmount: props.lockAmount,
       lockReceiver: props.lockReceiver,
-      sourceChain: props.defaultSourceChain || props.sourceChain || 'Mumbai',
-      destinationChain:
-        props.defaultDestinationChain || props.destinationChain || 'Goerli',
+      sourceChain: props.defaultSourceChain || props.sourceChain,
+      destinationChain: props.defaultDestinationChain || props.destinationChain,
       token: props.defaultToken || props.token || 'ETH',
       amount: props.defaultAmount || props.amount || '',
       receiver: props.defaultReceiver || props.receiver || '',
@@ -287,9 +285,12 @@ const Widget: React.FC<
       chainsList &&
       compatibleToChainsForCurrentFromChain
     ) {
-      changeToChain(
-        chainsList.find((e) => e.name === state.destinationChain) as ChainConfig
-      );
+      state.destinationChain &&
+        changeToChain(
+          chainsList.find(
+            (e) => e.name === state.destinationChain
+          ) as ChainConfig
+        );
       setFirstLoad(1);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -308,9 +309,10 @@ const Widget: React.FC<
       compatibleTokensForCurrentChains &&
       areChainsReady
     ) {
-      changeSelectedToken(
-        tokensList.find((t) => t.symbol === state.token) as TokenConfig
-      );
+      state.token &&
+        changeSelectedToken(
+          tokensList.find((t) => t.symbol === state.token) as TokenConfig
+        );
       changeTransferAmountInputValue(state.amount);
       setFirstLoad(2);
     }
