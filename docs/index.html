@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/flyinglimao/hyphen-widget/dist/index.css"
+    />
+    <script src="https://cdn.jsdelivr.net/gh/flyinglimao/hyphen-widget/dist/index.js"></script>
+  </head>
+  <body>
+    <div id="widget"></div>
+    <script>
+      const wid = HyphenWidget.default.init(document.getElementById('widget'), {
+        // test: true,
+        apiKeys: {
+          Polygon: 'cSatScM7g.822736c9-bea6-45f0-9c85-7b63c4cfb996',
+          Ethereum: 'meB-ffSeA.933aa46a-d579-407b-a4d4-b0549e10ace2',
+          Avalanche: 'HJYfMrnX-.e37d9c1c-b1fa-4567-8e24-fc8f81634855',
+          // Fuji: 'kOvWW92rA.b03d94b6-cc02-437b-8abc-b1e361db5e19',
+          // Goerli: 'R9s8SLCeV.d8d95a7e-6c38-4252-9849-ec12a9e0afc9',
+          // Mumbai: 'ywiK2AgFv.11eb5ba6-e39e-4eae-b6c4-21f0d26d1d55',
+          // Rinkeby: 'VuQcGyIKK.f3afe1e0-1754-41d5-af68-ab56fc1df2b1',
+        },
+        rpcUrls: {
+          Ethereum:
+            'https://eth.getblock.io/mainnet/?api_key=4f05cb8a-1c2a-407c-8c7e-ad7cd96b78bc',
+          Polygon:
+            'https://matic.getblock.io/mainnet/?api_key=4f05cb8a-1c2a-407c-8c7e-ad7cd96b78bc',
+          // Goerli:
+          //   'https://eth.getblock.io/goerli/?api_key=4f05cb8a-1c2a-407c-8c7e-ad7cd96b78bc',
+          // Mumbai:
+          //   'https://matic.getblock.io/testnet/?api_key=4f05cb8a-1c2a-407c-8c7e-ad7cd96b78bc',
+          // Rinkeby:
+          //   'https://rinkeby.infura.io/v3/d126f392798444609246423b06116c77',
+        },
+        // lockSourceChain: true,
+        // lockDestinationChain: true,
+        // lockToken: true,
+        // lockAmount: true,
+        // defaultDestinationChain: 'Ethereum',
+        // defaultSourceChain: 'Polygon',
+        // defaultToken: 'ETH',
+        // defaultAmount: '0.01',
+        // defaultReceiver: '0x000000000000000000000000000000000000dEaD',
+        onDeposit: (e) => console.log('Deposit ' + e),
+        onExit: (e) => console.log('Exit ' + e),
+        onChange: console.log,
+      });
+    </script>
+  </body>
+</html>

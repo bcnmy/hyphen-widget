@@ -1,0 +1,1 @@
+{"version":3,"file":"ErrorModal.d.ts","sourceRoot":"","sources":["../../../src/widget/components/ErrorModal.tsx"],"names":[],"mappings":"AAEA,OAAO,KAA6B,MAAM,OAAO,CAAC;AAYlD,MAAM,WAAW,gBAAgB;IAC/B,KAAK,EAAE,GAAG,CAAC;IACX,KAAK,EAAE,MAAM,CAAC;CACf;AAED,eAAO,MAAM,UAAU,EAAE,KAAK,CAAC,EAAE,CAAC,gBAAgB,CAiDjD,CAAC;AAEF,eAAe,UAAU,CAAC"}

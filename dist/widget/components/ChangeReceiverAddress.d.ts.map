@@ -1,0 +1,1 @@
+{"version":3,"file":"ChangeReceiverAddress.d.ts","sourceRoot":"","sources":["../../../src/widget/components/ChangeReceiverAddress.tsx"],"names":[],"mappings":";AAIA,iBAAS,qBAAqB,CAAC,EAC7B,YAAY,EACZ,WAAW,GACZ,EAAE;IACD,YAAY,CAAC,EAAE,OAAO,CAAC;IACvB,WAAW,EAAE,CAAC,OAAO,EAAE,MAAM,KAAK,IAAI,CAAC;CACxC,eAiCA;AAED,eAAe,qBAAqB,CAAC"}
