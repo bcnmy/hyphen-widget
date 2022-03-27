@@ -2,29 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-#hyphen-widget .web3modal-modal-lightbox {
+.web3modal-modal-lightbox {
   z-index: 100 !important;
 }
 
 @font-face {
-  font-family: "Inter";
-  src: local("Inter"), url(./assets/fonts/inter/Inter-Regular.ttf) format("ttf");
+  font-family: 'Inter';
+  src: local('Inter'), url(./assets/fonts/inter/Inter-Regular.ttf) format('ttf');
 }
 
 @font-face {
-  font-family: "Inter";
-  src: local("Inter"), url(./assets/fonts/inter/Inter-Medium.ttf) format("ttf");
+  font-family: 'Inter';
+  src: local('Inter'), url(./assets/fonts/inter/Inter-Medium.ttf) format('ttf');
 }
 
 @font-face {
-  font-family: "Inter";
-  src: local("Inter"),
-    url(./assets/fonts/inter/Inter-SemiBold.ttf) format("ttf");
+  font-family: 'Inter';
+  src: local('Inter'),
+    url(./assets/fonts/inter/Inter-SemiBold.ttf) format('ttf');
 }
 
 @font-face {
-  font-family: "Inter";
-  src: local("Inter"), url(./assets/fonts/inter/Inter-Bold.ttf) format("ttf");
+  font-family: 'Inter';
+  src: local('Inter'), url(./assets/fonts/inter/Inter-Bold.ttf) format('ttf');
 }
 
 #hyphen-widget .glassy-outline {
@@ -32,8 +32,8 @@
     0 -3px 1px hsla(250, 70%, 5%, 0.3) inset, 0 -2px 6px hsla(0, 0%, 100%, 0.25);
 }
 
-#hyphen-widget input[type="number"]::-webkit-inner-spin-button,
-#hyphen-widget input[type="number"]::-webkit-outer-spin-button {
+#hyphen-widget input[type='number']::-webkit-inner-spin-button,
+#hyphen-widget input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -41,7 +41,7 @@
 }
 
 #hyphen-widget code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 

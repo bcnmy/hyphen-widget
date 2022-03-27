@@ -1283,29 +1283,29 @@ Ensure the default browser behavior of the `hidden` attribute.
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-#hyphen-widget .web3modal-modal-lightbox {
+.web3modal-modal-lightbox {
   z-index: 100 !important;
 }
 
 @font-face {
-  font-family: "Inter";
-  src: local("Inter"), url(2391725004ae05a27e8e.ttf) format("ttf");
+  font-family: 'Inter';
+  src: local('Inter'), url(2391725004ae05a27e8e.ttf) format('ttf');
 }
 
 @font-face {
-  font-family: "Inter";
-  src: local("Inter"), url(e7231ba33760832432b8.ttf) format("ttf");
+  font-family: 'Inter';
+  src: local('Inter'), url(e7231ba33760832432b8.ttf) format('ttf');
 }
 
 @font-face {
-  font-family: "Inter";
-  src: local("Inter"),
-    url(45b4c2ae493bb481102f.ttf) format("ttf");
+  font-family: 'Inter';
+  src: local('Inter'),
+    url(45b4c2ae493bb481102f.ttf) format('ttf');
 }
 
 @font-face {
-  font-family: "Inter";
-  src: local("Inter"), url(a73db89c43e44ca8f5e0.ttf) format("ttf");
+  font-family: 'Inter';
+  src: local('Inter'), url(a73db89c43e44ca8f5e0.ttf) format('ttf');
 }
 
 #hyphen-widget .glassy-outline {
@@ -1313,15 +1313,15 @@ Ensure the default browser behavior of the `hidden` attribute.
     0 -3px 1px hsla(250, 70%, 5%, 0.3) inset, 0 -2px 6px hsla(0, 0%, 100%, 0.25);
 }
 
-#hyphen-widget input[type="number"]::-webkit-inner-spin-button,
-#hyphen-widget input[type="number"]::-webkit-outer-spin-button {
+#hyphen-widget input[type='number']::-webkit-inner-spin-button,
+#hyphen-widget input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   appearance: none;
   margin: 0;
 }
 
 #hyphen-widget code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
