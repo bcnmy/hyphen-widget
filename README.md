@@ -63,6 +63,11 @@ To use the widget in any html page, create an element and use `HyphenWidget.defa
 </script>
 ```
 
+### With React.js
+
+It was designed to be compatible with React, but it failed to 🥲.
+Leave a comment in [Issue#1](https://github.com/flyinglimao/hyphen-widget/issues/1) if you have some ideas.
+
 ## Available Scripts
 
 In the project directory, you can run:
