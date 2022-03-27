@@ -16,10 +16,10 @@ To use the widget in any html page, create an element and use `HyphenWidget.defa
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/flyinglimao/hyphen-widget/dist/index.css"
+  href="https://cdn.jsdelivr.net/gh/flyinglimao/hyphen-widget@0.1.4/dist/index.css"
 />
 <div id="widget"></div>
-<script src="https://cdn.jsdelivr.net/gh/flyinglimao/hyphen-widget/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/flyinglimao/hyphen-widget@0.1.4/dist/index.js"></script>
 <script>
   const wid = HyphenWidget.default.init(document.getElementById('widget'), {
     test: true, // if you're using testnet, it's required
