@@ -1,6 +1,7 @@
 # Hyphen Widget
 
 This project is based on [Hyphen-UI](https://github.com/bcnmy/hyphen-ui/). Provide the UI as a widget that can be embedded in any page.
+You can checkout [this page](https://flyinglimao.github.io/hyphen-widget/) to preview.
 
 ## Usage
 
