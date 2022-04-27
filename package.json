@@ -1,8 +1,5 @@
 {
-  "name": "@flyinglimao/hyphen-widget",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/flyinglimao"
-  },
+  "name": "@biconomy/hyphen-widget",
   "version": "0.1.4",
   "license": "MIT",
   "main": "dist/index.js",
