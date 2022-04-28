@@ -9,8 +9,10 @@ export interface ITransferRecord {
     fromChain: ChainConfig;
     toChain: ChainConfig;
     lpFee: string;
+    transferredAmount: string;
     transactionFee: string;
     transferTime: string;
+    rewardAmount?: string;
 }
 interface ITransactionInfoModalContext {
     showTransactionInfoModal: (transferRecord: ITransferRecord) => void;

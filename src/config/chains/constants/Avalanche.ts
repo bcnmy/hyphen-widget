@@ -7,6 +7,7 @@ export const AVALANCHE: ChainConfig = {
   image: avaxIcon,
   subText: 'Avalanche mainnet',
   chainId: 43114,
+  chainColor: '#E841421A',
   rpcUrl: 'https://api.avax.network/ext/bc/C/rpc',
   currency: 'AVAX',
   nativeToken: NATIVE_ADDRESS,
@@ -14,11 +15,13 @@ export const AVALANCHE: ChainConfig = {
   nativeFaucetURL: '',
   biconomy: {
     enable: false,
-    apiKey: '',
+    apiKey: 'jndkOSkVO.e9e51b91-ded9-4371-8eba-c5e8c7ec84d7',
   },
   assetSentTopicId:
-    '0xec1dcc5633614eade4a5730f51adc7444a5103a8477965a32f2e886f5b20f694',
+    '0x6bfd5ee5792d66b151a3fab9f56ee828a0f1c3216d4b752e267cd5590326b15c',
   networkAgnosticTransfer: false, // Set this to enable network agnostic gasless transactions
   graphURL: 'https://api.thegraph.com/subgraphs/name/divyan73/hyphen-avalanche',
+  v2GraphURL:
+    'https://api.thegraph.com/subgraphs/name/shantanu-bico/hyphenv2-liquidity-pool-avalanche',
   explorerUrl: 'https://snowtrace.io',
 };

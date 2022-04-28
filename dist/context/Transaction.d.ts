@@ -1,5 +1,5 @@
-import { FormEvent } from 'react';
-import { Status } from '../hooks/useLoading';
+import { FormEvent } from "react";
+import { Status } from "../hooks/useLoading";
 export declare enum ValidationErrors {
     INVALID_AMOUNT = 0,
     AMOUNT_LT_MIN = 1,
@@ -18,6 +18,8 @@ interface ITransactionContext {
         lpFeeProcessedString: string;
         transactionFeeProcessedString: string;
         amountToGetProcessedString: string;
+        rewardAmountString: string | undefined;
+        transferFeePercentage: string | undefined;
     };
     transactionAmountValidationErrors: ValidationErrors[];
     receiver: {

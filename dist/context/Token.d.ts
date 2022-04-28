@@ -1,7 +1,7 @@
 /// <reference types="react" />
-import { TokenConfig } from '../config/tokens';
-import { BigNumber } from 'ethers';
-import { Status } from '../hooks/useLoading';
+import { TokenConfig } from "../config/tokens";
+import { BigNumber } from "ethers";
+import { Status } from "../hooks/useLoading";
 interface ITokenBalance {
     formattedBalance: string;
     displayBalance: string;

@@ -1,72 +1,77 @@
-import { useHyphen } from '../../context/Hyphen';
-import { Status } from '../../hooks/useLoading';
-import Skeleton from 'react-loading-skeleton';
+import { useHyphen } from "../../context/Hyphen";
+import { Status } from "../../hooks/useLoading";
+import Skeleton from "react-loading-skeleton";
 
-import React from 'react';
-import { useTransaction, ValidationErrors } from '../../context/Transaction';
-import { twMerge } from 'tailwind-merge';
-import { useChains } from '../../context/Chains';
-import CustomTooltip from './CustomTooltip';
-import { Listbox } from '@headlessui/react';
+import React from "react";
+import { useTransaction, ValidationErrors } from "../../context/Transaction";
+import { twMerge } from "tailwind-merge";
+import { useChains } from "../../context/Chains";
+import CustomTooltip from "../../components/CustomTooltip";
+import { Listbox } from "@headlessui/react";
 
 interface IAmountInputProps {
   disabled?: boolean;
-  amount: string;
-  setAmount: (newValue: string) => void;
-  error: ValidationErrors[];
 }
-
 const AmountInput: React.FunctionComponent<IAmountInputProps> = ({
   disabled,
-  amount,
-  setAmount,
-  error,
 }) => {
   const { poolInfo, getPoolInfoStatus } = useHyphen()!;
+  const {
+    changeTransferAmountInputValue,
+    transferAmountInputValue,
+    transactionAmountValidationErrors,
+  } = useTransaction()!;
 
   return (
     <div className="flex flex-col justify-end text-hyphen-purple-dark">
-      <div className="block" data-tip data-for="transferAmount">
-        <label className="pl-1 text-xs font-semibold capitalize text-hyphen-purple-dark text-opacity-70">
+      <div className="flex flex-col" data-tip data-for="transferAmount">
+        <label className="pl-5 text-xxs font-semibold uppercase text-hyphen-gray-400">
           Amount
         </label>
         <input
-          type="string"
+          type="text"
           inputMode="decimal"
           placeholder="0.000"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
+          value={transferAmountInputValue}
+          onChange={(e) => changeTransferAmountInputValue(e.target.value)}
           className={twMerge(
-            'inline-block w-full h-12 text-2xl font-mono bg-white px-4 py-2 mt-1 tracking-tight border border-hyphen-purple border-opacity-20 focus:outline-none focus-visible:ring-2 rounded-lg focus-visible:ring-opacity-10 focus-visible:ring-white focus-visible:ring-offset-hyphen-purple/30 focus-visible:ring-offset-2 focus-visible:border-hyphen-purple',
-            disabled && 'cursor-not-allowed text-gray-900/80 bg-gray-200'
+            "mt-2 inline-block h-15 w-full rounded-2.5 border bg-white px-4 py-2 font-mono text-2xl text-hyphen-gray-400 focus:outline-none",
+            disabled && "cursor-not-allowed bg-gray-200"
           )}
           disabled={disabled}
         />
       </div>
       {disabled && (
-        <CustomTooltip
-          id="transferAmount"
-          text="Select source & destination chains"
-        />
+        <CustomTooltip id="transferAmount">
+          <span>Select source & destination chains</span>
+        </CustomTooltip>
       )}
-      <div className="flex justify-between px-2 my-2 text-xs text-hyphen-purple-dark">
+      <div className="my-2 flex justify-between px-2 text-xs text-hyphen-purple-dark">
         <button
           className={twMerge(
-            'flex items-center transition-colors',
-            error.includes(ValidationErrors.AMOUNT_LT_MIN) && 'text-red-600'
+            "flex items-center transition-colors",
+            transactionAmountValidationErrors.includes(
+              ValidationErrors.AMOUNT_LT_MIN
+            ) && "text-red-600"
           )}
-          onClick={() => setAmount(poolInfo?.minDepositAmount.toString() || '')}
+          onClick={() =>
+            changeTransferAmountInputValue(
+              poolInfo?.minDepositAmount.toString() || ""
+            )
+          }
         >
           Min:
-          <span className="min-w-[40px] ml-1 text-left">
+          <span className="ml-1 min-w-[40px] text-left">
             {getPoolInfoStatus === Status.SUCCESS &&
             poolInfo?.minDepositAmount ? (
-              <>{poolInfo.minDepositAmount}</>
+              <>{Math.trunc(poolInfo.minDepositAmount * 100000) / 100000}</>
             ) : (
               <>
                 <Skeleton
                   baseColor="#615ccd20"
-                  enableAnimation={!disabled}
+                  enableAnimation={
+                    !disabled || getPoolInfoStatus === Status.PENDING
+                  }
                   highlightColor="#615ccd05"
                 />
               </>
@@ -75,21 +80,29 @@ const AmountInput: React.FunctionComponent<IAmountInputProps> = ({
         </button>
         <button
           className={twMerge(
-            'flex items-center transition-colors',
-            error.includes(ValidationErrors.AMOUNT_GT_MAX) && 'text-red-600'
+            "flex items-center transition-colors",
+            transactionAmountValidationErrors.includes(
+              ValidationErrors.AMOUNT_GT_MAX
+            ) && "text-red-600"
           )}
-          onClick={() => setAmount(poolInfo?.maxDepositAmount.toString() || '')}
+          onClick={() =>
+            changeTransferAmountInputValue(
+              poolInfo?.maxDepositAmount.toString() || ""
+            )
+          }
         >
           Max:
-          <span className="min-w-[40px] ml-1 text-left">
+          <span className="ml-1 min-w-[40px] text-left">
             {getPoolInfoStatus === Status.SUCCESS &&
             poolInfo?.maxDepositAmount ? (
-              <>{poolInfo.maxDepositAmount}</>
+              <>{Math.trunc(poolInfo.maxDepositAmount * 100000) / 100000}</>
             ) : (
               <>
                 <Skeleton
                   baseColor="#615ccd20"
-                  enableAnimation={!disabled}
+                  enableAnimation={
+                    !disabled || getPoolInfoStatus === Status.PENDING
+                  }
                   highlightColor="#615ccd05"
                 />
               </>

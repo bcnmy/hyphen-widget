@@ -1,6 +1,7 @@
 import { Dialog } from "@headlessui/react";
 import { DEFAULT_FIXED_DECIMAL_POINT } from "../../../config/constants";
 import { formatDistanceStrict } from "date-fns";
+import { BigNumber, ethers } from "ethers";
 import {
   HiOutlineArrowNarrowRight,
   HiOutlineArrowSmRight,
@@ -27,45 +28,41 @@ function TransactionDetailModal({
   const {
     amount,
     amountReceived,
-    endTimeStamp,
+    endTimestamp,
+    fromChain,
     fromChainExplorerUrl,
-    fromChainLabel,
     lpFee,
-    receivedTokenSymbol,
-    startTimeStamp,
+    rewardAmount,
+    startTimestamp,
+    toChain,
     toChainExplorerUrl,
-    toChainLabel,
-    tokenSymbol,
+    token,
+    transactionFee,
   } = transactionDetails!;
   const transactionTime = formatDistanceStrict(
-    new Date(endTimeStamp * 1000),
-    new Date(startTimeStamp * 1000)
+    new Date(+endTimestamp * 1000),
+    new Date(+startTimestamp * 1000)
   );
-  const transactionFee = (
-    Number.parseFloat(amount) -
-    Number.parseFloat(lpFee) -
-    Number.parseFloat(amountReceived)
-  ).toFixed(DEFAULT_FIXED_DECIMAL_POINT);
 
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
-      <div className="relative z-20 p-6 bg-white border shadow-lg rounded-3xl border-hyphen-purple-darker/50">
-        <div className="flex items-center justify-between mb-6">
+      <div className="relative z-20 rounded-3xl border border-hyphen-purple-darker/50 bg-white p-6 shadow-lg">
+        <div className="mb-6 flex items-center justify-between">
           <Dialog.Title as="h1" className="text-xl font-semibold text-gray-700">
             Transaction details
           </Dialog.Title>
           <button onClick={onClose} className="rounded hover:bg-gray-100">
-            <IoMdClose className="w-auto h-6 text-gray-500" />
+            <IoMdClose className="h-6 w-auto text-gray-500" />
           </button>
         </div>
 
         <article>
-          <div className="flex flex-col pb-4 border-b border-gray-200">
-            <div className="flex items-center justify-between mb-2">
+          <div className="flex flex-col border-b border-gray-200 pb-4">
+            <div className="mb-2 flex items-center justify-between">
               <div className="flex flex-col">
                 <span className="text-xs text-gray-400">Sent</span>
                 <span className="text-xl font-semibold text-gray-700">
-                  {amount} {tokenSymbol}
+                  {amount} {token.symbol}
                 </span>
                 <a
                   target="_blank"
@@ -73,15 +70,15 @@ function TransactionDetailModal({
                   rel="noreferrer"
                   className="flex items-center text-hyphen-purple"
                 >
-                  {fromChainLabel}
-                  <HiOutlineArrowSmRight className="w-5 h-5 -rotate-45" />
+                  {fromChain.name}
+                  <HiOutlineArrowSmRight className="h-5 w-5 -rotate-45" />
                 </a>
               </div>
-              <HiOutlineArrowNarrowRight className="w-8 h-8 text-gray-700" />
+              <HiOutlineArrowNarrowRight className="h-8 w-8 text-gray-700" />
               <div className="flex flex-col">
                 <span className="text-xs text-gray-400">Received</span>
                 <span className="text-xl font-semibold text-gray-700">
-                  {amountReceived} {receivedTokenSymbol}
+                  {amountReceived} {token.symbol}
                 </span>
                 <a
                   target="_blank"
@@ -89,8 +86,8 @@ function TransactionDetailModal({
                   rel="noreferrer"
                   className="flex items-center text-hyphen-purple"
                 >
-                  {toChainLabel}
-                  <HiOutlineArrowSmRight className="w-5 h-5 -rotate-45" />
+                  {toChain.name}
+                  <HiOutlineArrowSmRight className="h-5 w-5 -rotate-45" />
                 </a>
               </div>
             </div>
@@ -102,16 +99,22 @@ function TransactionDetailModal({
           </div>
 
           <ul className="pt-4">
-            <li className="flex justify-between mb-1">
+            <li className="mb-1 flex justify-between">
               <span className="text-gray-500">Liquidity provider fee</span>
               <span className="text-gray-700">
-                {lpFee} {tokenSymbol}
+                {lpFee} {token.symbol}
+              </span>
+            </li>
+            <li className="mb-1 flex justify-between">
+              <span className="text-gray-500">Reward amount</span>
+              <span className="text-gray-700">
+                {rewardAmount} {token.symbol}
               </span>
             </li>
             <li className="flex justify-between">
               <span className="text-gray-500">Transaction fee</span>
               <span className="text-gray-700">
-                {transactionFee} {tokenSymbol}
+                {transactionFee} {token.symbol}
               </span>
             </li>
           </ul>

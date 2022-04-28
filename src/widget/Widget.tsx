@@ -1,29 +1,29 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from "react";
 
-import { useWalletProvider } from '../context/WalletProvider';
-import { useChains } from '../context/Chains';
+import { useWalletProvider } from "../context/WalletProvider";
+import { useChains } from "../context/Chains";
 
-import NetworkSelectors from './components/NetworkSelectors';
-import TokenSelector from './components/TokenSelector';
-import AmountInput from './components/AmountInput';
-import TransactionFee from './components/TransactionFee';
-import ChangeReceiverAddress from './components/ChangeReceiverAddress';
-import CallToAction from './components/CallToAction';
-import { Toggle } from '../components/Toggle';
-import useModal from '../hooks/useModal';
-import ApprovalModal from './components/ApprovalModal';
-import { useTokenApproval } from '../context/TokenApproval';
-import ErrorModal from './components/ErrorModal';
-import TransferModal from './components/TransferModal';
-import { useTransaction } from '../context/Transaction';
-import { useBiconomy } from '../context/Biconomy';
-import CustomTooltip from './components/CustomTooltip';
-import { HiInformationCircle } from 'react-icons/hi';
-import { HyphenWidgetOptions, InputConfig, Inputs } from '../';
-import { useToken } from '../context/Token';
-import { TokenConfig } from '../config/tokens';
-import { ChainConfig } from '../config/chains';
-import logo from '../assets/images/hyphen-logo.svg';
+import NetworkSelectors from "./components/NetworkSelectors";
+import TokenSelector from "./components/TokenSelector";
+import AmountInput from "./components/AmountInput";
+import TransactionFee from "./components/TransactionFee";
+import ChangeReceiverAddress from "./components/ChangeReceiverAddress";
+import CallToAction from "./components/CallToAction";
+import { Toggle } from "../components/Toggle";
+import useModal from "../hooks/useModal";
+import ApprovalModal from "./components/ApprovalModal";
+import { useTokenApproval } from "../context/TokenApproval";
+import ErrorModal from "./components/ErrorModal";
+import TransferModal from "./components/TransferModal";
+import { useTransaction } from "../context/Transaction";
+import { useBiconomy } from "../context/Biconomy";
+import CustomTooltip from "../components/CustomTooltip";
+import { HiInformationCircle } from "react-icons/hi";
+import { HyphenWidgetOptions, InputConfig, Inputs } from "../";
+import { useToken } from "../context/Token";
+import { TokenConfig } from "../config/tokens";
+import { ChainConfig } from "../config/chains";
+import { useHyphen } from "../context/Hyphen";
 export interface WidgetProps {
   sourceChain: string | undefined;
   destinationChain: string | undefined;
@@ -61,6 +61,7 @@ const Widget: React.FC<
     changeToChain,
     switchChains,
     compatibleToChainsForCurrentFromChain,
+    toChainRpcUrlProvider,
   } = useChains()!;
   const {
     transferAmount,
@@ -70,6 +71,7 @@ const Widget: React.FC<
     receiver,
     executeDepositValue,
     exitHash,
+    transactionFee,
   } = useTransaction()!;
 
   useEffect(() => {
@@ -89,6 +91,8 @@ const Widget: React.FC<
     selectedToken,
   } = useToken()!;
   const { isLoggedIn, connect } = useWalletProvider()!;
+  const { poolInfo } = useHyphen()!;
+
   const {
     isVisible: isApprovalModalVisible,
     hideModal: hideApprovalModal,
@@ -99,7 +103,7 @@ const Widget: React.FC<
     hideModal: hideTransferlModal,
     showModal: showTransferModal,
   } = useModal();
-  const { executeApproveTokenError } = useTokenApproval()!;
+  const { executeApproveTokenError, executeApproveToken } = useTokenApproval()!;
 
   const [state, setState] = useState<HyphenWidgetOptions & WidgetProps>({
     test: props.test,
@@ -114,11 +118,27 @@ const Widget: React.FC<
     lockReceiver: props.lockReceiver,
     sourceChain: props.defaultSourceChain || props.sourceChain,
     destinationChain: props.defaultDestinationChain || props.destinationChain,
-    token: props.defaultToken || props.token || 'ETH',
-    amount: props.defaultAmount || props.amount || '',
-    receiver: props.defaultReceiver || props.receiver || '',
+    token: props.defaultToken || props.token || "ETH",
+    amount: props.defaultAmount || props.amount || "",
+    receiver: props.defaultReceiver || props.receiver || "",
     gasless: props.defaultGaslessMode || props.gasless || false,
   });
+
+  const [transferModalData, setTransferModalData] = useState<any>();
+
+  function handleTransferButtonClick() {
+    const updatedTransferModalData = {
+      fromChain,
+      selectedToken,
+      toChain,
+      toChainRpcUrlProvider,
+      transferAmount,
+      transactionFee,
+    };
+
+    setTransferModalData(updatedTransferModalData);
+    showTransferModal();
+  }
 
   useEffect(() => {
     setState({
@@ -134,9 +154,9 @@ const Widget: React.FC<
       lockReceiver: props.lockReceiver,
       sourceChain: props.defaultSourceChain || props.sourceChain,
       destinationChain: props.defaultDestinationChain || props.destinationChain,
-      token: props.defaultToken || props.token || 'ETH',
-      amount: props.defaultAmount || props.amount || '',
-      receiver: props.defaultReceiver || props.receiver || '',
+      token: props.defaultToken || props.token || "ETH",
+      amount: props.defaultAmount || props.amount || "",
+      receiver: props.defaultReceiver || props.receiver || "",
       gasless: props.defaultGaslessMode || props.gasless || false,
     });
   }, [props]);
@@ -215,157 +235,162 @@ const Widget: React.FC<
     })();
   }, [isLoggedIn, connect]);
 
-  useEffect(() => {
-    setIsBiconomyToggledOn(!!state.gasless);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.gasless]);
+  // useEffect(() => {
+  //   setIsBiconomyToggledOn(!!state.gasless);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [state.gasless]);
 
-  useEffect(() => {
-    changeTransferAmountInputValue(state.amount);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.amount]);
+  // useEffect(() => {
+  //   changeTransferAmountInputValue(state.amount);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [state.amount]);
 
-  useEffect(() => {
-    if (firstLoad === 3) setFunctions.setAmount('');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.sourceChain, state.destinationChain, state.token]);
+  // useEffect(() => {
+  //   if (firstLoad === 3) setFunctions.setAmount("");
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [state.sourceChain, state.destinationChain, state.token]);
 
-  useEffect(() => {
-    fromChain &&
-      changeSelectedToken(
-        tokensList.find((t) => t.symbol === state.token) as TokenConfig
-      );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.token]);
+  // useEffect(() => {
+  //   fromChain &&
+  //     changeSelectedToken(
+  //       tokensList.find((t) => t.symbol === state.token) as TokenConfig
+  //     );
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [state.token]);
 
-  useEffect(() => {
-    if (
-      fromChain?.name === state.destinationChain &&
-      toChain?.name === state.sourceChain
-    )
-      return switchChains();
-    if (!chainsList) return;
+  // useEffect(() => {
+  //   if (
+  //     fromChain?.name === state.destinationChain &&
+  //     toChain?.name === state.sourceChain
+  //   )
+  //     return switchChains();
+  //   if (!chainsList) return;
 
-    if (fromChain?.name !== state.sourceChain) {
-      changeFromChain(
-        chainsList.find((e) => e.name === state.sourceChain) as ChainConfig
-      );
-      if (firstLoad) {
-        setFunctions.setDestinationChain(undefined);
-      }
-    } else if (toChain?.name !== state.destinationChain) {
-      if (
-        compatibleToChainsForCurrentFromChain?.find(
-          (e) => e.name === state.destinationChain
-        )
-      ) {
-        changeToChain(
-          chainsList.find(
-            (e) => e.name === state.destinationChain
-          ) as ChainConfig
-        );
-      } else if (firstLoad) {
-        setFunctions.setDestinationChain(undefined);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.destinationChain, state.sourceChain]);
+  //   if (fromChain?.name !== state.sourceChain) {
+  //     changeFromChain(
+  //       chainsList.find((e) => e.name === state.sourceChain) as ChainConfig
+  //     );
+  //     if (firstLoad) {
+  //       setFunctions.setDestinationChain(undefined);
+  //     }
+  //   } else if (toChain?.name !== state.destinationChain) {
+  //     if (
+  //       compatibleToChainsForCurrentFromChain?.find(
+  //         (e) => e.name === state.destinationChain
+  //       )
+  //     ) {
+  //       changeToChain(
+  //         chainsList.find(
+  //           (e) => e.name === state.destinationChain
+  //         ) as ChainConfig
+  //       );
+  //     } else if (firstLoad) {
+  //       setFunctions.setDestinationChain(undefined);
+  //     }
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [state.destinationChain, state.sourceChain]);
 
-  useEffect(() => {
-    changeReceiver({
-      currentTarget: { value: state.receiver },
-    } as React.FormEvent<HTMLInputElement>);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.receiver]);
+  // useEffect(() => {
+  //   changeReceiver({
+  //     currentTarget: { value: state.receiver },
+  //   } as React.FormEvent<HTMLInputElement>);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [state.receiver]);
 
-  useEffect(() => {
-    if (
-      firstLoad === 0 &&
-      !toChain &&
-      chainsList &&
-      compatibleToChainsForCurrentFromChain
-    ) {
-      state.destinationChain &&
-        changeToChain(
-          chainsList.find(
-            (e) => e.name === state.destinationChain
-          ) as ChainConfig
-        );
-      setFirstLoad(1);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    chainsList,
-    firstLoad,
-    toChain,
-    state.destinationChain,
-    compatibleToChainsForCurrentFromChain,
-  ]);
+  // useEffect(() => {
+  //   if (
+  //     firstLoad === 0 &&
+  //     !toChain &&
+  //     chainsList &&
+  //     compatibleToChainsForCurrentFromChain
+  //   ) {
+  //     state.destinationChain &&
+  //       changeToChain(
+  //         chainsList.find(
+  //           (e) => e.name === state.destinationChain
+  //         ) as ChainConfig
+  //       );
+  //     setFirstLoad(1);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [
+  //   chainsList,
+  //   firstLoad,
+  //   toChain,
+  //   state.destinationChain,
+  //   compatibleToChainsForCurrentFromChain,
+  // ]);
 
-  useEffect(() => {
-    if (
-      firstLoad === 1 &&
-      toChain &&
-      compatibleTokensForCurrentChains &&
-      areChainsReady
-    ) {
-      state.token &&
-        changeSelectedToken(
-          tokensList.find((t) => t.symbol === state.token) as TokenConfig
-        );
-      changeTransferAmountInputValue(state.amount);
-      setFirstLoad(2);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [firstLoad, state.token, toChain, tokensList, areChainsReady]);
+  // useEffect(() => {
+  //   if (
+  //     firstLoad === 1 &&
+  //     toChain &&
+  //     compatibleTokensForCurrentChains &&
+  //     areChainsReady
+  //   ) {
+  //     state.token &&
+  //       changeSelectedToken(
+  //         tokensList.find((t) => t.symbol === state.token) as TokenConfig
+  //       );
+  //     changeTransferAmountInputValue(state.amount);
+  //     setFirstLoad(2);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [firstLoad, state.token, toChain, tokensList, areChainsReady]);
 
-  useEffect(() => {
-    if (firstLoad === 2 && fromChain && toChain && selectedToken) {
-      changeTransferAmountInputValue(state.amount);
-      setFirstLoad(3);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [firstLoad, fromChain, selectedToken, state.amount, toChain]);
+  // useEffect(() => {
+  //   if (firstLoad === 2 && fromChain && toChain && selectedToken) {
+  //     changeTransferAmountInputValue(state.amount);
+  //     setFirstLoad(3);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [firstLoad, fromChain, selectedToken, state.amount, toChain]);
 
   return (
     <>
-      <ApprovalModal
-        isVisible={isApprovalModalVisible}
-        onClose={hideApprovalModal}
-      />
-      <TransferModal
-        isVisible={isTransferModalVisible}
-        onClose={() => {
-          changeTransferAmountInputValue('');
-          hideTransferlModal();
-        }}
-      />
-      <ErrorModal error={executeApproveTokenError} title={'Approval Error'} />
+      {fromChain && selectedToken && transferAmount ? (
+        <ApprovalModal
+          executeTokenApproval={executeApproveToken}
+          isVisible={isApprovalModalVisible}
+          onClose={hideApprovalModal}
+          selectedChainName={fromChain.name}
+          selectedTokenName={selectedToken.symbol}
+          transferAmount={transferAmount}
+        />
+      ) : null}
+
+      {isTransferModalVisible ? (
+        <TransferModal
+          isVisible={isTransferModalVisible}
+          onClose={() => {
+            changeTransferAmountInputValue("");
+            hideTransferlModal();
+          }}
+          transferModalData={transferModalData}
+        />
+      ) : null}
+
+      <ErrorModal error={executeApproveTokenError} title={"Approval Error"} />
       <div className="my-0 hyphen-widget-modal">
         <div className="max-w-xl mx-auto">
           <div className="relative z-10">
             <div className="flex flex-col gap-2 p-6 bg-white shadow-lg rounded-3xl">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center">
-                  <a href="https://hyphen.biconomy.io/">
-                    <img src={logo} alt="Hyphen" />
-                  </a>
-                </div>
-                <div className="flex items-center">
                   <HiInformationCircle
                     data-tip
                     data-for="gaslessMode"
                     className="mr-2 text-gray-500"
                   />
-                  <CustomTooltip
-                    id="gaslessMode"
-                    text="This transaction is sponsored by Biconomy"
-                  />
+                  <CustomTooltip id="gaslessMode">
+                    <span>This transaction is sponsored by Biconomy</span>
+                  </CustomTooltip>
                   <div
                     className={
                       !isBiconomyAllowed
-                        ? 'flex opacity-50 cursor-not-allowed'
-                        : 'flex'
+                        ? "flex opacity-50 cursor-not-allowed"
+                        : "flex"
                     }
                     data-tip
                     data-for="whyGaslessDisabled"
@@ -381,10 +406,9 @@ const Widget: React.FC<
                   </div>
                 </div>
                 {!isBiconomyAllowed && (
-                  <CustomTooltip
-                    id="whyGaslessDisabled"
-                    text="Disabled for selected chain"
-                  />
+                  <CustomTooltip id="whyGaslessDisabled">
+                    <span>Disabled for selected chain</span>
+                  </CustomTooltip>
                 )}
               </div>
               <div className="grid grid-cols-[1fr_34px_1fr] gap-2 p-4 rounded-xl bg-hyphen-purple bg-opacity-[0.05] border-hyphen-purple border border-opacity-10 hover:border-opacity-30">
@@ -407,28 +431,21 @@ const Widget: React.FC<
               </div>
               <div className="grid grid-cols-[1fr_34px_1fr] items-center gap-2 p-4 rounded-xl bg-hyphen-purple bg-opacity-[0.05] border-hyphen-purple border border-opacity-10 hover:border-opacity-30">
                 <AmountInput
-                  disabled={state.lockAmount || !areChainsReady}
-                  amount={state.amount}
-                  setAmount={setFunctions.setAmount}
-                  error={transactionAmountValidationErrors}
+                  disabled={
+                    !areChainsReady ||
+                    !poolInfo?.minDepositAmount ||
+                    !poolInfo?.maxDepositAmount
+                  }
                 />
                 <div></div>
-                <TokenSelector
-                  disabled={state.lockToken || !areChainsReady}
-                  token={state.token}
-                  setAmount={setFunctions.setAmount}
-                  setToken={setFunctions.setToken}
-                />
+                <TokenSelector disabled={state.lockToken || !areChainsReady} />
               </div>
 
-              <ChangeReceiverAddress
-                setReceiver={setFunctions.setReceiver}
-                lockReceiver={state.lockReceiver}
-              />
+              <ChangeReceiverAddress />
 
               <CallToAction
                 onApproveButtonClick={showApprovalModal}
-                onTransferButtonClick={showTransferModal}
+                onTransferButtonClick={handleTransferButtonClick}
               />
             </div>
           </div>

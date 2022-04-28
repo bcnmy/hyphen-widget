@@ -1,9 +1,10 @@
-import Select from '../../components/Select';
-import { useChains } from '../../context/Chains';
-import { useWalletProvider } from '../../context/WalletProvider';
-import React, { useMemo } from 'react';
-import { HiArrowRight } from 'react-icons/hi';
-import CustomTooltip from './CustomTooltip';
+import Select from "../../components/Select";
+import { ChainConfig } from "../../config/chains";
+import { useChains } from "../../context/Chains";
+import { useWalletProvider } from "../../context/WalletProvider";
+import React, { useMemo } from "react";
+import { HiArrowRight } from "react-icons/hi";
+import CustomTooltip from "../../components/CustomTooltip";
 
 interface INetworkSelectorsProps {
   setFromChain: (newValue: string) => void;
@@ -12,7 +13,6 @@ interface INetworkSelectorsProps {
   lockSourceChain?: boolean;
   lockDestinationChain?: boolean;
 }
-
 const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
   setFromChain,
   setToChain,
@@ -25,6 +25,9 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
     chainsList,
     fromChain,
     toChain,
+    changeFromChain,
+    changeToChain,
+    switchChains,
     compatibleToChainsForCurrentFromChain,
   } = useChains()!;
 
@@ -69,13 +72,13 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
           setSelected={(opt) => {
             chainsList && setFromChain(opt.name);
           }}
-          label={'source'}
+          label={"source"}
           disabled={lockSourceChain}
         />
       </div>
-      <div className="mb-1.5 flex items-end">
+      <div className="mb-3 flex items-end">
         <button
-          className="bg-hyphen-purple border-hyphen-purple/10 text-hyphen-purple rounded-full border bg-opacity-20 p-2 transition-all"
+          className="rounded-full border border-hyphen-purple/10 bg-hyphen-purple bg-opacity-20 p-2 text-hyphen-purple transition-all"
           onClick={swapFromToChains}
           disabled={lockSourceChain || lockDestinationChain}
         >
@@ -90,10 +93,12 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
           setSelected={(opt) => {
             chainsList && setToChain(opt.name);
           }}
-          label={'destination'}
+          label={"destination"}
         />
         {!isLoggedIn && (
-          <CustomTooltip id="networkSelect" text="Please connect your wallet" />
+          <CustomTooltip id="networkSelect">
+            <span>Please connect your wallet</span>
+          </CustomTooltip>
         )}
       </div>
     </>

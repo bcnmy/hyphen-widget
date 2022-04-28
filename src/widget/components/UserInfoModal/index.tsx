@@ -10,201 +10,223 @@ import {
   HiOutlineClipboardCopy,
   HiOutlineClipboardCheck,
   HiOutlineArrowNarrowRight,
-  HiOutlineArrowSmRight,
   HiOutlineRefresh,
 } from "react-icons/hi";
 import Modal from "../../../components/Modal";
 import { getProviderInfo } from "web3modal";
 import { useChains } from "../../../context/Chains";
-import { tokens } from "../../../config/tokens";
-import { ChainConfig } from "../../../config/chains";
+import { TokenConfig, tokens } from "../../../config/tokens";
+import { ChainConfig, chains } from "../../../config/chains";
 import TransactionDetailModal from "../TransactionDetailModal";
 import useModal from "../../../hooks/useModal";
 import { twMerge } from "tailwind-merge";
-import { DEFAULT_FIXED_DECIMAL_POINT } from "../../../config/constants";
+import { useHyphen } from "../../../context/Hyphen";
 
 export interface IUserInfoModalProps {
   isVisible: boolean;
   onClose: () => void;
 }
 
-export interface ITransaction {
-  amount: number;
-  from: string;
+export interface IUserDeposits {
   id: string;
-  receiver: string;
+  amount: string;
+  rewardAmount: string;
   timestamp: string;
-  toChainId: string;
   tokenAddress: string;
-  __typename: string;
+  toChainID: string;
 }
 
 export interface ITransactionDetails {
   amount: string;
   amountReceived: string;
   depositHash: string;
-  endTimeStamp: number;
-  fromChainId: number;
+  endTimestamp: number;
+  exitHash: string;
+  fromChain: ChainConfig;
   fromChainExplorerUrl: string;
-  fromChainLabel: string;
+  gasFee: string;
   lpFee: string;
-  receivedTokenAddress: string;
-  receivedTokenSymbol: string;
-  receiver: string;
-  startTimeStamp: number;
-  toChainId: number;
+  rewardAmount: string;
+  startTimestamp: number;
+  toChain: ChainConfig;
   toChainExplorerUrl: string;
-  toChainLabel: string;
-  tokenSymbol: string;
-  transferHash: string;
+  token: TokenConfig;
+  transactionFee: string;
 }
 
-const USER_TRANSACTIONS = gql`
-  query USER_TRANSACTIONS($address: String!) {
-    fundsDepositeds(
+const USER_DEPOSITS = gql`
+  query USER_DEPOSITS($address: String!) {
+    deposits(
       first: 5
+      where: { sender: $address }
       orderBy: timestamp
       orderDirection: desc
-      where: { from: $address }
     ) {
       id
-      from
-      receiver
-      tokenAddress
       amount
-      toChainId
+      rewardAmount
       timestamp
+      tokenAddress
+      toChainID
     }
   }
 `;
 
-const FUNDS_TO_USER = gql`
-  query FUNDS_TO_USER($depositHash: String!) {
-    fundsSentToUsers(where: { depositHash: $depositHash }) {
-      id
-      depositHash
-      tokenAddress
-      amount
-      transferredAmount
-      feeEarned
+const FEE_INFO = gql`
+  query FEE_INFO($exitHash: String!) {
+    assetSentToUserLogEntries(where: { id: $exitHash }) {
+      gasFee
+      lpFee
       timestamp
+      transferFee
     }
   }
 `;
 
 function UserInfoModal({ isVisible, onClose }: IUserInfoModalProps) {
+  const { accounts, disconnect, rawEthereumProvider } = useWalletProvider()!;
+  const { fromChain } = useChains()!;
+  const { hyphen } = useHyphen()!;
+
+  const [loading, setLoading] = useState(true);
   const [addressCopied, setAddressCopied] = useState(false);
   const [userTransactions, setUserTransactions] = useState<any>();
   const [transactionDetails, setTransactionDetails] =
     useState<ITransactionDetails>();
-  const { accounts, disconnect, rawEthereumProvider } = useWalletProvider()!;
-  const { chainsList, fromChain } = useChains()!;
+
   const { name: providerName } = getProviderInfo(rawEthereumProvider);
   const userAddress = accounts?.[0];
-  const { data, loading, networkStatus, refetch } = useQuery(
-    USER_TRANSACTIONS,
-    {
-      fetchPolicy: "no-cache",
-      notifyOnNetworkStatusChange: true,
-      skip: !isVisible,
-      variables: { address: userAddress },
-    }
-  );
+  const {
+    data: userDepositsData,
+    networkStatus,
+    refetch,
+  } = useQuery(USER_DEPOSITS, {
+    fetchPolicy: "no-cache",
+    notifyOnNetworkStatusChange: true,
+    skip: !isVisible,
+    variables: { address: userAddress },
+  });
 
   useEffect(() => {
-    function getTokenInfo(
-      amount: number,
-      tokenAddress: string,
-      fromChainId: number
-    ): { formattedAmount: string; symbol: string } {
-      const tokenInfo = tokens.find((token) => {
-        const { address } = token[fromChainId];
-        return address.toLowerCase() === tokenAddress.toLowerCase();
-      })!;
-      const { decimal, symbol } = tokenInfo[fromChainId];
-      const formattedAmount = (+ethers.utils.formatUnits(
-        amount.toString(),
-        decimal
-      )).toFixed(DEFAULT_FIXED_DECIMAL_POINT);
-
-      return { formattedAmount, symbol };
-    }
-
-    async function getTransferInfo(transactionId: string, toChainId: number) {
-      const apolloClient = apolloClients[toChainId];
-      const { data } = await apolloClient.query({
-        query: FUNDS_TO_USER,
-        variables: { depositHash: transactionId },
+    async function getFeeInfo(exitHash: string, toChain: ChainConfig) {
+      const apolloClient = apolloClients[toChain.chainId];
+      const { data: feeInfo } = await apolloClient.query({
+        query: FEE_INFO,
+        variables: { exitHash: exitHash },
       });
-      return data.fundsSentToUsers[0];
+
+      return feeInfo;
     }
 
     async function getUserTransactions(
-      chainsList: ChainConfig[],
-      data: { fundsDepositeds: ITransaction[] },
-      fromChain: ChainConfig
+      fromChain: ChainConfig,
+      userDeposits: IUserDeposits[]
     ) {
-      const { chainId: fromChainId, name: fromChainLabel } = fromChain;
-      const { fundsDepositeds } = data;
       let transformedTransactions = [];
-      for (const transaction of fundsDepositeds) {
+      for (const userDeposit of userDeposits) {
         const {
-          id: transactionId,
+          id: depositHash,
           amount,
-          receiver,
-          toChainId: toChainIdAsString,
-          tokenAddress: sentTokenAddress,
-          timestamp: startTimeStamp,
-        } = transaction;
-        const { formattedAmount: sentAmount, symbol: sentTokenSymbol } =
-          getTokenInfo(amount, sentTokenAddress, fromChainId);
-        const toChainId = Number.parseInt(toChainIdAsString, 10);
-        const { name: toChainLabel } = chainsList.find(
-          (chain) => chain.chainId === toChainId
+          rewardAmount,
+          timestamp: startTimestamp,
+          tokenAddress,
+          toChainID,
+        } = userDeposit;
+
+        const { exitHash } = await hyphen.depositManager.checkDepositStatus({
+          depositHash,
+          fromChainId: fromChain.chainId,
+        });
+        const toChain = chains.find(
+          (chainObj) => chainObj.chainId === Number.parseInt(toChainID, 10)
         )!;
-        const {
-          id: transferHash,
-          feeEarned,
-          tokenAddress: receivedTokenAddress,
-          timestamp: endTimeStamp,
-          transferredAmount,
-        } = await getTransferInfo(transactionId, toChainId);
-        const { formattedAmount: receivedAmount, symbol: receivedTokenSymbol } =
-          getTokenInfo(transferredAmount, receivedTokenAddress, toChainId);
-        const { formattedAmount: lpFee } = getTokenInfo(
-          feeEarned,
-          receivedTokenAddress,
-          toChainId
+        const fromChainExplorerUrl = `${fromChain.explorerUrl}/tx/${depositHash}`;
+        const toChainExplorerUrl = `${toChain.explorerUrl}/tx/${exitHash}`;
+        const token = tokens.find(
+          (tokenObj) =>
+            tokenObj[fromChain.chainId]?.address.toLowerCase() ===
+            tokenAddress.toLowerCase()
+        )!;
+        const tokenDecimals = token[fromChain.chainId].decimal;
+
+        const { assetSentToUserLogEntries } = await getFeeInfo(
+          exitHash,
+          toChain
         );
+        const {
+          gasFee,
+          lpFee,
+          timestamp: endTimestamp,
+          transferFee,
+        } = assetSentToUserLogEntries[0];
+
+        const amountReceived = BigNumber.from(amount)
+          .add(BigNumber.from(rewardAmount))
+          .sub(BigNumber.from(transferFee))
+          .sub(BigNumber.from(gasFee));
+
+        const formattedAmount = Number.parseFloat(
+          ethers.utils.formatUnits(
+            BigNumber.from(amount).sub(BigNumber.from(rewardAmount)),
+            tokenDecimals
+          )
+        ).toFixed(3);
+
+        const formattedAmountReceived = Number.parseFloat(
+          ethers.utils.formatUnits(amountReceived, tokenDecimals)
+        ).toFixed(3);
+
+        const formattedRewardAmount = Number.parseFloat(
+          ethers.utils.formatUnits(rewardAmount, tokenDecimals)
+        ).toFixed(3);
+
+        const formattedGasFee = Number.parseFloat(
+          ethers.utils.formatUnits(gasFee, tokenDecimals)
+        ).toFixed(3);
+
+        const formattedLpFee = Number.parseFloat(
+          ethers.utils.formatUnits(lpFee, tokenDecimals)
+        ).toFixed(3);
+
+        const formattedTransactionFee = Number.parseFloat(
+          ethers.utils.formatUnits(
+            BigNumber.from(transferFee)
+              .sub(BigNumber.from(lpFee))
+              .add(BigNumber.from(gasFee)),
+            tokenDecimals
+          )
+        ).toFixed(3);
 
         const transactionDetails = {
-          amount: sentAmount,
-          amountReceived: receivedAmount,
-          depositHash: transactionId,
-          endTimeStamp: Number.parseInt(endTimeStamp, 10),
-          fromChainLabel,
-          fromChainId,
-          lpFee,
-          receivedTokenAddress,
-          receivedTokenSymbol,
-          receiver,
-          startTimeStamp: Number.parseInt(startTimeStamp, 10),
-          toChainId,
-          toChainLabel,
-          tokenSymbol: sentTokenSymbol,
-          transferHash,
+          amount: formattedAmount,
+          amountReceived: formattedAmountReceived,
+          depositHash,
+          endTimestamp,
+          exitHash,
+          fromChain,
+          fromChainExplorerUrl,
+          gasFees: formattedGasFee,
+          lpFee: formattedLpFee,
+          rewardAmount: formattedRewardAmount,
+          startTimestamp,
+          toChain,
+          toChainExplorerUrl,
+          token,
+          transactionFee: formattedTransactionFee,
         };
 
         transformedTransactions.push(transactionDetails);
       }
 
       setUserTransactions(transformedTransactions);
+      setLoading(false);
     }
 
-    if (data && fromChain) {
-      getUserTransactions(chainsList, data, fromChain);
+    if (fromChain && userDepositsData) {
+      const { deposits: userDeposits } = userDepositsData;
+      getUserTransactions(fromChain, userDeposits);
     }
-  }, [chainsList, data, fromChain]);
+  }, [fromChain, hyphen, userDepositsData]);
 
   const {
     isVisible: isTransactionDetailModalVisible,
@@ -236,24 +258,24 @@ function UserInfoModal({ isVisible, onClose }: IUserInfoModalProps) {
   }
 
   function handleTransactionsRefetch() {
-    setUserTransactions(undefined);
+    setLoading(true);
     refetch();
   }
 
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
-      <div className="relative z-20 p-6 bg-white border shadow-lg rounded-3xl border-hyphen-purple-darker/50">
-        <div className="flex items-center justify-between mb-6">
+      <div className="relative z-20 rounded-3xl border border-hyphen-purple-darker/50 bg-white p-6 shadow-lg">
+        <div className="mb-6 flex items-center justify-between">
           <Dialog.Title as="h1" className="text-xl font-semibold text-gray-700">
             Account
           </Dialog.Title>
           <button onClick={onClose} className="rounded hover:bg-gray-100">
-            <IoMdClose className="w-auto h-6 text-gray-500" />
+            <IoMdClose className="h-6 w-auto text-gray-500" />
           </button>
         </div>
 
-        <article className="p-4 mb-6 border border-gray-200 rounded-2xl">
-          <header className="flex items-center justify-between mb-3">
+        <article className="mb-6 rounded-2xl border border-gray-200 p-4">
+          <header className="mb-3 flex items-center justify-between">
             <p className="text-sm text-gray-500">
               Connected with {providerName}
             </p>
@@ -269,9 +291,9 @@ function UserInfoModal({ isVisible, onClose }: IUserInfoModalProps) {
           </p>
           <button className="flex items-center" onClick={handleUserAddressCopy}>
             {addressCopied ? (
-              <HiOutlineClipboardCheck className="w-auto h-4 mr-1 text-green-400" />
+              <HiOutlineClipboardCheck className="mr-1 h-4 w-auto text-green-400" />
             ) : (
-              <HiOutlineClipboardCopy className="w-auto h-4 mr-1 text-gray-500" />
+              <HiOutlineClipboardCopy className="mr-1 h-4 w-auto text-gray-500" />
             )}
             <span
               className={`text-sm ${
@@ -284,16 +306,16 @@ function UserInfoModal({ isVisible, onClose }: IUserInfoModalProps) {
         </article>
 
         <article>
-          <div className="flex items-center justify-between mb-4">
+          <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg text-gray-700">Recent Transactions</h2>
             <button
               onClick={handleTransactionsRefetch}
-              className="flex items-center p-2 text-sm text-gray-700 rounded-md hover:bg-gray-100"
+              className="flex items-center rounded-md p-2 text-sm text-gray-700 hover:bg-gray-100"
             >
               Refresh
               <HiOutlineRefresh
                 className={twMerge(
-                  "w-4 h-4 ml-1 text-gray-500",
+                  "ml-1 h-4 w-4 text-gray-500",
                   networkStatus === NetworkStatus.refetch ? "animate-spin" : ""
                 )}
               />
@@ -315,34 +337,39 @@ function UserInfoModal({ isVisible, onClose }: IUserInfoModalProps) {
           {!loading && userTransactions && userTransactions.length > 0 ? (
             <ul>
               {userTransactions.map((userTransaction: ITransactionDetails) => {
-                const { image, symbol } = tokens.find(
-                  (token) => token.symbol === userTransaction.tokenSymbol
-                )!;
-                const fromChainExplorerUrl = `${
-                  chainsList.find(
-                    (chain) => chain.chainId === userTransaction.fromChainId
-                  )!.explorerUrl
-                }/tx/${userTransaction.depositHash}`;
-                const toChainExplorerUrl = `${
-                  chainsList.find(
-                    (chain) => chain.chainId === userTransaction.toChainId
-                  )!.explorerUrl
-                }/tx/${userTransaction.transferHash}`;
+                const {
+                  amount,
+                  depositHash,
+                  exitHash,
+                  fromChain,
+                  fromChainExplorerUrl,
+                  rewardAmount,
+                  toChain,
+                  toChainExplorerUrl,
+                  token,
+                } = userTransaction;
+                const { chainId: fromChainId, name: fromChainName } = fromChain;
+                const { name: toChainName } = toChain;
+                const {
+                  image,
+                  symbol,
+                  [fromChainId]: { decimal: tokenDecimals },
+                } = token;
 
                 return (
                   <li
-                    className="flex items-center justify-between p-2 mb-2 last:mb-0"
-                    key={userTransaction.depositHash}
+                    className="mb-2 flex items-center justify-between p-2 last:mb-0"
+                    key={depositHash}
                   >
                     <div className="flex items-center">
                       <img
                         src={image}
                         alt={symbol}
-                        className="w-10 h-10 mr-4"
+                        className="mr-4 h-10 w-10"
                       />
                       <div className="flex flex-col">
                         <span className="font-semibold text-gray-700">
-                          {userTransaction.amount} {userTransaction.tokenSymbol}
+                          {amount} {symbol}
                         </span>
                         <span className="flex items-center text-sm">
                           <a
@@ -351,29 +378,23 @@ function UserInfoModal({ isVisible, onClose }: IUserInfoModalProps) {
                             rel="noreferrer"
                             className="text-hyphen-purple"
                           >
-                            {userTransaction.fromChainLabel}
+                            {fromChainName}
                           </a>
-                          <HiOutlineArrowNarrowRight className="w-4 h-4 mx-1 text-gray-500" />
+                          <HiOutlineArrowNarrowRight className="mx-1 h-4 w-4 text-gray-500" />
                           <a
                             target="_blank"
                             href={toChainExplorerUrl}
                             rel="noreferrer"
                             className="text-hyphen-purple"
                           >
-                            {userTransaction.toChainLabel}
+                            {toChainName}
                           </a>
                         </span>
                       </div>
                     </div>
                     <button
-                      className="flex items-center p-2 text-sm text-gray-700 rounded-md hover:bg-gray-100"
-                      onClick={() =>
-                        handleDetailsOpen({
-                          ...userTransaction,
-                          fromChainExplorerUrl,
-                          toChainExplorerUrl,
-                        })
-                      }
+                      className="flex items-center rounded-md p-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleDetailsOpen(userTransaction)}
                     >
                       Details
                     </button>

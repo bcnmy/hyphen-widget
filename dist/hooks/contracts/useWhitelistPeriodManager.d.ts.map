@@ -1,0 +1,1 @@
+{"version":3,"file":"useWhitelistPeriodManager.d.ts","sourceRoot":"","sources":["../../../src/hooks/contracts/useWhitelistPeriodManager.ts"],"names":[],"mappings":"AAIA,OAAO,EAAE,WAAW,EAAE,MAAM,eAAe,CAAC;AAE5C,iBAAS,yBAAyB,CAAC,KAAK,EAAE,WAAW,GAAG,SAAS;qCAgB9C,MAAM,GAAG,SAAS;sCASlB,MAAM,GAAG,SAAS;0CASlB,MAAM,GAAG,SAAS,YAAY,MAAM,EAAE,GAAG,SAAS;EAgBpE;AAED,eAAe,yBAAyB,CAAC"}

@@ -3,15 +3,14 @@ export declare const config: {
     chainMap: import("./chains/chainMap").ChainMap;
     tokens: import("./tokens").TokenConfig[];
     hyphen: {
-        baseURL: {
-            test: string;
-            prod: string;
-        };
+        baseURL: string;
         getTokenGasPricePath: string;
     };
     constants: {
         NATIVE_ADDRESS: string;
         DEFAULT_FIXED_DECIMAL_POINT: number;
+        DEPOSIT_TAG: string;
+        BASE_DIVISOR: number;
     };
 };
 export default config;

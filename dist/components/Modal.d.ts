@@ -1,4 +1,4 @@
-import React, { HTMLAttributes } from "react";
+import React, { HTMLAttributes } from 'react';
 interface IModalProps extends HTMLAttributes<HTMLDivElement> {
     isVisible: boolean;
     onClose: () => void;

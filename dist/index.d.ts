@@ -1,8 +1,8 @@
-import React from 'react';
-import './index.css';
-import 'react-loading-skeleton/dist/skeleton.css';
-import 'react-toastify/dist/ReactToastify.css';
-import { Chains } from './config/chains';
+import React from "react";
+import "./index.css";
+import "react-loading-skeleton/dist/skeleton.css";
+import "react-toastify/dist/ReactToastify.css";
+import { Chains } from "./config/chains";
 declare global {
     interface Window {
         HyphenWidget: HyphenWidget | typeof HyphenWidget;

@@ -1,36 +1,34 @@
 /// <reference types="react" />
+import { TokenConfig } from "../../../config/tokens";
+import { ChainConfig } from "../../../config/chains";
 export interface IUserInfoModalProps {
     isVisible: boolean;
     onClose: () => void;
 }
-export interface ITransaction {
-    amount: number;
-    from: string;
+export interface IUserDeposits {
     id: string;
-    receiver: string;
+    amount: string;
+    rewardAmount: string;
     timestamp: string;
-    toChainId: string;
     tokenAddress: string;
-    __typename: string;
+    toChainID: string;
 }
 export interface ITransactionDetails {
     amount: string;
     amountReceived: string;
     depositHash: string;
-    endTimeStamp: number;
-    fromChainId: number;
+    endTimestamp: number;
+    exitHash: string;
+    fromChain: ChainConfig;
     fromChainExplorerUrl: string;
-    fromChainLabel: string;
+    gasFee: string;
     lpFee: string;
-    receivedTokenAddress: string;
-    receivedTokenSymbol: string;
-    receiver: string;
-    startTimeStamp: number;
-    toChainId: number;
+    rewardAmount: string;
+    startTimestamp: number;
+    toChain: ChainConfig;
     toChainExplorerUrl: string;
-    toChainLabel: string;
-    tokenSymbol: string;
-    transferHash: string;
+    token: TokenConfig;
+    transactionFee: string;
 }
 declare function UserInfoModal({ isVisible, onClose }: IUserInfoModalProps): JSX.Element;
 export default UserInfoModal;

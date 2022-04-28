@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 interface ITransactionFeeProps {
 }
 declare const TransactionFee: React.FunctionComponent<ITransactionFeeProps>;

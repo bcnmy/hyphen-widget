@@ -1,14 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import 'react-loading-skeleton/dist/skeleton.css';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import "react-loading-skeleton/dist/skeleton.css";
 
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import Widget from './widget/Widget';
-import AppProviders from './context';
-import { Chains, chains } from './config/chains';
+import Widget from "./widget/Widget";
+import AppProviders from "./context";
+import { Chains, chains } from "./config/chains";
 
 declare global {
   interface Window {
@@ -133,12 +133,12 @@ class HyphenWidget extends React.Component<
   }
 
   setElement(element: Element) {
-    if (this.element) throw new Error('Cannot override element ref');
+    if (this.element) throw new Error("Cannot override element ref");
     this.element = element;
   }
 
   destroy() {
-    if (!this.element) throw new Error('Element ref not found');
+    if (!this.element) throw new Error("Element ref not found");
     ReactDOM.unmountComponentAtNode(this.element);
   }
 

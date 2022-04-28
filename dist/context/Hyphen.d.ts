@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { Status } from '../hooks/useLoading';
+import { Status } from "../hooks/useLoading";
 declare type PoolInfo = {
     minDepositAmount: number;
     maxDepositAmount: number;

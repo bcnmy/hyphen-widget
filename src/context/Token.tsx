@@ -5,19 +5,19 @@ import {
   useEffect,
   useMemo,
   useState,
-} from 'react';
+} from "react";
 
-import { ChainConfig } from '../config/chains';
-import { config } from '../config';
-import { TokenConfig } from '../config/tokens';
-import { useChains } from '../context/Chains';
-import { useWalletProvider } from '../context/WalletProvider';
-import { BigNumber, ethers } from 'ethers';
+import { ChainConfig } from "../config/chains";
+import { config } from "../config";
+import { TokenConfig } from "../config/tokens";
+import { useChains } from "../context/Chains";
+import { useWalletProvider } from "./WalletProvider";
+import { BigNumber, ethers } from "ethers";
 
-import erc20ABI from '../contracts/erc20.abi.json';
-import toFixed from '../utils/toFixed';
-import useAsync, { Status } from '../hooks/useLoading';
-import formatRawEthValue from '../utils/formatRawEthValue';
+import erc20ABI from "../abis/erc20.abi.json";
+import toFixed from "../utils/toFixed";
+import useAsync, { Status } from "../hooks/useLoading";
+import formatRawEthValue from "../utils/formatRawEthValue";
 
 interface ITokenBalance {
   formattedBalance: string;
@@ -94,7 +94,7 @@ const TokenProvider: React.FC = (props) => {
         throw new Error("Chains aren't initialized yet");
       }
       if (!isTokenValidForChains(token, fromChain, toChain)) {
-        throw Error('Provided token is invalid choice for current chains');
+        throw Error("Provided token is invalid choice for current chains");
       }
       setSelectedToken(token);
     },
@@ -112,7 +112,7 @@ const TokenProvider: React.FC = (props) => {
       !accounts ||
       !accounts[0]
     ) {
-      throw new Error('Prerequisites not met');
+      throw new Error("Prerequisites not met");
     }
     let formattedBalance: string;
     let userRawBalance: BigNumber;

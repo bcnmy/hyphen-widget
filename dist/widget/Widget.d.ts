@@ -1,5 +1,5 @@
-import React from 'react';
-import { HyphenWidgetOptions, InputConfig, Inputs } from '../';
+import React from "react";
+import { HyphenWidgetOptions, InputConfig, Inputs } from "../";
 export interface WidgetProps {
     sourceChain: string | undefined;
     destinationChain: string | undefined;

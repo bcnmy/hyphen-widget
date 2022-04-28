@@ -1,6 +1,6 @@
 /// <reference types="react" />
-import { ethers } from 'ethers';
-import { ChainConfig } from '../config/chains';
+import { ethers } from "ethers";
+import { ChainConfig } from "../config/chains";
 interface IChainsContext {
     areChainsReady: boolean;
     fromChainRpcUrlProvider: undefined | ethers.providers.JsonRpcProvider;
@@ -12,6 +12,8 @@ interface IChainsContext {
     changeToChain: (chain: ChainConfig) => void;
     switchChains: () => void;
     chainsList: ChainConfig[];
+    selectedNetwork: ChainConfig | undefined;
+    changeSelectedNetwork: (network: ChainConfig) => void;
 }
 declare const ChainsProvider: React.FC<{
     chains: ChainConfig[];

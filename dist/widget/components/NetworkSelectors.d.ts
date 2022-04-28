@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 interface INetworkSelectorsProps {
     setFromChain: (newValue: string) => void;
     setToChain: (newValue: string) => void;
