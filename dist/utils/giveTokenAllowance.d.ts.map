@@ -1,1 +1,0 @@
-{"version":3,"file":"giveTokenAllowance.d.ts","sourceRoot":"","sources":["../../src/utils/giveTokenAllowance.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAE,MAAM,EAAE,MAAM,QAAQ,CAAC;AAG3C,iBAAS,kBAAkB,CACzB,OAAO,EAAE,MAAM,EACf,MAAM,EAAE,MAAM,CAAC,MAAM,EACrB,YAAY,EAAE,MAAM,EACpB,KAAK,EAAE,SAAS,OAKjB;AAED,eAAe,kBAAkB,CAAC"}

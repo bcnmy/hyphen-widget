@@ -1,1 +1,0 @@
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../../../src/widget/components/TransferModal/index.tsx"],"names":[],"mappings":"AACA,OAAO,KAAoD,MAAM,OAAO,CAAC;AAyBzE,MAAM,WAAW,mBAAmB;IAClC,SAAS,EAAE,OAAO,CAAC;IACnB,OAAO,EAAE,MAAM,IAAI,CAAC;IACpB,iBAAiB,EAAE,GAAG,CAAC;CACxB;AAoTD,eAAO,MAAM,aAAa,EAAE,KAAK,CAAC,EAAE,CAAC,mBAAmB,CAiXvD,CAAC;AAEF,eAAe,aAAa,CAAC"}

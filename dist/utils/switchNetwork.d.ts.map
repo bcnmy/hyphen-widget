@@ -1,1 +1,0 @@
-{"version":3,"file":"switchNetwork.d.ts","sourceRoot":"","sources":["../../src/utils/switchNetwork.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,WAAW,EAAE,MAAM,eAAe,CAAC;AAC5C,OAAO,EAAE,MAAM,EAAE,MAAM,QAAQ,CAAC;AAEhC,wBAAsB,aAAa,CACjC,cAAc,EAAE,MAAM,CAAC,SAAS,CAAC,YAAY,EAC7C,KAAK,EAAE,WAAW,gBAyBnB;AAED,eAAe,aAAa,CAAC"}
