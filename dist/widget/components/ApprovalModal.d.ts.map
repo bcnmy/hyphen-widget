@@ -1,1 +1,0 @@
-{"version":3,"file":"ApprovalModal.d.ts","sourceRoot":"","sources":["../../../src/widget/components/ApprovalModal.tsx"],"names":[],"mappings":"AAEA,OAAO,KAA6B,MAAM,OAAO,CAAC;AAalD,MAAM,WAAW,mBAAmB;IAClC,SAAS,EAAE,OAAO,CAAC;IACnB,OAAO,EAAE,MAAM,IAAI,CAAC;CACrB;AAED,eAAO,MAAM,aAAa,EAAE,KAAK,CAAC,EAAE,CAAC,mBAAmB,CA6EvD,CAAC;AAEF,eAAe,aAAa,CAAC"}
