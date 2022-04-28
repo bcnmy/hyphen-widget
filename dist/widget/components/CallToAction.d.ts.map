@@ -1,1 +1,0 @@
-{"version":3,"file":"CallToAction.d.ts","sourceRoot":"","sources":["../../../src/widget/components/CallToAction.tsx"],"names":[],"mappings":"AASA,OAAO,KAAK,KAAK,MAAM,OAAO,CAAC;AAI/B,MAAM,WAAW,kBAAkB;IACjC,oBAAoB,EAAE,MAAM,IAAI,CAAC;IACjC,qBAAqB,EAAE,MAAM,IAAI,CAAC;CACnC;AAED,eAAO,MAAM,YAAY,EAAE,KAAK,CAAC,EAAE,CAAC,kBAAkB,CAgJrD,CAAC;AAEF,eAAe,YAAY,CAAC"}
