@@ -372,11 +372,11 @@ const Widget: React.FC<
       ) : null}
 
       <ErrorModal error={executeApproveTokenError} title={"Approval Error"} />
-      <div className="my-0 hyphen-widget-modal">
-        <div className="max-w-xl mx-auto">
+      <div className="my-24">
+        <div className="mx-auto max-w-xl">
           <div className="relative z-10">
-            <div className="flex flex-col gap-2 p-6 bg-white shadow-lg rounded-3xl">
-              <div className="flex items-center justify-between mb-2">
+            <div className="flex flex-col gap-2 rounded-10 bg-white p-6 shadow-lg">
+              <div className="mb-2 flex items-center justify-end">
                 <div className="flex items-center">
                   <HiInformationCircle
                     data-tip
@@ -389,7 +389,7 @@ const Widget: React.FC<
                   <div
                     className={
                       !isBiconomyAllowed
-                        ? "flex opacity-50 cursor-not-allowed"
+                        ? "flex cursor-not-allowed opacity-50"
                         : "flex"
                     }
                     data-tip
@@ -401,7 +401,7 @@ const Widget: React.FC<
                     <Toggle
                       label="Gasless Mode"
                       enabled={isBiconomyEnabled}
-                      onToggle={(enabled) => setFunctions.setGasless(enabled)}
+                      onToggle={(enabled) => setIsBiconomyToggledOn(enabled)}
                     />
                   </div>
                 </div>
@@ -411,25 +411,10 @@ const Widget: React.FC<
                   </CustomTooltip>
                 )}
               </div>
-              <div className="grid grid-cols-[1fr_34px_1fr] gap-2 p-4 rounded-xl bg-hyphen-purple bg-opacity-[0.05] border-hyphen-purple border border-opacity-10 hover:border-opacity-30">
-                <NetworkSelectors
-                  setFromChain={setFunctions.setSourceChain}
-                  setToChain={setFunctions.setDestinationChain}
-                  swapFromToChains={() => {
-                    if (
-                      !state.destinationChain ||
-                      state.lockDestinationChain ||
-                      state.lockSourceChain
-                    )
-                      return;
-                    setFunctions.setSourceChain(state.destinationChain);
-                    setFunctions.setDestinationChain(state.sourceChain);
-                  }}
-                  lockSourceChain={state.lockSourceChain}
-                  lockDestinationChain={state.lockDestinationChain}
-                />
+              <div className="grid grid-cols-[1fr_34px_1fr] gap-2 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 hover:border-opacity-30">
+                <NetworkSelectors />
               </div>
-              <div className="grid grid-cols-[1fr_34px_1fr] items-center gap-2 p-4 rounded-xl bg-hyphen-purple bg-opacity-[0.05] border-hyphen-purple border border-opacity-10 hover:border-opacity-30">
+              <div className="grid grid-cols-2 items-center gap-12 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 hover:border-opacity-30">
                 <AmountInput
                   disabled={
                     !areChainsReady ||
@@ -437,8 +422,13 @@ const Widget: React.FC<
                     !poolInfo?.maxDepositAmount
                   }
                 />
-                <div></div>
-                <TokenSelector disabled={state.lockToken || !areChainsReady} />
+                <TokenSelector
+                  disabled={
+                    !areChainsReady ||
+                    !poolInfo?.minDepositAmount ||
+                    !poolInfo?.maxDepositAmount
+                  }
+                />
               </div>
 
               <ChangeReceiverAddress />
