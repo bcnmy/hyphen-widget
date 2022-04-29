@@ -1,37 +1,34 @@
-import Select from '../../components/Select';
-import { TokenConfig } from '../../config/tokens';
-import { useChains } from '../../context/Chains';
-import { useHyphen } from '../../context/Hyphen';
-import { useToken } from '../../context/Token';
-import { useTransaction, ValidationErrors } from '../../context/Transaction';
-import { Status } from '../../hooks/useLoading';
-import React, { useMemo } from 'react';
-import Skeleton from 'react-loading-skeleton';
-import { twMerge } from 'tailwind-merge';
-import CustomTooltip from './CustomTooltip';
+import Select from "../../components/Select";
+import { TokenConfig } from "../../config/tokens";
+import { useChains } from "../../context/Chains";
+import { useHyphen } from "../../context/Hyphen";
+import { useToken } from "../../context/Token";
+import { useTransaction, ValidationErrors } from "../../context/Transaction";
+import { Status } from "../../hooks/useLoading";
+import React, { useMemo } from "react";
+import Skeleton from "react-loading-skeleton";
+import { twMerge } from "tailwind-merge";
+import CustomTooltip from "../../components/CustomTooltip";
 
 interface ITokenSelectorProps {
   disabled?: boolean;
-  token: string;
-  setToken: (newValue: string) => void;
-  setAmount: (newValue: string) => void;
 }
 
 const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
   disabled,
-  setToken,
-  setAmount,
 }) => {
   const {
     tokensList,
     compatibleTokensForCurrentChains,
+    changeSelectedToken,
     selectedTokenBalance,
     selectedToken,
     getSelectedTokenBalanceStatus,
   } = useToken()!;
   const { poolInfo } = useHyphen()!;
 
-  const { transactionAmountValidationErrors } = useTransaction()!;
+  const { changeTransferAmountInputValue, transactionAmountValidationErrors } =
+    useTransaction()!;
   const { fromChain } = useChains()!;
 
   const tokenOptions = useMemo(() => {
@@ -56,28 +53,30 @@ const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
             tokenOptions.find((opt) => opt.id === selectedToken.symbol)
           }
           setSelected={(opt) => {
-            fromChain && setToken(opt.id);
+            fromChain &&
+              changeSelectedToken(
+                tokensList.find((t) => t.symbol === opt.id) as TokenConfig
+              );
           }}
-          label={'token'}
+          label={"token"}
           disabled={disabled}
         />
         {disabled && (
-          <CustomTooltip
-            id="tokenSelect"
-            text="Select source & destination chains"
-          />
+          <CustomTooltip id="tokenSelect">
+            <span>Select source & destination chains</span>
+          </CustomTooltip>
         )}
       </div>
 
-      <div className="flex items-center justify-between gap-4 pl-2 my-2 text-xs text-hyphen-purple-dark">
-        <span className="flex items-baseline flex-grow">
+      <div className="my-2 flex items-center justify-between gap-4 pl-2 text-xs text-hyphen-purple-dark">
+        <span className="flex flex-grow items-baseline">
           <span
             className={twMerge(
-              'mr-1',
+              "mr-1",
               transactionAmountValidationErrors.includes(
                 ValidationErrors.INADEQUATE_BALANCE
-              ) && 'text-red-600',
-              'transition-colors'
+              ) && "text-red-600",
+              "transition-colors"
             )}
           >
             Balance:
@@ -90,11 +89,11 @@ const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
                 className={twMerge(
                   transactionAmountValidationErrors.includes(
                     ValidationErrors.INADEQUATE_BALANCE
-                  ) && 'text-red-600',
-                  'transition-colors'
+                  ) && "text-red-600",
+                  "transition-colors"
                 )}
               >
-                {selectedTokenBalance?.displayBalance || ''}
+                {selectedTokenBalance?.displayBalance || ""}
               </span>
             ) : (
               <Skeleton
@@ -106,12 +105,12 @@ const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
           </span>
         </span>
         <button
-          className="px-2 transition-colors border rounded-full shadow-sm text-hyphen-purple shadow-hyphen-purple/20 border-hyphen-purple border-opacity-20 hover:bg-hyphen-purple/10"
+          className="flex h-4 items-center rounded-full bg-hyphen-purple px-1.5 text-xxs text-white"
           onClick={() => {
             selectedTokenBalance &&
               poolInfo &&
               parseFloat(selectedTokenBalance.formattedBalance) &&
-              setAmount(
+              changeTransferAmountInputValue(
                 (
                   Math.trunc(
                     Math.min(

@@ -14,38 +14,45 @@ import { PrimaryButtonDark } from "../../../components/Buttons/PrimaryButtonDark
 import Spinner from "../../../components/Buttons/Spinner";
 import AnimateHeight from "react-animate-height";
 import { useChains } from "../../../context/Chains";
-// import { useHyphen } from "../context/Hyphen";
 import { useToken } from "../../../context/Token";
-import { HiOutlineArrowSmRight } from "react-icons/hi";
+import { HiExclamation, HiOutlineArrowSmRight } from "react-icons/hi";
 import SpinnerDark from "../../../components/Buttons/SpinnerDark";
 import {
   ITransferRecord,
   useTransactionInfoModal,
 } from "../../../context/TransactionInfoModal";
-import CustomTooltip from "../CustomTooltip";
+import CustomTooltip from "../../../components/CustomTooltip";
 // import { MANUAL_EXIT_RETRIES } from "../../../../config/constants";
 
 export interface ITransferModalProps {
   isVisible: boolean;
   onClose: () => void;
+  transferModalData: any;
 }
 
 interface Step {
   currentStepNumber: number;
   onNextStep: () => void;
   stepNumber: number;
+  transferModalData: any;
 }
 
 const PreDepositStep: React.FC<
   Step & { setModalErrored: (modalErrored: boolean) => void }
-> = ({ currentStepNumber, stepNumber, onNextStep, setModalErrored }) => {
+> = ({
+  currentStepNumber,
+  stepNumber,
+  onNextStep,
+  setModalErrored,
+  transferModalData,
+}) => {
   const active = currentStepNumber === stepNumber;
   const completed = currentStepNumber > stepNumber;
 
   // we set this to true after this step is executed
   // this is done so that stale values of value and error are not used
   const [executed, setExecuted] = useState(false);
-  const { toChain } = useChains()!;
+  const { toChain } = transferModalData;
 
   const {
     executePreDepositCheck,
@@ -75,16 +82,16 @@ const PreDepositStep: React.FC<
   return (
     <div className={!active && !completed ? "opacity-30" : ""}>
       <div className="flex items-center gap-4 py-2 font-medium text-hyphen-purple-darker/70">
-        <div className="relative p-3 border rounded-full shadow-sm bg-hyphen-purple/30 border-hyphen-purple-dark/10 text-hyphen-purple-darker/80">
-          <span className="absolute inset-0 flex items-center justify-center text-xs text-center">
+        <div className="relative rounded-full border border-hyphen-purple-dark/10 bg-hyphen-purple/30 p-3 text-hyphen-purple-darker/80 shadow-sm">
+          <span className="absolute inset-0 flex items-center justify-center text-center text-xs">
             <span className="mb-0.5">{stepNumber}</span>
           </span>
         </div>
         <span>Checking Available Liquidity</span>
       </div>
       <AnimateHeight height={active ? "auto" : 0}>
-        <div className="transition-colors p-4 rounded-xl bg-hyphen-purple bg-opacity-[0.05] border-hyphen-purple border border-opacity-10 hover:border-opacity-30 mx-10 mt-2">
-          <div className="text-sm font-medium text-center text-hyphen-purple-dark/60">
+        <div className="mx-10 mt-2 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 transition-colors hover:border-opacity-30">
+          <div className="text-center text-sm font-medium text-hyphen-purple-dark/60">
             {executePreDepositCheckError ? (
               <span className="font-semibold text-red-700/70">
                 {executePreDepositCheckError.toString()}
@@ -113,18 +120,17 @@ const DepositStep: React.FC<
   setDepositState,
   onNextStep,
   setModalErrored,
+  transferModalData,
 }) => {
   const active = currentStepNumber === stepNumber;
   const completed = currentStepNumber > stepNumber;
   const {
-    transferAmount,
     executeDeposit,
     executeDepositStatus,
     executeDepositValue,
     executeDepositError,
   } = useTransaction()!;
-  const { selectedToken } = useToken()!;
-  const { fromChain } = useChains()!;
+  const { fromChain, selectedToken, transferAmount } = transferModalData;
   const {
     receiver: { receiverAddress },
   } = useTransaction()!;
@@ -163,8 +169,8 @@ const DepositStep: React.FC<
   return (
     <div className={!active && !completed ? "opacity-30" : ""}>
       <div className="flex items-center gap-4 py-2 font-medium text-hyphen-purple-darker/70">
-        <div className="relative p-3 border rounded-full shadow-sm bg-hyphen-purple/30 border-hyphen-purple-dark/10 text-hyphen-purple-darker/80">
-          <span className="absolute inset-0 flex items-center justify-center text-xs text-center">
+        <div className="relative rounded-full border border-hyphen-purple-dark/10 bg-hyphen-purple/30 p-3 text-hyphen-purple-darker/80 shadow-sm">
+          <span className="absolute inset-0 flex items-center justify-center text-center text-xs">
             <span className="mb-0.5">{stepNumber}</span>
           </span>
         </div>
@@ -173,13 +179,13 @@ const DepositStep: React.FC<
         </span>
       </div>
       <AnimateHeight height={active ? "auto" : 0}>
-        <div className="transition-colors p-4 rounded-xl bg-hyphen-purple bg-opacity-[0.05] border-hyphen-purple border border-opacity-10 hover:border-opacity-30 mx-10 mt-2">
+        <div className="mx-10 mt-2 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 transition-colors hover:border-opacity-30">
           {executeDepositError ? (
             <span className="text-sm font-medium text-red-700/70">
               {executeDepositError?.message || executeDepositError.toString()}
             </span>
           ) : (
-            <div className="flex items-center justify-center gap-4 text-sm font-medium text-center text-hyphen-purple-dark/60">
+            <div className="flex items-center justify-center gap-4 text-center text-sm font-medium text-hyphen-purple-dark/60">
               <Spinner />
               <div>
                 {executeDepositStatus === Status.PENDING &&
@@ -212,14 +218,14 @@ const ReceivalStep: React.FC<
   setReceivalState,
   // showManualExit,
   stepNumber,
+  transferModalData,
 }) => {
   const active = currentStepNumber === stepNumber;
   const completed = currentStepNumber > stepNumber;
 
-  const { selectedToken } = useToken()!;
-  const { checkReceival, exitHash, setExitHash, transactionFee } =
-    useTransaction()!;
-  const { toChainRpcUrlProvider, toChain } = useChains()!;
+  const { checkReceival, exitHash, setExitHash } = useTransaction()!;
+  const { selectedToken, toChainRpcUrlProvider, toChain, transactionFee } =
+    transferModalData;
 
   const [receivalError, setReceivalError] = useState<any>();
   const [executed, setExecuted] = useState(false);
@@ -263,9 +269,15 @@ const ReceivalStep: React.FC<
   useEffect(() => {
     try {
       if (!toChainRpcUrlProvider) {
-        console.error("Something has gone horribly wrong");
-        setReceivalError("Unrecoverable application error. Contact us.");
-        throw new Error("Something has gone horribly wrong");
+        console.error(
+          "We were not able to fetch the details, please refresh and try again later."
+        );
+        setReceivalError(
+          "We were not able to fetch the details, please refresh and try again later."
+        );
+        throw new Error(
+          "We were not able to fetch the details, please refresh and try again later."
+        );
       } else if (exitHash && executed && active) {
         setReceivalState(Status.PENDING);
         (async () => {
@@ -293,8 +305,8 @@ const ReceivalStep: React.FC<
   return (
     <div className={!active && !completed ? "opacity-30" : ""}>
       <div className="flex items-center gap-4 py-2 font-medium text-hyphen-purple-darker/70">
-        <div className="relative p-3 border rounded-full shadow-sm bg-hyphen-purple/30 border-hyphen-purple-dark/10 text-hyphen-purple-darker/80">
-          <span className="absolute inset-0 flex items-center justify-center text-xs text-center">
+        <div className="relative rounded-full border border-hyphen-purple-dark/10 bg-hyphen-purple/30 p-3 text-hyphen-purple-darker/80 shadow-sm">
+          <span className="absolute inset-0 flex items-center justify-center text-center text-xs">
             <span className="mb-0.5">{stepNumber}</span>
           </span>
         </div>
@@ -304,13 +316,13 @@ const ReceivalStep: React.FC<
         </span>
       </div>
       <AnimateHeight height={active ? "auto" : 0}>
-        <div className="transition-colors p-4 rounded-xl bg-hyphen-purple bg-opacity-[0.05] border-hyphen-purple border border-opacity-10 hover:border-opacity-30 mx-10 mt-2">
+        <div className="mx-10 mt-2 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 transition-colors hover:border-opacity-30">
           {receivalError ? (
             <span className="font-medium text-red-700/70">
               {receivalError?.message || receivalError.toString()}
             </span>
           ) : (
-            <div className="flex items-center justify-center gap-4 text-sm font-medium text-center text-hyphen-purple-dark/60">
+            <div className="flex items-center justify-center gap-4 text-center text-sm font-medium text-hyphen-purple-dark/60">
               <Spinner />
               Waiting to receive ~{
                 transactionFee?.amountToGetProcessedString
@@ -327,11 +339,13 @@ const ReceivalStep: React.FC<
 export const TransferModal: React.FC<ITransferModalProps> = ({
   isVisible,
   onClose,
+  transferModalData,
 }) => {
-  const { refreshSelectedTokenBalance, selectedToken } = useToken()!;
-  const { transferAmount, executeDepositValue, exitHash, transactionFee } =
-    useTransaction()!;
-  const { fromChain, toChain } = useChains()!;
+  const { fromChain, selectedToken, toChain, transferAmount, transactionFee } =
+    transferModalData;
+
+  const { refreshSelectedTokenBalance } = useToken()!;
+  const { executeDepositValue, exitHash } = useTransaction()!;
   // const { hyphen } = useHyphen()!;
   const { showTransactionInfoModal } = useTransactionInfoModal()!;
   const [modalErrored, setModalErrored] = useState(false);
@@ -414,12 +428,13 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
       fromChain,
       toChain,
       lpFee: transactionFee.lpFeeProcessedString,
+      rewardAmount: transactionFee.rewardAmountString,
+      transferredAmount: transactionFee.amountToGetProcessedString,
       transactionFee: transactionFee.transactionFeeProcessedString,
       transferTime: formatDistanceStrict(endTime, startTime),
     };
 
     showTransactionInfoModal(transferRecord);
-    onClose();
   }, [
     executeDepositValue?.hash,
     exitHash,
@@ -429,7 +444,6 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
     transactionFee,
     transferAmount,
     showTransactionInfoModal,
-    onClose,
     startTime,
     endTime,
   ]);
@@ -468,10 +482,10 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
   return (
     <Modal isVisible={isVisible} onClose={() => {}}>
       <div className="mb-14">
-        <div className="relative z-20 p-6 bg-white border shadow-lg rounded-3xl border-hyphen-purple-darker/50">
-          <div className="absolute opacity-50 -inset-2 bg-white/60 rounded-3xl blur-lg -z-10"></div>
+        <div className="relative z-20 rounded-3xl border border-hyphen-purple-darker/50 bg-white p-6 shadow-lg">
+          <div className="absolute -inset-2 -z-10 rounded-3xl bg-white/60 opacity-50 blur-lg"></div>
           <div className="flex flex-col">
-            <div className="flex items-center justify-between mb-4">
+            <div className="mb-4 flex items-center justify-between">
               <Dialog.Title
                 as="h1"
                 className="text-xl font-semibold text-gray-700"
@@ -486,14 +500,13 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
                   }}
                   disabled={!isExitAllowed}
                 >
-                  <IoMdClose className="w-auto h-6 text-gray-500" />
+                  <IoMdClose className="h-6 w-auto text-gray-500" />
                 </button>
               </span>
               {!isExitAllowed && (
-                <CustomTooltip
-                  id="whyModalExitDisabled"
-                  text="Exit is disabled because transfer is in progress"
-                />
+                <CustomTooltip id="whyModalExitDisabled">
+                  <span>Exit is disabled because transfer is in progress</span>
+                </CustomTooltip>
               )}
             </div>
             <div className="flex flex-col gap-2 pl-2">
@@ -502,6 +515,7 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
                 stepNumber={1}
                 onNextStep={nextStep}
                 setModalErrored={setModalErrored}
+                transferModalData={transferModalData}
               />
               <DepositStep
                 currentStepNumber={activeStep}
@@ -509,6 +523,7 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
                 onNextStep={nextStep}
                 setModalErrored={setModalErrored}
                 setDepositState={setDepositState}
+                transferModalData={transferModalData}
               />
               <ReceivalStep
                 currentStepNumber={activeStep}
@@ -519,9 +534,10 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
                 setReceivalState={setReceivalState}
                 // showManualExit={showManualExit}
                 stepNumber={3}
+                transferModalData={transferModalData}
               />
             </div>
-            <div className="flex justify-center pt-3 pb-2 mt-4">
+            <div className="mt-4 flex justify-center pt-3 pb-2">
               {modalErrored ? (
                 <PrimaryButtonLight
                   className="px-8"
@@ -556,20 +572,28 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
             </div>
           </div>
         </div>
+
         <TransitionReact in={isBottomTrayOpen} timeout={300}>
           {(state) => (
             <div
               className={twMerge(
-                "transition-transform transform-gpu",
+                "transform-gpu transition-transform",
                 (state === "exiting" || state === "exited") &&
                   "-translate-y-full"
               )}
             >
               <div className="relative mx-10">
-                <div className="absolute opacity-80 -inset-[2px] bg-gradient-to-br from-white/10 to-hyphen-purple/30 blur-md -z-10"></div>
-                <div className="relative z-0 border-b shadow-lg bg-gradient-to-r from-hyphen-purple-darker via-hyphen-purple-mid to-hyphen-purple-darker backdrop-blur border-white/20 border-x rounded-b-md">
+                <div className="absolute -inset-[2px] -z-10 bg-gradient-to-br from-white/10 to-hyphen-purple/30 opacity-80 blur-md"></div>
+                <div className="relative z-0 rounded-b-md border-x border-b border-white/20 bg-gradient-to-r from-hyphen-purple-darker via-hyphen-purple-mid to-hyphen-purple-darker p-4 shadow-lg backdrop-blur">
+                  <article className="mb-4 flex items-start rounded-xl bg-red-100 p-2 text-sm text-red-600">
+                    <HiExclamation className="mr-2 h-6 w-auto" />
+                    <p>
+                      Please do not refresh or change network while the
+                      transaction is in progress.
+                    </p>
+                  </article>
                   <div
-                    className="grid p-6 text-white/75 gap-y-2"
+                    className="grid gap-y-2 text-white/75"
                     style={{ gridTemplateColumns: "1fr auto" }}
                   >
                     <span className="flex items-center gap-3 font-normal">
@@ -593,7 +617,7 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
                               <span className="flex items-center gap-2">
                                 <span>Pending</span>
                                 <span>
-                                  <HiOutlineArrowSmRight className="w-5 h-5 -rotate-45" />
+                                  <HiOutlineArrowSmRight className="h-5 w-5 -rotate-45" />
                                 </span>
                               </span>
                             </div>
@@ -602,7 +626,7 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
                             <div className="flex items-center gap-2">
                               <span>Confirmed</span>
                               <span>
-                                <HiOutlineArrowSmRight className="w-5 h-5 -rotate-45" />
+                                <HiOutlineArrowSmRight className="h-5 w-5 -rotate-45" />
                               </span>
                             </div>
                           )}
@@ -611,7 +635,7 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
                         <Skeleton
                           baseColor="#ffffff10"
                           highlightColor="#ffffff15"
-                          className="max-w-[100px] my-4 mr-2"
+                          className="my-4 mr-2 max-w-[100px]"
                         />
                       )}
                     </span>
@@ -649,7 +673,7 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
                                 <span className="flex items-center gap-2">
                                   <span>Pending</span>
                                   <span>
-                                    <HiOutlineArrowSmRight className="w-5 h-5 -rotate-45" />
+                                    <HiOutlineArrowSmRight className="h-5 w-5 -rotate-45" />
                                   </span>
                                 </span>
                               </div>
@@ -658,7 +682,7 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
                               <div className="flex items-center gap-2">
                                 <span>Confirmed</span>
                                 <span>
-                                  <HiOutlineArrowSmRight className="w-5 h-5 -rotate-45" />
+                                  <HiOutlineArrowSmRight className="h-5 w-5 -rotate-45" />
                                 </span>
                               </div>
                             )}
@@ -667,7 +691,7 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
                           <Skeleton
                             baseColor="#ffffff10"
                             highlightColor="#ffffff15"
-                            className="max-w-[100px] my-4 mr-2"
+                            className="my-4 mr-2 max-w-[100px]"
                           />
                         )
                       }

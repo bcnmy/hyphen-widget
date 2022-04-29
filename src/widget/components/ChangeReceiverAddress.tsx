@@ -1,16 +1,11 @@
-import { Disclosure } from '@headlessui/react';
-import { HiOutlineChevronDown } from 'react-icons/hi';
-import { useTransaction } from '../../context/Transaction';
+import { Disclosure } from "@headlessui/react";
+import { HiOutlineChevronDown } from "react-icons/hi";
+import { useTransaction } from "../../context/Transaction";
 
-function ChangeReceiverAddress({
-  lockReceiver,
-  setReceiver,
-}: {
-  lockReceiver?: boolean;
-  setReceiver: (address: string) => void;
-}) {
+function ChangeReceiverAddress() {
   const {
     receiver: { receiverAddress },
+    changeReceiver,
   } = useTransaction()!;
 
   return (
@@ -21,7 +16,7 @@ function ChangeReceiverAddress({
             <span>Change receiver address</span>
             <HiOutlineChevronDown
               className={`${
-                open ? 'transform rotate-180' : ''
+                open ? "transform rotate-180" : ""
               } w-5 h-5 text-gray-500`}
             />
           </Disclosure.Button>
@@ -29,9 +24,8 @@ function ChangeReceiverAddress({
             <input
               type="text"
               value={receiverAddress}
-              onChange={(evt) => setReceiver(evt.target.value)}
+              onChange={changeReceiver}
               className="w-full h-12 px-4 text-base border border-gray-200 rounded-lg focus:border-gray-500 focus-visible:outline-none"
-              disabled={lockReceiver}
             />
             <span className="px-4 text-sm text-red-600">
               Note: Please do not enter a Smart Contract address.

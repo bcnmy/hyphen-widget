@@ -7,15 +7,12 @@ import {
   useState,
 } from "react";
 
-// @ts-ignore
-import { Hyphen, RESPONSE_CODES, SIGNATURE_TYPES } from "@biconomy/hyphen";
-
-import { useWalletProvider } from "../context/WalletProvider";
-import { useChains } from "../context/Chains";
-import { useToken } from "../context/Token";
+import { useWalletProvider } from "./WalletProvider";
+import { useChains } from "./Chains";
+import { useToken } from "./Token";
 import useAsync, { Status } from "../hooks/useLoading";
-import { useBiconomy } from "../context/Biconomy";
-import { useHyphen } from "../context/Hyphen";
+import { useBiconomy } from "./Biconomy";
+import { useHyphen } from "./Hyphen";
 import { BigNumber, ethers } from "ethers";
 import { NATIVE_ADDRESS } from "../config/constants";
 import { WebpackError } from "webpack";
@@ -72,13 +69,13 @@ const TokenApprovalProvider: React.FC = ({ ...props }) => {
       let tokenDecimals;
 
       try {
-        tokenAllowance = await hyphen.getERC20Allowance(
+        tokenAllowance = await hyphen.tokens.getERC20Allowance(
           selectedToken[fromChain.chainId].address,
           accounts[0],
           poolInfo.fromLPManagerAddress
         );
 
-        tokenDecimals = await hyphen.getERC20TokenDecimals(
+        tokenDecimals = await hyphen.tokens.getERC20TokenDecimals(
           selectedToken[fromChain.chainId].address
         );
       } catch (err) {
@@ -129,7 +126,7 @@ const TokenApprovalProvider: React.FC = ({ ...props }) => {
       }
 
       try {
-        let tokenDecimals = await hyphen.getERC20TokenDecimals(
+        let tokenDecimals = await hyphen.tokens.getERC20TokenDecimals(
           selectedToken[fromChain.chainId].address
         );
 
@@ -140,7 +137,7 @@ const TokenApprovalProvider: React.FC = ({ ...props }) => {
         );
         let rawAmountHexString = rawAmount.toHexString();
 
-        let approveTx = await hyphen.approveERC20(
+        let approveTx = await hyphen.tokens.approveERC20(
           selectedToken[fromChain.chainId].address,
           poolInfo.fromLPManagerAddress,
           rawAmountHexString,

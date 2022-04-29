@@ -1,16 +1,15 @@
-import { ChainConfig } from 'config/chains';
-import { HyphenWidgetOptions } from 'index';
-import React from 'react';
-import { BiconomyProvider } from './Biconomy';
-import { ChainsProvider } from './Chains';
-import { GraphQLProvider } from './GraphQL';
-import { HyphenProvider } from './Hyphen';
-import { NotificationsProvider } from './Notifications';
-import { TokenProvider } from './Token';
-import { TokenApprovalProvider } from './TokenApproval';
-import { TransactionProvider } from './Transaction';
-import { TransactionInfoModalProvider } from './TransactionInfoModal';
-import { WalletProviderProvider } from './WalletProvider';
+import { ChainConfig } from "config/chains";
+import React from "react";
+import { BiconomyProvider } from "./Biconomy";
+import { ChainsProvider } from "./Chains";
+import { GraphQLProvider } from "./GraphQL";
+import { HyphenProvider } from "./Hyphen";
+import { NotificationsProvider } from "./Notifications";
+import { TokenProvider } from "./Token";
+import { TokenApprovalProvider } from "./TokenApproval";
+import { TransactionProvider } from "./Transaction";
+import { TransactionInfoModalProvider } from "./TransactionInfoModal";
+import { WalletProviderProvider } from "./WalletProvider";
 
 export const AppProviders: React.FC<{
   test: boolean;

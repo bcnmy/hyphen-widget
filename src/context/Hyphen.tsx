@@ -4,16 +4,17 @@ import {
   useContext,
   useEffect,
   useMemo,
-} from 'react';
+} from "react";
 
 // @ts-ignore
-import { Hyphen, SIGNATURE_TYPES } from '@biconomy/hyphen';
+import { Hyphen, SIGNATURE_TYPES } from "@biconomy/hyphen-staging";
 
-import { useWalletProvider } from './WalletProvider';
-import { useChains } from './Chains';
-import { useToken } from './Token';
-import useAsync, { Status } from '../hooks/useLoading';
-import { useBiconomy } from './Biconomy';
+import { useWalletProvider } from "./WalletProvider";
+import { useChains } from "./Chains";
+import { useToken } from "./Token";
+import useAsync, { Status } from "../hooks/useLoading";
+import { useBiconomy } from "./Biconomy";
+import { ENV } from "../types/environment";
 
 type PoolInfo = {
   minDepositAmount: number;
@@ -49,7 +50,7 @@ const HyphenProvider: React.FC<{ test?: boolean }> = (props) => {
       hyphen = new Hyphen(fromChainRpcUrlProvider, {
         debug: true,
         infiniteApproval: true,
-        environment: props.test ? 'test' : 'prod',
+        environment: props.test ? "test" : "prod",
         biconomy: {
           enable: isBiconomyEnabled,
           apiKey: fromChain?.biconomy.apiKey,
@@ -61,7 +62,7 @@ const HyphenProvider: React.FC<{ test?: boolean }> = (props) => {
       hyphen = new Hyphen(rawEthereumProvider, {
         debug: true,
         infiniteApproval: true,
-        environment: props.test ? 'test' : 'prod',
+        environment: props.test ? "test" : "prod",
         signatureType: SIGNATURE_TYPES.EIP712,
       });
     }
@@ -86,9 +87,9 @@ const HyphenProvider: React.FC<{ test?: boolean }> = (props) => {
       !selectedToken[fromChain.chainId] ||
       !selectedToken[toChain.chainId]
     ) {
-      throw new Error('Prerequisites not met');
+      throw new Error("Prerequisites not met");
     }
-    return hyphen.getPoolInformation(
+    return hyphen.liquidityPool.getPoolInformation(
       selectedToken[fromChain.chainId].address,
       fromChain.chainId,
       toChain.chainId

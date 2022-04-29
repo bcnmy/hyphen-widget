@@ -1,30 +1,22 @@
-import Select from '../../components/Select';
-import { useChains } from '../../context/Chains';
-import { useWalletProvider } from '../../context/WalletProvider';
-import React, { useMemo } from 'react';
-import { HiArrowRight } from 'react-icons/hi';
-import CustomTooltip from './CustomTooltip';
+import Select from "../../components/Select";
+import { ChainConfig } from "../../config/chains";
+import { useChains } from "../../context/Chains";
+import { useWalletProvider } from "../../context/WalletProvider";
+import React, { useMemo } from "react";
+import { HiArrowRight } from "react-icons/hi";
+import CustomTooltip from "../../components/CustomTooltip";
 
-interface INetworkSelectorsProps {
-  setFromChain: (newValue: string) => void;
-  setToChain: (newValue: string) => void;
-  swapFromToChains: () => void;
-  lockSourceChain?: boolean;
-  lockDestinationChain?: boolean;
-}
+interface INetworkSelectorsProps {}
 
-const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
-  setFromChain,
-  setToChain,
-  swapFromToChains,
-  lockSourceChain,
-  lockDestinationChain,
-}) => {
+const NetworkSelectors: React.FC<INetworkSelectorsProps> = () => {
   const { isLoggedIn } = useWalletProvider()!;
   const {
     chainsList,
     fromChain,
     toChain,
+    changeFromChain,
+    changeToChain,
+    switchChains,
     compatibleToChainsForCurrentFromChain,
   } = useChains()!;
 
@@ -41,14 +33,12 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
   const toChainOptions = useMemo(() => {
     if (!compatibleToChainsForCurrentFromChain) return [];
     else
-      return compatibleToChainsForCurrentFromChain
-        .map((chain) => ({
-          id: chain.chainId,
-          name: chain.name,
-          image: chain.image,
-        }))
-        .filter((f) => chainsList.find((e) => e.chainId === f.id));
-  }, [chainsList, compatibleToChainsForCurrentFromChain]);
+      return compatibleToChainsForCurrentFromChain.map((chain) => ({
+        id: chain.chainId,
+        name: chain.name,
+        image: chain.image,
+      }));
+  }, [compatibleToChainsForCurrentFromChain]);
 
   const selectedFromChain = useMemo(() => {
     if (!fromChain) return undefined;
@@ -67,33 +57,43 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
           options={fromChainOptions}
           selected={selectedFromChain}
           setSelected={(opt) => {
-            chainsList && setFromChain(opt.name);
+            chainsList &&
+              changeFromChain(
+                chainsList.find(
+                  (chain) => chain.chainId === opt.id
+                ) as ChainConfig
+              );
           }}
-          label={'source'}
-          disabled={lockSourceChain}
+          label={"source"}
         />
       </div>
-      <div className="mb-1.5 flex items-end">
+      <div className="mb-3 flex items-end">
         <button
-          className="bg-hyphen-purple border-hyphen-purple/10 text-hyphen-purple rounded-full border bg-opacity-20 p-2 transition-all"
-          onClick={swapFromToChains}
-          disabled={lockSourceChain || lockDestinationChain}
+          className="rounded-full border border-hyphen-purple/10 bg-hyphen-purple bg-opacity-20 p-2 text-hyphen-purple transition-all"
+          onClick={switchChains}
         >
           <HiArrowRight />
         </button>
       </div>
       <div data-tip data-for="networkSelect">
         <Select
-          disabled={!isLoggedIn || lockDestinationChain}
+          disabled={!isLoggedIn}
           options={toChainOptions}
           selected={selectedToChain}
           setSelected={(opt) => {
-            chainsList && setToChain(opt.name);
+            chainsList &&
+              changeToChain(
+                chainsList.find(
+                  (chain) => chain.chainId === opt.id
+                ) as ChainConfig
+              );
           }}
-          label={'destination'}
+          label={"destination"}
         />
         {!isLoggedIn && (
-          <CustomTooltip id="networkSelect" text="Please connect your wallet" />
+          <CustomTooltip id="networkSelect">
+            <span>Please connect your wallet</span>
+          </CustomTooltip>
         )}
       </div>
     </>

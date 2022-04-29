@@ -7,18 +7,22 @@ export const POLYGON: ChainConfig = {
   image: maticIcon,
   subText: 'Polygon Mainnet',
   chainId: 137,
-  rpcUrl: 'https://polygon-rpc.com/',
+  chainColor: '#8247E51A',
+  rpcUrl:
+    'https://polygon-mainnet.g.alchemy.com/v2/SsLbrjcZfm-DHu3sWWw08_LjlIiRDdcH',
   currency: 'MATIC',
   nativeToken: NATIVE_ADDRESS,
   nativeDecimal: 18,
   nativeFaucetURL: '',
   biconomy: {
     enable: true,
-    apiKey: '',
+    apiKey: 'jYEsJEDel.8bc71a9b-4097-4f77-98dc-3a713e3988b9',
   },
   assetSentTopicId:
-    '0xec1dcc5633614eade4a5730f51adc7444a5103a8477965a32f2e886f5b20f694',
+    '0x6bfd5ee5792d66b151a3fab9f56ee828a0f1c3216d4b752e267cd5590326b15c',
   networkAgnosticTransfer: true,
   graphURL: 'https://api.thegraph.com/subgraphs/name/divyan73/hyphenpolygonv2',
+  v2GraphURL:
+    'https://api.thegraph.com/subgraphs/name/shantanu-bico/hyphenv2-liquidity-pool-polygon',
   explorerUrl: 'https://polygonscan.com',
 };
