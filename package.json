@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/bcnmy/hyphen-widget/issues"
   },
-  "homepage": "https://downshift-js.com",
+  "homepage": "https://github.com/bcnmy/hyphen-widget",
   "dependencies": {
     "@apollo/client": "^3.5.7",
     "@biconomy/hyphen-staging": "^1.0.2",
