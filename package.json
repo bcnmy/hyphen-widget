@@ -6,6 +6,9 @@
   "unpkg": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "@apollo/client": "^3.5.7",
     "@biconomy/hyphen-staging": "^1.0.2",
@@ -37,8 +40,8 @@
     "web3modal": "^1.9.4"
   },
   "scripts": {
-    "build": "REACT_APP_ENV=production REACT_APP_INFURA_ID=https://mainnet.infura.io/v3/c9c349cef85a436eaad2f5ef6c067f3a webpack",
-    "start": "REACT_APP_ENV=local REACT_APP_INFURA_ID=https://mainnet.infura.io/v3/c9c349cef85a436eaad2f5ef6c067f3a webpack --watch"
+    "build": "REACT_APP_ENV=production GENERATE_SOURCEMAP=false webpack",
+    "start": "REACT_APP_ENV=local webpack --watch"
   },
   "eslintConfig": {
     "extends": [
