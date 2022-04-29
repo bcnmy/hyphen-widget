@@ -15,7 +15,7 @@ yarn add @biconomy/hyphen-widget
 ### Importing & Instantiation
 
 - Obtain Biconomy api keys from [Biconomy](https://dashboard.biconomy.io/)
-- Obtain RPC endpoints from somewhere like [Infura](https://infura.io/) or [Alchemy](https://www.alchemy.com/)
+- Obtain RPC endpoints from providers like [Infura](https://infura.io/) or [Alchemy](https://www.alchemy.com/)
 - To use the widget in any html page, create an element and use HyphenWidget.default.init
 
 ```javascript
@@ -25,7 +25,7 @@ import "@biconomy/hyphen-widget/dist/index.css";
 const wid = HyphenWidget.default.init(document.getElementById("widget"), {
   test: true, // required if using testnet chains.
   apiKeys: {
-    // required for gasless
+    // optional for gasless
     Ethereum: "Ethereum API Key",
     Polygon: "Polygon API Key",
     Avalanche: "Avalanche API Key",
@@ -62,18 +62,16 @@ import "@biconomy/hyphen-widget/dist/index.css";
 const wid = HyphenWidget.default.init(document.getElementById("widget"), {
   test: true, // required if using testnet chains.
   apiKeys: {
-    // required for gasless
+    // optional for gasless
     Fuji: "Fuji API Key",
     Goerli: "Goerli API Key",
     Mumbai: "Mumbai API Key",
-    Rinkeby: "Rinkeby API Key",
   },
   rpcUrls: {
     // required
     Fuji: "Fuji RPC URL",
     Goerli: "Goerli RPC URL",
     Mumbai: "Mumbai RPC URL",
-    Rinkeby: "Rinkeby RPC URL",
   },
   ...
   // Other options.
