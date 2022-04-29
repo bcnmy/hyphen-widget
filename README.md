@@ -14,9 +14,9 @@ yarn add @biconomy/hyphen-widget
 
 ### Importing & Instantiation
 
-* Obtain Biconomy api keys from [Biconomy](https://dashboard.biconomy.io/)
-* Obtain RPC endpoints from somewhere like [Infura](https://infura.io/) or [Alchemy](https://www.alchemy.com/)
-* To use the widget in any html page, create an element and use HyphenWidget.default.init
+- Obtain Biconomy api keys from [Biconomy](https://dashboard.biconomy.io/)
+- Obtain RPC endpoints from somewhere like [Infura](https://infura.io/) or [Alchemy](https://www.alchemy.com/)
+- To use the widget in any html page, create an element and use HyphenWidget.default.init
 
 ```javascript
 import * as HyphenWidget from "@biconomy/hyphen-widget/dist";
@@ -25,18 +25,16 @@ import "@biconomy/hyphen-widget/dist/index.css";
 const wid = HyphenWidget.default.init(document.getElementById("widget"), {
   test: true, // required if using testnet chains.
   apiKeys: {
-    // required
-    Fuji: "Fuji API Key",
-    Goerli: "Goerli API Key",
-    Mumbai: "Mumbai API Key",
-    Rinkeby: "Rinkeby API Key",
+    // required for gasless
+    Ethereum: "Ethereum API Key",
+    Polygon: "Polygon API Key",
+    Avalanche: "Avalanche API Key",
   },
   rpcUrls: {
     // required
-    Fuji: "Fuji RPC URL",
-    Goerli: "Goerli RPC URL",
-    Mumbai: "Mumbai RPC URL",
-    Rinkeby: "Rinkeby RPC URL",
+    Ethereum: "Ethereum RPC URL",
+    Polygon: "Polygon RPC URL",
+    Avalanche: "Avalanche RPC URL",
   },
   // NOTE: following 2 callback emit when tx is *sent*, you should check the status by yourself
   onDeposit: (e) => console.log("Deposit " + e), // emit when depost tx is sent
@@ -55,7 +53,34 @@ const wid = HyphenWidget.default.init(document.getElementById("widget"), {
 });
 ```
 
-* Add an element in your HTML with an appropriate ID which will render the widget.
+For testnets this would look somewhat like this:
+
+```javascript
+import * as HyphenWidget from "@biconomy/hyphen-widget/dist";
+import "@biconomy/hyphen-widget/dist/index.css";
+
+const wid = HyphenWidget.default.init(document.getElementById("widget"), {
+  test: true, // required if using testnet chains.
+  apiKeys: {
+    // required for gasless
+    Fuji: "Fuji API Key",
+    Goerli: "Goerli API Key",
+    Mumbai: "Mumbai API Key",
+    Rinkeby: "Rinkeby API Key",
+  },
+  rpcUrls: {
+    // required
+    Fuji: "Fuji RPC URL",
+    Goerli: "Goerli RPC URL",
+    Mumbai: "Mumbai RPC URL",
+    Rinkeby: "Rinkeby RPC URL",
+  },
+  ...
+  // Other options.
+});
+```
+
+- Add an element in your HTML with an appropriate ID which will render the widget.
 
 ```html
 <!DOCTYPE html>
