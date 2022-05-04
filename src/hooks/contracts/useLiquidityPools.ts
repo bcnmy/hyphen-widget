@@ -1,23 +1,22 @@
-import { useCallback, useMemo } from "react";
-import { ethers } from "ethers";
-import liquidityPoolABI from "../../abis/LiquidityPools.abi.json";
-import { useWalletProvider } from "../../context/WalletProvider";
-import { ChainConfig } from "../../config/chains";
-import { LiquidityPool } from "../../config/liquidityContracts/LiquidityPool";
+import { useCallback, useMemo } from 'react';
+import { ethers } from 'ethers';
+import liquidityPoolABI from 'abis/LiquidityPools.abi.json';
+import { useWalletProvider } from 'context/WalletProvider';
+import { Network } from 'hooks/useNetworks';
 
-function useLiquidityPools(chain: ChainConfig | undefined) {
+function useLiquidityPools(chain: Network | undefined) {
   const { isLoggedIn, signer } = useWalletProvider()!;
   const contractAddress = chain
-    ? LiquidityPool[chain.chainId].address
+    ? chain.contracts.hyphen.liquidityPool
     : undefined;
 
   const liquidityPoolsContract = useMemo(() => {
-    if (!contractAddress || !isLoggedIn || !chain) return;
+    if (!contractAddress || !isLoggedIn || !chain || !chain.rpc) return;
 
     return new ethers.Contract(
       contractAddress,
       liquidityPoolABI,
-      new ethers.providers.JsonRpcProvider(chain.rpcUrl)
+      new ethers.providers.JsonRpcProvider(chain.rpc),
     );
   }, [chain, contractAddress, isLoggedIn]);
 
@@ -32,10 +31,10 @@ function useLiquidityPools(chain: ChainConfig | undefined) {
       if (!liquidityPoolsContract) return;
       return await liquidityPoolsContract.getTransferFee(
         tokenAddress,
-        rawTransferAmount
+        rawTransferAmount,
       );
     },
-    [liquidityPoolsContract]
+    [liquidityPoolsContract],
   );
 
   const getRewardAmount = useCallback(
@@ -43,10 +42,10 @@ function useLiquidityPools(chain: ChainConfig | undefined) {
       if (!liquidityPoolsContract) return;
       return liquidityPoolsContract.getRewardAmount(
         rawDepositAmount,
-        tokenAddress
+        tokenAddress,
       );
     },
-    [liquidityPoolsContract]
+    [liquidityPoolsContract],
   );
 
   // const addLiquidity = useCallback(

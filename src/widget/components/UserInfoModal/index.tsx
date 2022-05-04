@@ -1,26 +1,32 @@
-import { useEffect, useState } from "react";
-import { gql, NetworkStatus, useQuery } from "@apollo/client";
-import { BigNumber, ethers } from "ethers";
-import { Dialog } from "@headlessui/react";
-import Skeleton from "react-loading-skeleton";
-import { useWalletProvider } from "../../../context/WalletProvider";
-import { apolloClients } from "../../../context/GraphQL";
-import { IoMdClose } from "react-icons/io";
+import { useEffect, useState } from 'react';
+import {
+  ApolloClient,
+  gql,
+  InMemoryCache,
+  NetworkStatus,
+  useQuery,
+} from '@apollo/client';
+import { BigNumber, ethers } from 'ethers';
+import { Dialog } from '@headlessui/react';
+import Skeleton from 'react-loading-skeleton';
+import { useWalletProvider } from 'context/WalletProvider';
+import { IoMdClose } from 'react-icons/io';
 import {
   HiOutlineClipboardCopy,
   HiOutlineClipboardCheck,
   HiOutlineArrowNarrowRight,
   HiOutlineRefresh,
-} from "react-icons/hi";
-import Modal from "../../../components/Modal";
-import { getProviderInfo } from "web3modal";
-import { useChains } from "../../../context/Chains";
-import { TokenConfig, tokens } from "../../../config/tokens";
-import { ChainConfig, chains } from "../../../config/chains";
-import TransactionDetailModal from "../TransactionDetailModal";
-import useModal from "../../../hooks/useModal";
-import { twMerge } from "tailwind-merge";
-import { useHyphen } from "../../../context/Hyphen";
+} from 'react-icons/hi';
+import Modal from '../../../../components/Modal';
+import { getProviderInfo } from 'web3modal';
+import { useChains } from 'context/Chains';
+import TransactionDetailModal from '../TransactionDetailModal';
+import useModal from 'hooks/useModal';
+import { twMerge } from 'tailwind-merge';
+import { useHyphen } from 'context/Hyphen';
+import { Network } from 'hooks/useNetworks';
+import { Token } from 'hooks/useTokens';
+import { useToken } from 'context/Token';
 
 export interface IUserInfoModalProps {
   isVisible: boolean;
@@ -42,15 +48,15 @@ export interface ITransactionDetails {
   depositHash: string;
   endTimestamp: number;
   exitHash: string;
-  fromChain: ChainConfig;
+  fromChain: Network;
   fromChainExplorerUrl: string;
   gasFee: string;
   lpFee: string;
   rewardAmount: string;
   startTimestamp: number;
-  toChain: ChainConfig;
+  toChain: Network;
   toChainExplorerUrl: string;
-  token: TokenConfig;
+  token: Token;
   transactionFee: string;
 }
 
@@ -85,7 +91,8 @@ const FEE_INFO = gql`
 
 function UserInfoModal({ isVisible, onClose }: IUserInfoModalProps) {
   const { accounts, disconnect, rawEthereumProvider } = useWalletProvider()!;
-  const { fromChain } = useChains()!;
+  const { fromChain, networks } = useChains()!;
+  const { tokens } = useToken()!;
   const { hyphen } = useHyphen()!;
 
   const [loading, setLoading] = useState(true);
@@ -101,15 +108,18 @@ function UserInfoModal({ isVisible, onClose }: IUserInfoModalProps) {
     networkStatus,
     refetch,
   } = useQuery(USER_DEPOSITS, {
-    fetchPolicy: "no-cache",
+    fetchPolicy: 'no-cache',
     notifyOnNetworkStatusChange: true,
     skip: !isVisible,
     variables: { address: userAddress },
   });
 
   useEffect(() => {
-    async function getFeeInfo(exitHash: string, toChain: ChainConfig) {
-      const apolloClient = apolloClients[toChain.chainId];
+    async function getFeeInfo(exitHash: string, toChain: Network) {
+      const apolloClient = new ApolloClient({
+        uri: toChain.v2GraphUrl,
+        cache: new InMemoryCache(),
+      });
       const { data: feeInfo } = await apolloClient.query({
         query: FEE_INFO,
         variables: { exitHash: exitHash },
@@ -119,8 +129,8 @@ function UserInfoModal({ isVisible, onClose }: IUserInfoModalProps) {
     }
 
     async function getUserTransactions(
-      fromChain: ChainConfig,
-      userDeposits: IUserDeposits[]
+      fromChain: Network,
+      userDeposits: IUserDeposits[],
     ) {
       let transformedTransactions = [];
       for (const userDeposit of userDeposits) {
@@ -137,21 +147,26 @@ function UserInfoModal({ isVisible, onClose }: IUserInfoModalProps) {
           depositHash,
           fromChainId: fromChain.chainId,
         });
-        const toChain = chains.find(
-          (chainObj) => chainObj.chainId === Number.parseInt(toChainID, 10)
+        const toChain = networks?.find(
+          networkObj => networkObj.chainId === Number.parseInt(toChainID, 10),
         )!;
         const fromChainExplorerUrl = `${fromChain.explorerUrl}/tx/${depositHash}`;
         const toChainExplorerUrl = `${toChain.explorerUrl}/tx/${exitHash}`;
-        const token = tokens.find(
-          (tokenObj) =>
-            tokenObj[fromChain.chainId]?.address.toLowerCase() ===
-            tokenAddress.toLowerCase()
-        )!;
-        const tokenDecimals = token[fromChain.chainId].decimal;
+        const tokenSymbol = tokens
+          ? Object.keys(tokens).find(tokenSymbol => {
+              const tokenObj = tokens[tokenSymbol];
+              return (
+                tokenObj[fromChain.chainId]?.address.toLowerCase() ===
+                tokenAddress.toLowerCase()
+              );
+            })
+          : undefined;
+        const token = tokens && tokenSymbol ? tokens[tokenSymbol] : undefined;
+        const tokenDecimals = token ? token[fromChain.chainId].decimal : 18;
 
         const { assetSentToUserLogEntries } = await getFeeInfo(
           exitHash,
-          toChain
+          toChain,
         );
         const {
           gasFee,
@@ -168,24 +183,24 @@ function UserInfoModal({ isVisible, onClose }: IUserInfoModalProps) {
         const formattedAmount = Number.parseFloat(
           ethers.utils.formatUnits(
             BigNumber.from(amount).sub(BigNumber.from(rewardAmount)),
-            tokenDecimals
-          )
+            tokenDecimals,
+          ),
         ).toFixed(3);
 
         const formattedAmountReceived = Number.parseFloat(
-          ethers.utils.formatUnits(amountReceived, tokenDecimals)
+          ethers.utils.formatUnits(amountReceived, tokenDecimals),
         ).toFixed(3);
 
         const formattedRewardAmount = Number.parseFloat(
-          ethers.utils.formatUnits(rewardAmount, tokenDecimals)
+          ethers.utils.formatUnits(rewardAmount, tokenDecimals),
         ).toFixed(3);
 
         const formattedGasFee = Number.parseFloat(
-          ethers.utils.formatUnits(gasFee, tokenDecimals)
+          ethers.utils.formatUnits(gasFee, tokenDecimals),
         ).toFixed(3);
 
         const formattedLpFee = Number.parseFloat(
-          ethers.utils.formatUnits(lpFee, tokenDecimals)
+          ethers.utils.formatUnits(lpFee, tokenDecimals),
         ).toFixed(3);
 
         const formattedTransactionFee = Number.parseFloat(
@@ -193,8 +208,8 @@ function UserInfoModal({ isVisible, onClose }: IUserInfoModalProps) {
             BigNumber.from(transferFee)
               .sub(BigNumber.from(lpFee))
               .add(BigNumber.from(gasFee)),
-            tokenDecimals
-          )
+            tokenDecimals,
+          ),
         ).toFixed(3);
 
         const transactionDetails = {
@@ -222,11 +237,11 @@ function UserInfoModal({ isVisible, onClose }: IUserInfoModalProps) {
       setLoading(false);
     }
 
-    if (fromChain && userDepositsData) {
+    if (fromChain && networks && userDepositsData) {
       const { deposits: userDeposits } = userDepositsData;
       getUserTransactions(fromChain, userDeposits);
     }
-  }, [fromChain, hyphen, userDepositsData]);
+  }, [fromChain, hyphen, networks, userDepositsData]);
 
   const {
     isVisible: isTransactionDetailModalVisible,
@@ -240,7 +255,7 @@ function UserInfoModal({ isVisible, onClose }: IUserInfoModalProps) {
   }
 
   function handleUserAddressCopy() {
-    navigator.clipboard.writeText(userAddress || "");
+    navigator.clipboard.writeText(userAddress || '');
     setAddressCopied(true);
     setTimeout(() => {
       setAddressCopied(false);
@@ -297,10 +312,10 @@ function UserInfoModal({ isVisible, onClose }: IUserInfoModalProps) {
             )}
             <span
               className={`text-sm ${
-                addressCopied ? "text-green-400" : "text-gray-500"
+                addressCopied ? 'text-green-400' : 'text-gray-500'
               }`}
             >
-              {addressCopied ? "Copied!" : "Copy Address"}
+              {addressCopied ? 'Copied!' : 'Copy Address'}
             </span>
           </button>
         </article>
@@ -315,8 +330,8 @@ function UserInfoModal({ isVisible, onClose }: IUserInfoModalProps) {
               Refresh
               <HiOutlineRefresh
                 className={twMerge(
-                  "ml-1 h-4 w-4 text-gray-500",
-                  networkStatus === NetworkStatus.refetch ? "animate-spin" : ""
+                  'ml-1 h-4 w-4 text-gray-500',
+                  networkStatus === NetworkStatus.refetch ? 'animate-spin' : '',
                 )}
               />
             </button>

@@ -1,14 +1,14 @@
-import React from "react";
-import Skeleton from "react-loading-skeleton";
-import { HiExclamation, HiInformationCircle } from "react-icons/hi";
-import { Transition } from "react-transition-group";
-import { twMerge } from "tailwind-merge";
-import { useChains } from "../../context/Chains";
-import { useToken } from "../../context/Token";
-import { useTransaction } from "../../context/Transaction";
-import { Status } from "../../hooks/useLoading";
-import isToChainEthereum from "../../utils/isToChainEthereum";
-import CustomTooltip from "../../components/CustomTooltip";
+import React from 'react';
+import Skeleton from 'react-loading-skeleton';
+import { HiExclamation, HiInformationCircle } from 'react-icons/hi';
+import { Transition } from 'react-transition-group';
+import { twMerge } from 'tailwind-merge';
+import { useChains } from 'context/Chains';
+import { useToken } from 'context/Token';
+import { useTransaction } from 'context/Transaction';
+import { Status } from 'hooks/useLoading';
+import isToChainEthereum from 'utils/isToChainEthereum';
+import CustomTooltip from '../../../components/CustomTooltip';
 
 interface ITransactionFeeProps {}
 
@@ -27,7 +27,7 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
   const totalFee = transactionFee
     ? Number.parseFloat(transactionFee.lpFeeProcessedString) +
       Number.parseFloat(transactionFee.transactionFeeProcessedString) -
-      Number.parseFloat(transactionFee.rewardAmountString || "0")
+      Number.parseFloat(transactionFee.rewardAmountString || '0')
     : undefined;
 
   return (
@@ -35,18 +35,18 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
       in={
         (fetchTransactionFeeStatus === Status.PENDING ||
           fetchTransactionFeeStatus === Status.SUCCESS) &&
-        transferAmountInputValue !== ""
+        transferAmountInputValue !== ''
       }
       timeout={300}
     >
-      {(state) => (
+      {state => (
         <div
           className={twMerge(
-            "transform-gpu transition-transform",
-            (state === "exiting" || state === "exited") && "-translate-y-full"
+            'transform-gpu transition-transform',
+            (state === 'exiting' || state === 'exited') && '-translate-y-full',
           )}
         >
-          <div className="mx-10 rounded-b-lg border-x border-b border-white/10 bg-gray-700">
+          <div className="mx-10 rounded-b-lg border-x border-b border-white/10 bg-white bg-opacity-10">
             <div className="flex flex-col gap-y-2 p-4 text-sm text-white/75">
               {showEthereumDisclaimer ? (
                 <article className="mb-2 flex items-start rounded-xl bg-red-100 p-2 text-sm text-red-600">
@@ -69,7 +69,7 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
                     <CustomTooltip id="lpFee">
                       <div>
                         <span>
-                          LP fee ({transactionFee.transferFeePercentage}%):{" "}
+                          LP fee ({transactionFee.transferFeePercentage}%):{' '}
                         </span>
                         {fetchTransactionFeeStatus === Status.SUCCESS &&
                         transactionFee ? (

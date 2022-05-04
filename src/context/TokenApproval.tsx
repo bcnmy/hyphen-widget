@@ -7,14 +7,17 @@ import {
   useState,
 } from "react";
 
-import { useWalletProvider } from "./WalletProvider";
-import { useChains } from "./Chains";
-import { useToken } from "./Token";
-import useAsync, { Status } from "../hooks/useLoading";
-import { useBiconomy } from "./Biconomy";
-import { useHyphen } from "./Hyphen";
+// @ts-ignore
+import { Hyphen, RESPONSE_CODES, SIGNATURE_TYPES } from "@biconomy/hyphen-staging";
+
+import { useWalletProvider } from "context/WalletProvider";
+import { useChains } from "context/Chains";
+import { useToken } from "context/Token";
+import useAsync, { Status } from "hooks/useLoading";
+import { useBiconomy } from "context/Biconomy";
+import { useHyphen } from "context/Hyphen";
 import { BigNumber, ethers } from "ethers";
-import { NATIVE_ADDRESS } from "../config/constants";
+import { NATIVE_ADDRESS } from "config/constants";
 import { WebpackError } from "webpack";
 import { useNotifications } from "./Notifications";
 

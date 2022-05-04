@@ -1,4 +1,3 @@
-import { ChainConfig } from "config/chains";
 import React from "react";
 import { BiconomyProvider } from "./Biconomy";
 import { ChainsProvider } from "./Chains";
@@ -11,20 +10,17 @@ import { TransactionProvider } from "./Transaction";
 import { TransactionInfoModalProvider } from "./TransactionInfoModal";
 import { WalletProviderProvider } from "./WalletProvider";
 
-export const AppProviders: React.FC<{
-  test: boolean;
-  chains: ChainConfig[];
-}> = ({ children, test, chains }) => {
+export const AppProviders: React.FC = ({ children }) => {
   return (
     <WalletProviderProvider>
-      <ChainsProvider chains={chains}>
+      <ChainsProvider>
         <GraphQLProvider>
           <NotificationsProvider>
             <TokenProvider>
               <BiconomyProvider>
-                <HyphenProvider test={test}>
+                <HyphenProvider>
                   <TokenApprovalProvider>
-                    <TransactionProvider test={test}>
+                    <TransactionProvider>
                       <TransactionInfoModalProvider>
                         {children}
                       </TransactionInfoModalProvider>

@@ -1,14 +1,14 @@
-import { Dialog } from "@headlessui/react";
-import { DEFAULT_FIXED_DECIMAL_POINT } from "../../../config/constants";
-import { formatDistanceStrict } from "date-fns";
-import { BigNumber, ethers } from "ethers";
+import { Dialog } from '@headlessui/react';
+import { DEFAULT_FIXED_DECIMAL_POINT } from 'config/constants';
+import { formatDistanceStrict } from 'date-fns';
+import { BigNumber, ethers } from 'ethers';
 import {
   HiOutlineArrowNarrowRight,
   HiOutlineArrowSmRight,
-} from "react-icons/hi";
-import { IoMdClose } from "react-icons/io";
-import Modal from "../../../components/Modal";
-import { ITransactionDetails } from "../UserInfoModal";
+} from 'react-icons/hi';
+import { IoMdClose } from 'react-icons/io';
+import Modal from '../../../../components/Modal';
+import { ITransactionDetails } from '../UserInfoModal';
 
 export interface ITransactionDetailModal {
   isVisible: boolean;
@@ -41,7 +41,7 @@ function TransactionDetailModal({
   } = transactionDetails!;
   const transactionTime = formatDistanceStrict(
     new Date(+endTimestamp * 1000),
-    new Date(+startTimestamp * 1000)
+    new Date(+startTimestamp * 1000),
   );
 
   return (
@@ -93,7 +93,7 @@ function TransactionDetailModal({
             </div>
 
             <span className="text-center text-gray-500">
-              Tranfer completed in{" "}
+              Transfer completed in{' '}
               <span className="text-hyphen-purple">{transactionTime}</span>
             </span>
           </div>

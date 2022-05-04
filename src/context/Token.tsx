@@ -5,19 +5,20 @@ import {
   useEffect,
   useMemo,
   useState,
-} from "react";
+} from 'react';
 
-import { ChainConfig } from "../config/chains";
-import { config } from "../config";
-import { TokenConfig } from "../config/tokens";
-import { useChains } from "../context/Chains";
-import { useWalletProvider } from "./WalletProvider";
-import { BigNumber, ethers } from "ethers";
+import { config } from 'config';
+import { useChains } from 'context/Chains';
+import { useWalletProvider } from 'context/WalletProvider';
+import { BigNumber, ethers } from 'ethers';
 
-import erc20ABI from "../abis/erc20.abi.json";
-import toFixed from "../utils/toFixed";
-import useAsync, { Status } from "../hooks/useLoading";
-import formatRawEthValue from "../utils/formatRawEthValue";
+import erc20ABI from 'abis/erc20.abi.json';
+import toFixed from 'utils/toFixed';
+import useAsync, { Status } from 'hooks/useLoading';
+import formatRawEthValue from 'utils/formatRawEthValue';
+import { Network } from 'hooks/useNetworks';
+import useTokens, { Token } from 'hooks/useTokens';
+import { DEFAULT_FIXED_DECIMAL_POINT } from 'config/constants';
 
 interface ITokenBalance {
   formattedBalance: string;
@@ -26,41 +27,56 @@ interface ITokenBalance {
 }
 
 interface ITokenContext {
-  changeSelectedToken: (token: TokenConfig) => void;
-  compatibleTokensForCurrentChains: undefined | TokenConfig[];
+  changeSelectedToken: (tokenSymbol: string | undefined) => void;
+  compatibleTokensForCurrentChains: undefined | Token[];
   getSelectedTokenBalanceStatus: undefined | Status;
   refreshSelectedTokenBalance: () => void;
-  selectedToken: undefined | TokenConfig;
+  selectedToken: undefined | Token;
   selectedTokenBalance: undefined | ITokenBalance;
-  tokensList: TokenConfig[];
+  tokens:
+    | {
+        [key: string]: Token;
+      }
+    | undefined;
+  isTokensLoading: boolean;
+  isTokensError: boolean;
 }
-
-const tokensList = config.tokens;
 
 const TokenContext = createContext<ITokenContext | null>(null);
 
 function isTokenValidForChains(
-  token: TokenConfig,
-  fromChain: ChainConfig,
-  toChain: ChainConfig
+  token: Token,
+  fromChain: Network,
+  toChain: Network,
 ) {
   // return true if token has config available for both from and to chains
   // else return false
   return !!(token[fromChain.chainId] && token[toChain.chainId]);
 }
 
-const TokenProvider: React.FC = (props) => {
+const TokenProvider: React.FC = props => {
   const { accounts } = useWalletProvider()!;
   const { fromChain, fromChainRpcUrlProvider, toChain } = useChains()!;
-  const [selectedToken, setSelectedToken] = useState<TokenConfig>();
+  const [selectedToken, setSelectedToken] = useState<Token>();
+
+  const {
+    data: tokens,
+    isLoading: isTokensLoading,
+    isError: isTokensError,
+  } = useTokens();
 
   // compute and memoize the compatible tokens
   const compatibleTokensForCurrentChains = useMemo(() => {
     if (!fromChain || !toChain) return;
-    return config.tokens.filter((token) =>
-      isTokenValidForChains(token, fromChain, toChain)
-    );
-  }, [fromChain, toChain]);
+    return tokens
+      ? Object.keys(tokens)
+          .filter((tokenSymbol: string) => {
+            const token = tokens[tokenSymbol];
+            return isTokenValidForChains(token, fromChain, toChain);
+          })
+          .map((tokenSymbol: string) => tokens[tokenSymbol])
+      : [];
+  }, [fromChain, toChain, tokens]);
 
   const tokenContract = useMemo(() => {
     if (!selectedToken || !fromChainRpcUrlProvider || !fromChain) return;
@@ -69,7 +85,7 @@ const TokenProvider: React.FC = (props) => {
     return new ethers.Contract(
       selectedToken[fromChain.chainId].address,
       erc20ABI,
-      fromChainRpcUrlProvider
+      fromChainRpcUrlProvider,
     );
   }, [selectedToken, fromChainRpcUrlProvider, fromChain]);
 
@@ -89,16 +105,23 @@ const TokenProvider: React.FC = (props) => {
   }, [fromChain, toChain, selectedToken, compatibleTokensForCurrentChains]);
 
   const changeSelectedToken = useCallback(
-    (token: TokenConfig) => {
+    (tokenSymbol: string | undefined) => {
+      if (!tokenSymbol) {
+        setSelectedToken(undefined);
+        return;
+      }
+
       if (!fromChain || !toChain) {
         throw new Error("Chains aren't initialized yet");
       }
+
+      const token = tokens![tokenSymbol];
       if (!isTokenValidForChains(token, fromChain, toChain)) {
-        throw Error("Provided token is invalid choice for current chains");
+        throw Error('Provided token is invalid choice for current chains');
       }
       setSelectedToken(token);
     },
-    [fromChain, toChain]
+    [fromChain, toChain, tokens],
   );
 
   // construct the async function that can be called to get user balance
@@ -112,7 +135,7 @@ const TokenProvider: React.FC = (props) => {
       !accounts ||
       !accounts[0]
     ) {
-      throw new Error("Prerequisites not met");
+      throw new Error('Prerequisites not met');
     }
     let formattedBalance: string;
     let userRawBalance: BigNumber;
@@ -132,10 +155,7 @@ const TokenProvider: React.FC = (props) => {
 
       formattedBalance = formatRawEthValue(userRawBalance.toString(), decimals);
     }
-    let displayBalance = toFixed(
-      formattedBalance,
-      selectedToken[fromChain.chainId].fixedDecimalPoint || 4
-    );
+    let displayBalance = toFixed(formattedBalance, DEFAULT_FIXED_DECIMAL_POINT);
 
     return { formattedBalance, displayBalance, userRawBalance };
   }, [
@@ -167,7 +187,9 @@ const TokenProvider: React.FC = (props) => {
         refreshSelectedTokenBalance,
         selectedToken,
         selectedTokenBalance,
-        tokensList,
+        tokens,
+        isTokensLoading,
+        isTokensError,
       }}
       {...props}
     />
