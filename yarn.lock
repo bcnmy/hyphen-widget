@@ -1094,13 +1094,14 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@biconomy/hyphen-staging@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@biconomy/hyphen-staging/-/hyphen-staging-1.0.2.tgz#c90236643a5aed74d7eee4b3f7453be2bfcadf01"
-  integrity sha512-yioscl1B6trYxfM8dOEeUMTKxaY4HMlglsmpjP3E53mnTRfAn+rYUKotQMl3Zen2d0zoQRImniv30LrobKNp4g==
+"@biconomy/hyphen@^1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@biconomy/hyphen/-/hyphen-1.1.3.tgz#a5d7873bcf94e310aebb9b67aeb19b710c3d1560"
+  integrity sha512-QdQxSs5l0wudIfPAUusDFCmXWiEGhexYUf0ZaV8frsKGSWwP6AFCAa9Nfx8sZxFZR1DmUdl75AuVxqh04rfhew==
   dependencies:
     "@biconomy/mexa" "^2.0.24"
     ethers "^5.0.24"
+    node-fetch "2.6.7"
     promise "^8.0.3"
     tslint "^6.1.3"
     typescript "^4.1.3"
@@ -10966,9 +10967,9 @@ typescript@^4.1.2:
   integrity sha512-HM/hFigTBHZhLXshn9sN37H085+hQGeJHJ/X7LpBWLID/fbc2acUMfU+lGD98X81sKP+pFa9f0DZmCwB9GnbAg==
 
 typescript@^4.1.3:
-  version "4.6.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.6.3.tgz#eefeafa6afdd31d725584c67a0eaba80f6fc6c6c"
-  integrity sha512-yNIatDa5iaofVozS/uQJEl3JRWLKKGJKh6Yaiv0GLGSuhpFJe7P3SbHZ8/yjAHRQwKRoA6YZqlfjXWmVzoVSMw==
+  version "4.6.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.6.4.tgz#caa78bbc3a59e6a5c510d35703f6a09877ce45e9"
+  integrity sha512-9ia/jWHIEbo49HfjrLGfKbZSuWo9iTMwXO+Ca3pRsSpbsMbc7/IU8NKdCZVRRBafVPGnoJeFL76ZOAA84I9fEg==
 
 unbox-primitive@^1.0.1:
   version "1.0.1"
