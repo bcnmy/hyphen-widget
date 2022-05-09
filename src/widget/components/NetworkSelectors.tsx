@@ -1,9 +1,9 @@
-import Select from 'components/Select';
-import { useChains } from 'context/Chains';
-import { useWalletProvider } from 'context/WalletProvider';
-import React, { useMemo } from 'react';
-import { HiArrowRight } from 'react-icons/hi';
-import CustomTooltip from '../../../components/CustomTooltip';
+import Select from "components/Select";
+import { useChains } from "context/Chains";
+import { useWalletProvider } from "context/WalletProvider";
+import React, { useMemo } from "react";
+import { HiArrowRight } from "react-icons/hi";
+import CustomTooltip from "components/CustomTooltip";
 
 interface INetworkSelectorsProps {}
 
@@ -20,41 +20,32 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = () => {
 
   const fromChainOptions = useMemo(
     () =>
-      networks
-        // temporary filtering for BNB network 56 chain.
-        ?.filter(network => network.chainId !== 56)
-        .map(network => ({
-          id: network.chainId,
-          name: network.name,
-          image: network.image,
-        })),
-    [networks],
+      networks?.map((network) => ({
+        id: network.chainId,
+        name: network.name,
+        image: network.image,
+      })),
+    [networks]
   );
 
   const toChainOptions = useMemo(() => {
-    return (
-      networks
-        // temporary filtering for BNB network 56 chainId.
-        ?.filter(
-          network =>
-            network.chainId !== fromChain?.chainId && network.chainId !== 56,
-        )
-        .map(network => ({
-          id: network.chainId,
-          name: network.name,
-          image: network.image,
-        }))
-    );
+    return networks
+      ?.filter((network) => network.chainId !== fromChain?.chainId)
+      .map((network) => ({
+        id: network.chainId,
+        name: network.name,
+        image: network.image,
+      }));
   }, [fromChain?.chainId, networks]);
 
   const selectedFromChain = useMemo(() => {
     if (!fromChain) return undefined;
-    else return fromChainOptions?.find(opt => opt.id === fromChain.chainId);
+    else return fromChainOptions?.find((opt) => opt.id === fromChain.chainId);
   }, [fromChain, fromChainOptions]);
 
   const selectedToChain = useMemo(() => {
     if (!toChain) return undefined;
-    else return toChainOptions?.find(opt => opt.id === toChain.chainId);
+    else return toChainOptions?.find((opt) => opt.id === toChain.chainId);
   }, [toChain, toChainOptions]);
 
   return (
@@ -64,16 +55,16 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = () => {
           <Select
             options={fromChainOptions}
             selected={selectedFromChain}
-            setSelected={opt => {
+            setSelected={(opt) => {
               networks &&
                 changeFromChain(
-                  networks.find(network => network.chainId === opt.id)!,
+                  networks.find((network) => network.chainId === opt.id)!
                 );
             }}
-            label={'source'}
+            label={"source"}
           />
         ) : (
-          '...'
+          "..."
         )}
       </div>
       <div className="mb-3 flex items-end">
@@ -90,16 +81,16 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = () => {
             disabled={!isLoggedIn}
             options={toChainOptions}
             selected={selectedToChain}
-            setSelected={opt => {
+            setSelected={(opt) => {
               networks &&
                 changeToChain(
-                  networks.find(network => network.chainId === opt.id)!,
+                  networks.find((network) => network.chainId === opt.id)!
                 );
             }}
-            label={'destination'}
+            label={"destination"}
           />
         ) : (
-          '...'
+          "..."
         )}
         {!isLoggedIn && (
           <CustomTooltip id="networkSelect">

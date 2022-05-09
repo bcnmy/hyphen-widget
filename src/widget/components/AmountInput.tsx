@@ -1,13 +1,13 @@
-import { useHyphen } from 'context/Hyphen';
-import { Status } from 'hooks/useLoading';
-import Skeleton from 'react-loading-skeleton';
+import { useHyphen } from "context/Hyphen";
+import { Status } from "hooks/useLoading";
+import Skeleton from "react-loading-skeleton";
 
-import React from 'react';
-import { useTransaction, ValidationErrors } from 'context/Transaction';
-import { twMerge } from 'tailwind-merge';
-import { useChains } from 'context/Chains';
-import CustomTooltip from '../../../components/CustomTooltip';
-import { Listbox } from '@headlessui/react';
+import React from "react";
+import { useTransaction, ValidationErrors } from "context/Transaction";
+import { twMerge } from "tailwind-merge";
+import { useChains } from "context/Chains";
+import CustomTooltip from "components/CustomTooltip";
+import { Listbox } from "@headlessui/react";
 
 interface IAmountInputProps {
   disabled?: boolean;
@@ -34,10 +34,10 @@ const AmountInput: React.FunctionComponent<IAmountInputProps> = ({
           inputMode="decimal"
           placeholder="0.000"
           value={transferAmountInputValue}
-          onChange={e => changeTransferAmountInputValue(e.target.value)}
+          onChange={(e) => changeTransferAmountInputValue(e.target.value)}
           className={twMerge(
-            'mt-2 inline-block h-15 w-full rounded-2.5 border bg-white px-4 py-2 font-mono text-2xl text-hyphen-gray-400 focus:outline-none',
-            disabled && 'cursor-not-allowed bg-gray-200',
+            "mt-2 inline-block h-15 w-full rounded-2.5 border bg-white px-4 py-2 font-mono text-2xl text-hyphen-gray-400 focus:outline-none",
+            disabled && "cursor-not-allowed bg-gray-200"
           )}
           disabled={disabled}
         />
@@ -50,14 +50,14 @@ const AmountInput: React.FunctionComponent<IAmountInputProps> = ({
       <div className="my-2 flex justify-between px-2 text-xs text-hyphen-purple-dark">
         <button
           className={twMerge(
-            'flex items-center transition-colors',
+            "flex items-center transition-colors",
             transactionAmountValidationErrors.includes(
-              ValidationErrors.AMOUNT_LT_MIN,
-            ) && 'text-red-600',
+              ValidationErrors.AMOUNT_LT_MIN
+            ) && "text-red-600"
           )}
           onClick={() =>
             changeTransferAmountInputValue(
-              poolInfo?.minDepositAmount.toString() || '',
+              poolInfo?.minDepositAmount.toString() || ""
             )
           }
         >
@@ -81,14 +81,14 @@ const AmountInput: React.FunctionComponent<IAmountInputProps> = ({
         </button>
         <button
           className={twMerge(
-            'flex items-center transition-colors',
+            "flex items-center transition-colors",
             transactionAmountValidationErrors.includes(
-              ValidationErrors.AMOUNT_GT_MAX,
-            ) && 'text-red-600',
+              ValidationErrors.AMOUNT_GT_MAX
+            ) && "text-red-600"
           )}
           onClick={() =>
             changeTransferAmountInputValue(
-              poolInfo?.maxDepositAmount.toString() || '',
+              poolInfo?.maxDepositAmount.toString() || ""
             )
           }
         >

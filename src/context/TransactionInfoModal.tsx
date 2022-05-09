@@ -1,8 +1,8 @@
-import useModal from 'hooks/useModal';
-import { Network } from 'hooks/useNetworks';
-import { Token } from 'hooks/useTokens';
-import TransferInfoModal from 'pages/bridge/components/TransferInfoModal';
-import { createContext, useCallback, useContext, useState } from 'react';
+import useModal from "hooks/useModal";
+import { Network } from "hooks/useNetworks";
+import { Token } from "hooks/useTokens";
+import TransferInfoModal from "widget/components/TransferInfoModal";
+import { createContext, useCallback, useContext, useState } from "react";
 
 export interface ITransferRecord {
   depositHash: string;
@@ -44,7 +44,7 @@ const TransactionInfoModalProvider: React.FC = ({ children, ...props }) => {
       setTransferRecord(transferRecord);
       showModal();
     },
-    [showModal],
+    [showModal]
   );
 
   return (

@@ -8,7 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 import Widget from "./widget/Widget";
 import AppProviders from "./context";
-import { Chains, chains } from "./config/chains";
 
 declare global {
   interface Window {
@@ -24,8 +23,8 @@ interface HyphenWidgetProps {
 
 export interface HyphenWidgetOptions {
   test?: boolean;
-  apiKeys: { [key in Chains]?: string };
-  rpcUrls: { [key in Chains]?: string };
+  apiKeys: { [key: string]: string };
+  rpcUrls: { [key: string]: string };
   popupMode?: boolean;
   widgetMode?: boolean;
   onDeposit?: (hash: string) => any;

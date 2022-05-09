@@ -1,7 +1,7 @@
-import Header from './Header';
-import Footer from './Footer';
-import UserInfoModal from '../pages/bridge/components/UserInfoModal';
-import useModal from '../hooks/useModal';
+import Header from "./Header";
+import Footer from "./Footer";
+import UserInfoModal from "widget/components/UserInfoModal";
+import useModal from "../hooks/useModal";
 
 interface LayoutProps {
   children?: React.ReactNode;
