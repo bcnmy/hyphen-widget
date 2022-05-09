@@ -50,7 +50,7 @@
   },
   "scripts": {
     "build": "REACT_APP_ENV=production GENERATE_SOURCEMAP=false webpack",
-    "start": "REACT_APP_ENV=local webpack --watch"
+    "start": "REACT_APP_ENV=staging webpack --watch"
   },
   "eslintConfig": {
     "extends": [

@@ -22,7 +22,7 @@ interface HyphenWidgetProps {
 }
 
 export interface HyphenWidgetOptions {
-  test?: boolean;
+  env: string;
   apiKeys: { [key: string]: string };
   rpcUrls: { [key: string]: string };
   popupMode?: boolean;
@@ -95,6 +95,7 @@ export interface InputConfig {
   lockAmount?: boolean;
   lockReceiver?: boolean;
 }
+
 class HyphenWidget extends React.Component<
   HyphenWidgetProps,
   HyphenWidgetOptions & Inputs & InputConfig
@@ -108,22 +109,15 @@ class HyphenWidget extends React.Component<
   }
 
   render() {
-    const chainsCopy = [...chains];
-    for (const chain of chainsCopy) {
-      if (this.state.apiKeys[chain.name]) {
-        chain.biconomy.apiKey = this.state.apiKeys[chain.name]!;
-        chain.rpcUrl = this.state.rpcUrls[chain.name] || chain.rpcUrl;
-      }
-    }
-
     return (
       <>
         {this.props.skipToastContainer ? null : (
           <ToastContainer className="font-sans font-semibold" />
         )}
         <AppProviders
-          test={!!this.state.test}
-          chains={chainsCopy.filter((e) => e.rpcUrl && e.biconomy.apiKey)}
+          env={this.state.env}
+          apiKeys={this.state.apiKeys}
+          rpcUrls={this.state.rpcUrls}
         >
           <Widget {...this.state} />
         </AppProviders>

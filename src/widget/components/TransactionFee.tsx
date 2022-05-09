@@ -46,7 +46,7 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
             (state === "exiting" || state === "exited") && "-translate-y-full"
           )}
         >
-          <div className="mx-10 rounded-b-lg border-x border-b border-white/10 bg-white bg-opacity-10">
+          <div className="mx-10 rounded-b-lg border-x border-b border-white/10 bg-gray-700">
             <div className="flex flex-col gap-y-2 p-4 text-sm text-white/75">
               {showEthereumDisclaimer ? (
                 <article className="mb-2 flex items-start rounded-xl bg-red-100 p-2 text-sm text-red-600">

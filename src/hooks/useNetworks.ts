@@ -1,5 +1,5 @@
-import { config } from 'config';
-import { useQuery } from 'react-query';
+import { config } from "config";
+import { useQuery } from "react-query";
 
 export type Network = {
   enabled: boolean;
@@ -48,16 +48,37 @@ export type Network = {
   };
 };
 
-const networksEndpoint = `${config.hyphen.baseURL}/api/v1/configuration/networks`;
+function fetchNetworks(
+  env: string,
+  apiKeys: { [key: string]: string },
+  rpcUrls: { [key: string]: string }
+): Promise<Network[]> {
+  const networksEndpoint = `${config.getBaseURL(
+    env
+  )}/api/v1/configuration/networks`;
 
-function fetchNetworks(): Promise<Network[]> {
   return fetch(networksEndpoint)
-    .then(res => res.json())
-    .then(data => data.message.filter((network: Network) => network.enabled));
+    .then((res) => res.json())
+    .then((data) =>
+      data.message
+        .filter((network: Network) => network.enabled)
+        .map((network: Network) => {
+          return {
+            ...network,
+            rpc: rpcUrls[network.name] || network.rpc,
+            gasless: {
+              ...network.gasless,
+              apiKey: apiKeys[network.name] || network.gasless.apiKey,
+            },
+          };
+        })
+    );
 }
 
-function useNetworks() {
-  return useQuery<Network[], Error>('networks', fetchNetworks);
+function useNetworks(env = "", apiKeys = {}, rpcUrls = {}) {
+  return useQuery<Network[], Error>(["networks", env, apiKeys, rpcUrls], () =>
+    fetchNetworks(env, apiKeys, rpcUrls)
+  );
 }
 
 export default useNetworks;

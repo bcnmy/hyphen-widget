@@ -5,18 +5,18 @@ import {
   useEffect,
   useMemo,
   useState,
-} from 'react';
+} from "react";
 
 // @ts-ignore
-import { Hyphen, SIGNATURE_TYPES } from '@biconomy/hyphen';
+import { Hyphen, SIGNATURE_TYPES } from "@biconomy/hyphen";
 
-import { useWalletProvider } from './WalletProvider';
-import { useChains } from './Chains';
-import { useToken } from './Token';
-import useAsync, { Status } from 'hooks/useLoading';
-import { useBiconomy } from './Biconomy';
-import { ENV } from 'types/environment';
-import { Environment } from '@biconomy/hyphen/dist/types';
+import { useWalletProvider } from "./WalletProvider";
+import { useChains } from "./Chains";
+import { useToken } from "./Token";
+import useAsync, { Status } from "hooks/useLoading";
+import { useBiconomy } from "./Biconomy";
+import { ENV } from "types/environment";
+import { Environment } from "@biconomy/hyphen/dist/types";
 
 type PoolInfo = {
   minDepositAmount: number;
@@ -33,7 +33,7 @@ interface IHyphenContext {
 
 const HyphenContext = createContext<IHyphenContext | null>(null);
 
-const HyphenProvider: React.FC = props => {
+const HyphenProvider: React.FC<{ env: string }> = (props) => {
   const { rawEthereumProvider, walletProvider } = useWalletProvider()!;
   const { selectedToken } = useToken()!;
   const { isBiconomyEnabled } = useBiconomy()!;
@@ -52,14 +52,14 @@ const HyphenProvider: React.FC = props => {
           debug: true,
           infiniteApproval: true,
           environment: {
-            [ENV.production]: 'prod',
-            [ENV.test]: 'test',
-            [ENV.staging]: 'staging',
-            local: '',
-          }[process.env.REACT_APP_ENV] as Environment,
+            [ENV.production]: "prod",
+            [ENV.test]: "test",
+            [ENV.staging]: "staging",
+            local: "",
+          }[props.env] as Environment,
           biconomy: {
             enable: isBiconomyEnabled,
-            apiKey: fromChain?.gasless.apiKey ?? '',
+            apiKey: fromChain?.gasless.apiKey ?? "",
             debug: false,
           },
           signatureType: SIGNATURE_TYPES.EIP712,
@@ -70,11 +70,11 @@ const HyphenProvider: React.FC = props => {
           debug: true,
           infiniteApproval: true,
           environment: {
-            [ENV.production]: 'prod',
-            [ENV.test]: 'test',
-            [ENV.staging]: 'staging',
-            local: '',
-          }[process.env.REACT_APP_ENV] as Environment,
+            [ENV.production]: "prod",
+            [ENV.test]: "test",
+            [ENV.staging]: "staging",
+            local: "",
+          }[props.env] as Environment,
           signatureType: SIGNATURE_TYPES.EIP712,
         });
       }
@@ -103,13 +103,13 @@ const HyphenProvider: React.FC = props => {
       !selectedToken[fromChain.chainId] ||
       !selectedToken[toChain.chainId]
     ) {
-      throw new Error('Prerequisites not met');
+      throw new Error("Prerequisites not met");
     }
 
     return hyphen.liquidityPool.getPoolInformation(
       selectedToken[fromChain.chainId].address,
       fromChain.chainId,
-      toChain.chainId,
+      toChain.chainId
     );
   }, [fromChain, toChain, selectedToken, hyphen, areChainsReady]);
 

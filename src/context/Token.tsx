@@ -5,20 +5,20 @@ import {
   useEffect,
   useMemo,
   useState,
-} from 'react';
+} from "react";
 
-import { config } from 'config';
-import { useChains } from 'context/Chains';
-import { useWalletProvider } from 'context/WalletProvider';
-import { BigNumber, ethers } from 'ethers';
+import { config } from "config";
+import { useChains } from "context/Chains";
+import { useWalletProvider } from "context/WalletProvider";
+import { BigNumber, ethers } from "ethers";
 
-import erc20ABI from 'abis/erc20.abi.json';
-import toFixed from 'utils/toFixed';
-import useAsync, { Status } from 'hooks/useLoading';
-import formatRawEthValue from 'utils/formatRawEthValue';
-import { Network } from 'hooks/useNetworks';
-import useTokens, { Token } from 'hooks/useTokens';
-import { DEFAULT_FIXED_DECIMAL_POINT } from 'config/constants';
+import erc20ABI from "abis/erc20.abi.json";
+import toFixed from "utils/toFixed";
+import useAsync, { Status } from "hooks/useLoading";
+import formatRawEthValue from "utils/formatRawEthValue";
+import { Network } from "hooks/useNetworks";
+import useTokens, { Token } from "hooks/useTokens";
+import { DEFAULT_FIXED_DECIMAL_POINT } from "config/constants";
 
 interface ITokenBalance {
   formattedBalance: string;
@@ -47,14 +47,18 @@ const TokenContext = createContext<ITokenContext | null>(null);
 function isTokenValidForChains(
   token: Token,
   fromChain: Network,
-  toChain: Network,
+  toChain: Network
 ) {
   // return true if token has config available for both from and to chains
   // else return false
   return !!(token[fromChain.chainId] && token[toChain.chainId]);
 }
 
-const TokenProvider: React.FC = props => {
+const TokenProvider: React.FC<{
+  env: string;
+  apiKeys: { [key: string]: string };
+  rpcUrls: { [key: string]: string };
+}> = (props) => {
   const { accounts } = useWalletProvider()!;
   const { fromChain, fromChainRpcUrlProvider, toChain } = useChains()!;
   const [selectedToken, setSelectedToken] = useState<Token>();
@@ -63,7 +67,7 @@ const TokenProvider: React.FC = props => {
     data: tokens,
     isLoading: isTokensLoading,
     isError: isTokensError,
-  } = useTokens();
+  } = useTokens(props.env, props.apiKeys, props.rpcUrls);
 
   // compute and memoize the compatible tokens
   const compatibleTokensForCurrentChains = useMemo(() => {
@@ -85,7 +89,7 @@ const TokenProvider: React.FC = props => {
     return new ethers.Contract(
       selectedToken[fromChain.chainId].address,
       erc20ABI,
-      fromChainRpcUrlProvider,
+      fromChainRpcUrlProvider
     );
   }, [selectedToken, fromChainRpcUrlProvider, fromChain]);
 
@@ -117,11 +121,11 @@ const TokenProvider: React.FC = props => {
 
       const token = tokens![tokenSymbol];
       if (!isTokenValidForChains(token, fromChain, toChain)) {
-        throw Error('Provided token is invalid choice for current chains');
+        throw Error("Provided token is invalid choice for current chains");
       }
       setSelectedToken(token);
     },
-    [fromChain, toChain, tokens],
+    [fromChain, toChain, tokens]
   );
 
   // construct the async function that can be called to get user balance
@@ -135,7 +139,7 @@ const TokenProvider: React.FC = props => {
       !accounts ||
       !accounts[0]
     ) {
-      throw new Error('Prerequisites not met');
+      throw new Error("Prerequisites not met");
     }
     let formattedBalance: string;
     let userRawBalance: BigNumber;

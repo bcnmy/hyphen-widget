@@ -5,12 +5,12 @@ import {
   useEffect,
   useMemo,
   useState,
-} from 'react';
+} from "react";
 
 // @ts-ignore
-import { ethers } from 'ethers';
-import { useWalletProvider } from './WalletProvider';
-import useNetworks, { Network } from 'hooks/useNetworks';
+import { ethers } from "ethers";
+import { useWalletProvider } from "./WalletProvider";
+import useNetworks, { Network } from "hooks/useNetworks";
 
 interface IChainsContext {
   areChainsReady: boolean;
@@ -30,13 +30,17 @@ interface IChainsContext {
 
 const ChainsContext = createContext<IChainsContext | null>(null);
 
-const ChainsProvider: React.FC = props => {
+const ChainsProvider: React.FC<{
+  env: string;
+  apiKeys: { [key: string]: string };
+  rpcUrls: { [key: string]: string };
+}> = (props) => {
   const { currentChainId } = useWalletProvider()!;
   const {
     data: networks,
     isLoading: isNetworksLoading,
     isError: isNetworksError,
-  } = useNetworks();
+  } = useNetworks(props.env, props.apiKeys, props.rpcUrls);
 
   const [fromChain, setFromChain] = useState<Network>();
   const [toChain, setToChain] = useState<Network>();
@@ -64,7 +68,7 @@ const ChainsProvider: React.FC = props => {
       return;
     }
     let currentMetamaskChain = networks?.find(
-      network => network.chainId === currentChainId,
+      (network) => network.chainId === currentChainId
     );
 
     if (currentMetamaskChain) {
@@ -76,7 +80,7 @@ const ChainsProvider: React.FC = props => {
 
   useEffect(() => {
     const network = networks?.find(
-      chainObj => chainObj.chainId === currentChainId,
+      (chainObj) => chainObj.chainId === currentChainId
     );
 
     if (network) {
@@ -113,7 +117,7 @@ const ChainsProvider: React.FC = props => {
         setToChain(chain);
       }
     },
-    [fromChain],
+    [fromChain]
   );
 
   const switchChains = useCallback(() => {
