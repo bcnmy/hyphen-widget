@@ -1,6 +1,5 @@
 import AwesomeDebouncePromise from "awesome-debounce-promise";
 import { BigNumber, ethers } from "ethers";
-import { useQuery } from "react-query";
 import {
   createContext,
   FormEvent,
@@ -11,29 +10,28 @@ import {
   useState,
 } from "react";
 
-import lpmanagerABI from "../abis/LiquidityPools.abi.json";
+import lpmanagerABI from "abis/LiquidityPools.abi.json";
 
 // @ts-ignore
-import { RESPONSE_CODES } from "@biconomy/hyphen-staging";
+import { RESPONSE_CODES } from "@biconomy/hyphen";
 
 import {
   BASE_DIVISOR,
   DEFAULT_FIXED_DECIMAL_POINT,
-  LP_FEE_FRACTION,
   NATIVE_ADDRESS,
-} from "../config/constants";
+} from "config/constants";
 import { useChains } from "./Chains";
 import { useHyphen } from "./Hyphen";
 import { useToken } from "./Token";
 import { useTokenApproval } from "./TokenApproval";
-import config from "../config";
-import toFixed from "../utils/toFixed";
-import formatRawEthValue from "../utils/formatRawEthValue";
-import useAsync, { Status } from "../hooks/useLoading";
+import config from "config";
+import toFixed from "utils/toFixed";
+import formatRawEthValue from "utils/formatRawEthValue";
+import useAsync, { Status } from "hooks/useLoading";
 import { useWalletProvider } from "./WalletProvider";
 import { useBiconomy } from "./Biconomy";
 import { useNotifications } from "./Notifications";
-import useLiquidityPools from "../hooks/contracts/useLiquidityPools";
+import useLiquidityPools from "hooks/contracts/useLiquidityPools";
 
 export enum ValidationErrors {
   INVALID_AMOUNT,
@@ -84,23 +82,21 @@ interface ITransactionContext {
 const TransactionContext = createContext<ITransactionContext | null>(null);
 
 const getTokenGasPrice = (
+  env: string,
   tokenAddress: string,
   networkId: number,
-  test: boolean,
   fetchOptions: any
 ) => {
-  const baseUrl = test
-    ? "https://hyphen-v2-integration-api.biconomy.io"
-    : "https://hyphen-v2-api.biconomy.io";
+  const baseURL = config.getBaseURL(env);
 
   return fetch(
-    `${baseUrl}${config.hyphen.getTokenGasPricePath}?tokenAddress=${tokenAddress}&networkId=${networkId}`,
+    `${baseURL}${config.hyphen.getTokenGasPricePath}?tokenAddress=${tokenAddress}&networkId=${networkId}`,
     fetchOptions
   );
 };
 const getTokenGasPriceDebounced = AwesomeDebouncePromise(getTokenGasPrice, 500);
 
-const TransactionProvider: React.FC<{ test: boolean }> = (props) => {
+const TransactionProvider: React.FC<{ env: string }> = (props) => {
   const { selectedToken, selectedTokenBalance } = useToken()!;
   const { toChainRpcUrlProvider } = useChains()!;
   const { poolInfo, hyphen } = useHyphen()!;
@@ -241,9 +237,7 @@ const TransactionProvider: React.FC<{ test: boolean }> = (props) => {
       if (isNaN(transferAmount)) throw new Error("Transfer amount is invalid");
       console.log("calculate fee for amount", transferAmount);
 
-      let fixedDecimalPoint =
-        selectedToken[fromChain.chainId].fixedDecimalPoint ||
-        DEFAULT_FIXED_DECIMAL_POINT;
+      let fixedDecimalPoint = DEFAULT_FIXED_DECIMAL_POINT;
       if (!selectedToken || !toChain || !transferAmount) {
         return;
       }
@@ -269,9 +263,9 @@ const TransactionProvider: React.FC<{ test: boolean }> = (props) => {
       lpFeeProcessedString = lpFeeAmountRaw.toFixed(fixedDecimalPoint);
 
       let fetchResponse = await getTokenGasPriceDebounced(
+        props.env,
         selectedToken[toChain.chainId].address,
         toChain.chainId,
-        props.test,
         fetchOptions
       );
 
@@ -334,7 +328,7 @@ const TransactionProvider: React.FC<{ test: boolean }> = (props) => {
 
       let transactionFee = formatRawEthValue(
         transactionFeeRaw.toString(),
-        decimal
+        tokenDecimal
       );
 
       let transactionFeeProcessedString = toFixed(
@@ -634,7 +628,7 @@ const TransactionProvider: React.FC<{ test: boolean }> = (props) => {
       let lpManagerInterface = new ethers.utils.Interface(lpmanagerABI);
 
       let tokenReceipt = receipt.logs.find(
-        (receiptLog) => receiptLog.topics[0] === toChain.assetSentTopicId
+        (receiptLog) => receiptLog.topics[0] === toChain.topicIds.assetSent
       );
       try {
         if (!tokenReceipt) {
@@ -647,11 +641,7 @@ const TransactionProvider: React.FC<{ test: boolean }> = (props) => {
           amount,
           selectedToken[fromChain.chainId].decimal
         );
-        processedAmount = toFixed(
-          processedAmount,
-          selectedToken[fromChain.chainId].fixedDecimalPoint ||
-            DEFAULT_FIXED_DECIMAL_POINT
-        );
+        processedAmount = toFixed(processedAmount, DEFAULT_FIXED_DECIMAL_POINT);
         return processedAmount;
       } catch (error) {
         console.log(error);

@@ -1,14 +1,13 @@
-import Select from "../../components/Select";
-import { TokenConfig } from "../../config/tokens";
-import { useChains } from "../../context/Chains";
-import { useHyphen } from "../../context/Hyphen";
-import { useToken } from "../../context/Token";
-import { useTransaction, ValidationErrors } from "../../context/Transaction";
-import { Status } from "../../hooks/useLoading";
+import Select from "components/Select";
+import { useChains } from "context/Chains";
+import { useHyphen } from "context/Hyphen";
+import { useToken } from "context/Token";
+import { useTransaction, ValidationErrors } from "context/Transaction";
+import { Status } from "hooks/useLoading";
 import React, { useMemo } from "react";
 import Skeleton from "react-loading-skeleton";
 import { twMerge } from "tailwind-merge";
-import CustomTooltip from "../../components/CustomTooltip";
+import CustomTooltip from "components/CustomTooltip";
 
 interface ITokenSelectorProps {
   disabled?: boolean;
@@ -18,7 +17,7 @@ const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
   disabled,
 }) => {
   const {
-    tokensList,
+    tokens,
     compatibleTokensForCurrentChains,
     changeSelectedToken,
     selectedTokenBalance,
@@ -33,14 +32,19 @@ const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
 
   const tokenOptions = useMemo(() => {
     if (!fromChain || !compatibleTokensForCurrentChains) return [];
-    return tokensList
-      .filter((token) => compatibleTokensForCurrentChains.indexOf(token) !== -1)
-      .map((token) => ({
-        id: token.symbol,
-        name: token.symbol,
-        image: token.image,
-      }));
-  }, [fromChain, tokensList, compatibleTokensForCurrentChains]);
+    return tokens
+      ? Object.keys(tokens)
+          .filter((tokenSymbol) => {
+            const token = tokens[tokenSymbol];
+            return compatibleTokensForCurrentChains.indexOf(token) !== -1;
+          })
+          .map((tokenSymbol) => ({
+            id: tokens[tokenSymbol].symbol,
+            name: tokens[tokenSymbol].symbol,
+            image: tokens[tokenSymbol].image,
+          }))
+      : [];
+  }, [compatibleTokensForCurrentChains, fromChain, tokens]);
 
   return (
     <div className="flex flex-col justify-between">
@@ -55,7 +59,11 @@ const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
           setSelected={(opt) => {
             fromChain &&
               changeSelectedToken(
-                tokensList.find((t) => t.symbol === opt.id) as TokenConfig
+                tokens
+                  ? Object.keys(tokens).find(
+                      (tokenSymbol) => tokenSymbol === opt.id
+                    )
+                  : ""
               );
           }}
           label={"token"}

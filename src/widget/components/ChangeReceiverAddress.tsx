@@ -1,6 +1,6 @@
 import { Disclosure } from "@headlessui/react";
 import { HiOutlineChevronDown } from "react-icons/hi";
-import { useTransaction } from "../../context/Transaction";
+import { useTransaction } from "context/Transaction";
 
 function ChangeReceiverAddress() {
   const {

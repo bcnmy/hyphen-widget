@@ -87,7 +87,7 @@ const Widget: React.FC<
   } = useModal();
 
   const [state, setState] = useState<HyphenWidgetOptions & WidgetProps>({
-    test: props.test,
+    env: props.env,
     apiKeys: props.apiKeys,
     rpcUrls: props.rpcUrls,
     popupMode: props.popupMode,
@@ -123,7 +123,7 @@ const Widget: React.FC<
 
   useEffect(() => {
     setState({
-      test: props.test,
+      env: props.env,
       apiKeys: props.apiKeys,
       rpcUrls: props.rpcUrls,
       popupMode: props.popupMode,

@@ -1,11 +1,11 @@
-import PrimaryButtonLight from "../../components/Buttons/PrimaryButtonLight";
-import { Toggle } from "../../components/Toggle";
-import React, { useState } from "react";
-import { FaInfoCircle } from "react-icons/fa";
-import { IoMdClose } from "react-icons/io";
+import PrimaryButtonLight from 'components/Buttons/PrimaryButtonLight';
+import { Toggle } from 'components/Toggle';
+import React, { useState } from 'react';
+import { FaInfoCircle } from 'react-icons/fa';
+import { IoMdClose } from 'react-icons/io';
 
-import { Dialog } from "@headlessui/react";
-import Modal from "../../components/Modal";
+import { Dialog } from '@headlessui/react';
+import Modal from 'components/Modal';
 
 export interface IApprovalModalProps {
   executeTokenApproval: (isInfiniteApproval: boolean, amount: number) => void;
@@ -51,7 +51,7 @@ export const ApprovalModal: React.FC<IApprovalModalProps> = ({
                   as="div"
                   className="py-2 text-center font-medium text-hyphen-purple-dark/80"
                 >
-                  Allow Hyphen to spend {selectedTokenName} on{" "}
+                  Allow Hyphen to spend {selectedTokenName} on{' '}
                   {selectedChainName}
                 </Dialog.Description>
                 <div className="flex items-center justify-center gap-4 p-4">
@@ -68,8 +68,8 @@ export const ApprovalModal: React.FC<IApprovalModalProps> = ({
                   />
                 </div>
                 <div className="text-center text-xs font-medium text-hyphen-purple-dark/60">
-                  Note: This approval will only be used when you deposit your{" "}
-                  {selectedTokenName} in Hyphen contracts on {selectedChainName}{" "}
+                  Note: This approval will only be used when you deposit your{' '}
+                  {selectedTokenName} in Hyphen contracts on {selectedChainName}{' '}
                   for cross chain transfers.
                 </div>
               </div>
@@ -79,7 +79,7 @@ export const ApprovalModal: React.FC<IApprovalModalProps> = ({
                 className="px-8"
                 onClick={() => {
                   if (!transferAmount)
-                    throw new Error("Transfer Amount Invalid");
+                    throw new Error('Transfer Amount Invalid');
                   executeTokenApproval(infiniteApproval, transferAmount);
                   onClose();
                 }}

@@ -1,7 +1,5 @@
-import { chains, chainMap } from "./chains";
-import tokens from "./tokens";
 import constants from "./constants";
-import { ENV } from "../types/environment";
+import { ENV } from "types/environment";
 
 let hyphenBaseUrl;
 if (process.env.REACT_APP_ENV === ENV.production) {
@@ -17,12 +15,20 @@ const hyphen = {
   getTokenGasPricePath: "/api/v1/insta-exit/get-token-price",
 };
 
+function getBaseURL(env: string) {
+  if (env === ENV.production) {
+    return "ttps://hyphen-v2-api.biconomy.io";
+  } else if (env === ENV.test) {
+    return "https://hyphen-v2-integration-api.biconomy.io";
+  } else {
+    return "https://hyphen-v2-staging-api.biconomy.io";
+  }
+}
+
 export const config = {
-  chains,
-  chainMap,
-  tokens,
   hyphen,
   constants,
+  getBaseURL,
 };
 
 export default config;

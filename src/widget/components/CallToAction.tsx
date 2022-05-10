@@ -1,15 +1,15 @@
-import PrimaryButtonLight from "../../components/Buttons/PrimaryButtonLight";
-import SecondaryButtonLight from "../../components/Buttons/SecondaryButtonLight";
-import Spinner from "../../components/Buttons/Spinner";
-import { useBiconomy } from "../../context/Biconomy";
-import { useChains } from "../../context/Chains";
-import { useTokenApproval } from "../../context/TokenApproval";
-import { useTransaction } from "../../context/Transaction";
-import { useWalletProvider } from "../../context/WalletProvider";
-import { Status } from "../../hooks/useLoading";
+import PrimaryButtonLight from "components/Buttons/PrimaryButtonLight";
+import SecondaryButtonLight from "components/Buttons/SecondaryButtonLight";
+import Spinner from "components/Buttons/Spinner";
+import { useBiconomy } from "context/Biconomy";
+import { useChains } from "context/Chains";
+import { useTokenApproval } from "context/TokenApproval";
+import { useTransaction } from "context/Transaction";
+import { useWalletProvider } from "context/WalletProvider";
+import { Status } from "hooks/useLoading";
 import * as React from "react";
-import switchNetwork from "../../utils/switchNetwork";
-import CustomTooltip from "../../components/CustomTooltip";
+import switchNetwork from "utils/switchNetwork";
+import CustomTooltip from "components/CustomTooltip";
 
 export interface ICallToActionProps {
   onApproveButtonClick: () => void;

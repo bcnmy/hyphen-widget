@@ -1,5 +1,5 @@
 import { Dialog } from "@headlessui/react";
-import { DEFAULT_FIXED_DECIMAL_POINT } from "../../../config/constants";
+import { DEFAULT_FIXED_DECIMAL_POINT } from "config/constants";
 import { formatDistanceStrict } from "date-fns";
 import { BigNumber, ethers } from "ethers";
 import {
@@ -7,7 +7,7 @@ import {
   HiOutlineArrowSmRight,
 } from "react-icons/hi";
 import { IoMdClose } from "react-icons/io";
-import Modal from "../../../components/Modal";
+import Modal from "components/Modal";
 import { ITransactionDetails } from "../UserInfoModal";
 
 export interface ITransactionDetailModal {
@@ -78,7 +78,7 @@ function TransactionDetailModal({
               <div className="flex flex-col">
                 <span className="text-xs text-gray-400">Received</span>
                 <span className="text-xl font-semibold text-gray-700">
-                  {amountReceived} {token.symbol}
+                  ~{amountReceived} {token.symbol}
                 </span>
                 <a
                   target="_blank"
@@ -93,7 +93,7 @@ function TransactionDetailModal({
             </div>
 
             <span className="text-center text-gray-500">
-              Tranfer completed in{" "}
+              Transfer completed in{" "}
               <span className="text-hyphen-purple">{transactionTime}</span>
             </span>
           </div>

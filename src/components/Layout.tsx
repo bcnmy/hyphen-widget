@@ -1,6 +1,6 @@
 import Header from "./Header";
 import Footer from "./Footer";
-import UserInfoModal from "../widget/components/UserInfoModal";
+import UserInfoModal from "widget/components/UserInfoModal";
 import useModal from "../hooks/useModal";
 
 interface LayoutProps {
