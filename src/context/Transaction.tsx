@@ -96,7 +96,9 @@ const getTokenGasPrice = (
 };
 const getTokenGasPriceDebounced = AwesomeDebouncePromise(getTokenGasPrice, 500);
 
-const TransactionProvider: React.FC<{ env: string }> = (props) => {
+const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
+  props
+) => {
   const { selectedToken, selectedTokenBalance } = useToken()!;
   const { toChainRpcUrlProvider } = useChains()!;
   const { poolInfo, hyphen } = useHyphen()!;
@@ -263,7 +265,7 @@ const TransactionProvider: React.FC<{ env: string }> = (props) => {
       lpFeeProcessedString = lpFeeAmountRaw.toFixed(fixedDecimalPoint);
 
       let fetchResponse = await getTokenGasPriceDebounced(
-        props.env,
+        props.env || "staging",
         selectedToken[toChain.chainId].address,
         toChain.chainId,
         fetchOptions
@@ -558,7 +560,7 @@ const TransactionProvider: React.FC<{ env: string }> = (props) => {
         fromChainId: fromChain.chainId,
         toChainId: toChain.chainId,
         useBiconomy: isBiconomyEnabled,
-        tag: config.constants.DEPOSIT_TAG,
+        tag: props.tag,
       });
 
       addTxNotification(
@@ -581,6 +583,7 @@ const TransactionProvider: React.FC<{ env: string }> = (props) => {
       toChain,
       transferAmount,
       addTxNotification,
+      props.tag,
     ]
   );
 

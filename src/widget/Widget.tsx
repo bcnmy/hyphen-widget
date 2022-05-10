@@ -87,6 +87,7 @@ const Widget: React.FC<
   } = useModal();
 
   const [state, setState] = useState<HyphenWidgetOptions & WidgetProps>({
+    tag: props.tag,
     env: props.env,
     apiKeys: props.apiKeys,
     rpcUrls: props.rpcUrls,
@@ -123,6 +124,7 @@ const Widget: React.FC<
 
   useEffect(() => {
     setState({
+      tag: props.tag,
       env: props.env,
       apiKeys: props.apiKeys,
       rpcUrls: props.rpcUrls,
