@@ -14,7 +14,7 @@ import { WalletProviderProvider } from "./WalletProvider";
 const queryClient = new QueryClient();
 
 export const AppProviders: React.FC<{
-  tag?: string;
+  tag: string;
   env?: string;
   apiKeys?: { [key: string]: string };
   rpcUrls?: { [key: string]: string };

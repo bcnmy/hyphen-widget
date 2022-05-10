@@ -22,7 +22,7 @@ interface HyphenWidgetProps {
 }
 
 export interface HyphenWidgetOptions {
-  tag?: string;
+  tag: string;
   env?: string;
   apiKeys?: { [key: string]: string };
   rpcUrls?: { [key: string]: string };
@@ -116,6 +116,7 @@ class HyphenWidget extends React.Component<
           <ToastContainer className="font-sans font-semibold" />
         )}
         <AppProviders
+          tag={this.state.tag}
           env={this.state.env}
           apiKeys={this.state.apiKeys}
           rpcUrls={this.state.rpcUrls}
@@ -141,6 +142,13 @@ class HyphenWidget extends React.Component<
     options: HyphenWidgetOptions & DefaultInputs & InputConfig
   ) {
     let widget;
+
+    if (!options.tag) {
+      throw new Error(
+        "Tag is a mandatory field, please specify it to use the widget!"
+      );
+    }
+
     ReactDOM.render(
       <React.StrictMode>
         <HyphenWidget

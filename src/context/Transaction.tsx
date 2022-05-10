@@ -96,7 +96,7 @@ const getTokenGasPrice = (
 };
 const getTokenGasPriceDebounced = AwesomeDebouncePromise(getTokenGasPrice, 500);
 
-const TransactionProvider: React.FC<{ tag?: string; env?: string }> = (
+const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
   props
 ) => {
   const { selectedToken, selectedTokenBalance } = useToken()!;
@@ -560,7 +560,7 @@ const TransactionProvider: React.FC<{ tag?: string; env?: string }> = (
         fromChainId: fromChain.chainId,
         toChainId: toChain.chainId,
         useBiconomy: isBiconomyEnabled,
-        tag: props.tag || config.constants.DEPOSIT_TAG,
+        tag: props.tag,
       });
 
       addTxNotification(
