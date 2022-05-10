@@ -55,9 +55,9 @@ function isTokenValidForChains(
 }
 
 const TokenProvider: React.FC<{
-  env: string;
-  apiKeys: { [key: string]: string };
-  rpcUrls: { [key: string]: string };
+  env?: string;
+  apiKeys?: { [key: string]: string };
+  rpcUrls?: { [key: string]: string };
 }> = (props) => {
   const { accounts } = useWalletProvider()!;
   const { fromChain, fromChainRpcUrlProvider, toChain } = useChains()!;

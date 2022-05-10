@@ -22,9 +22,10 @@ interface HyphenWidgetProps {
 }
 
 export interface HyphenWidgetOptions {
-  env: string;
-  apiKeys: { [key: string]: string };
-  rpcUrls: { [key: string]: string };
+  tag?: string;
+  env?: string;
+  apiKeys?: { [key: string]: string };
+  rpcUrls?: { [key: string]: string };
   popupMode?: boolean;
   widgetMode?: boolean;
   onDeposit?: (hash: string) => any;

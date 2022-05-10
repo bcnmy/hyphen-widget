@@ -31,9 +31,9 @@ interface IChainsContext {
 const ChainsContext = createContext<IChainsContext | null>(null);
 
 const ChainsProvider: React.FC<{
-  env: string;
-  apiKeys: { [key: string]: string };
-  rpcUrls: { [key: string]: string };
+  env?: string;
+  apiKeys?: { [key: string]: string };
+  rpcUrls?: { [key: string]: string };
 }> = (props) => {
   const { currentChainId } = useWalletProvider()!;
   const {

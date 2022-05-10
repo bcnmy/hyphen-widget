@@ -17,6 +17,7 @@ import useAsync, { Status } from "hooks/useLoading";
 import { useBiconomy } from "./Biconomy";
 import { ENV } from "types/environment";
 import { Environment } from "@biconomy/hyphen/dist/types";
+import { config } from "config";
 
 type PoolInfo = {
   minDepositAmount: number;
@@ -33,7 +34,7 @@ interface IHyphenContext {
 
 const HyphenContext = createContext<IHyphenContext | null>(null);
 
-const HyphenProvider: React.FC<{ env: string }> = (props) => {
+const HyphenProvider: React.FC<{ env?: string }> = (props) => {
   const { rawEthereumProvider, walletProvider } = useWalletProvider()!;
   const { selectedToken } = useToken()!;
   const { isBiconomyEnabled } = useBiconomy()!;
@@ -56,7 +57,7 @@ const HyphenProvider: React.FC<{ env: string }> = (props) => {
             [ENV.test]: "test",
             [ENV.staging]: "staging",
             local: "",
-          }[props.env] as Environment,
+          }[props.env || "staging"] as Environment,
           biconomy: {
             enable: isBiconomyEnabled,
             apiKey: fromChain?.gasless.apiKey ?? "",
@@ -74,7 +75,7 @@ const HyphenProvider: React.FC<{ env: string }> = (props) => {
             [ENV.test]: "test",
             [ENV.staging]: "staging",
             local: "",
-          }[props.env] as Environment,
+          }[props.env || "staging"] as Environment,
           signatureType: SIGNATURE_TYPES.EIP712,
         });
       }
@@ -88,6 +89,7 @@ const HyphenProvider: React.FC<{ env: string }> = (props) => {
     fromChain?.gasless.apiKey,
     fromChainRpcUrlProvider,
     isBiconomyEnabled,
+    props.env,
     rawEthereumProvider,
     walletProvider,
   ]);

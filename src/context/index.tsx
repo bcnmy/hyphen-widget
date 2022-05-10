@@ -14,10 +14,11 @@ import { WalletProviderProvider } from "./WalletProvider";
 const queryClient = new QueryClient();
 
 export const AppProviders: React.FC<{
-  env: string;
-  apiKeys: { [key: string]: string };
-  rpcUrls: { [key: string]: string };
-}> = ({ children, env, apiKeys, rpcUrls }) => {
+  tag?: string;
+  env?: string;
+  apiKeys?: { [key: string]: string };
+  rpcUrls?: { [key: string]: string };
+}> = ({ children, tag, env, apiKeys, rpcUrls }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <WalletProviderProvider>
@@ -28,7 +29,7 @@ export const AppProviders: React.FC<{
                 <BiconomyProvider>
                   <HyphenProvider env={env}>
                     <TokenApprovalProvider>
-                      <TransactionProvider env={env}>
+                      <TransactionProvider env={env} tag={tag}>
                         <TransactionInfoModalProvider>
                           {children}
                         </TransactionInfoModalProvider>

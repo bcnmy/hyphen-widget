@@ -15,7 +15,7 @@ const hyphen = {
   getTokenGasPricePath: "/api/v1/insta-exit/get-token-price",
 };
 
-function getBaseURL(env: string) {
+function getBaseURL(env: string | undefined): string {
   if (env === ENV.production) {
     return "ttps://hyphen-v2-api.biconomy.io";
   } else if (env === ENV.test) {
