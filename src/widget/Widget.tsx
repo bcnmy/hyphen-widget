@@ -22,6 +22,7 @@ import { HiInformationCircle } from "react-icons/hi";
 import { HyphenWidgetOptions, InputConfig, Inputs } from "../";
 import { useToken } from "../context/Token";
 import { useHyphen } from "../context/Hyphen";
+import HyphenLogoDark from "assets/images/hyphen-logo-dark.svg";
 export interface WidgetProps {
   sourceChain: string | undefined;
   destinationChain: string | undefined;
@@ -180,7 +181,12 @@ const Widget: React.FC<
       <div className="max-w-xl">
         <div className="relative z-10">
           <div className="flex flex-col gap-2 rounded-10 bg-white p-6 shadow-lg">
-            <div className="mb-2 flex items-center justify-end">
+            <div className="mb-2 flex items-center justify-between">
+              <img
+                src={HyphenLogoDark}
+                className="h-8 w-auto"
+                alt="Hyphen Logo"
+              />
               <div className="flex items-center">
                 <HiInformationCircle
                   data-tip
