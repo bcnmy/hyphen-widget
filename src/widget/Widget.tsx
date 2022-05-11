@@ -23,6 +23,8 @@ import { HyphenWidgetOptions, InputConfig, Inputs } from "../";
 import { useToken } from "../context/Token";
 import { useHyphen } from "../context/Hyphen";
 import HyphenLogoDark from "assets/images/hyphen-logo-dark.svg";
+import WidgetBranding from "assets/images/widget-branding.svg";
+
 export interface WidgetProps {
   sourceChain: string | undefined;
   destinationChain: string | undefined;
@@ -180,13 +182,20 @@ const Widget: React.FC<
       <ErrorModal error={executeApproveTokenError} title={"Approval Error"} />
       <div className="max-w-xl">
         <div className="relative z-10">
-          <div className="flex flex-col gap-2 rounded-10 bg-white p-6 shadow-lg">
+          <div className="flex flex-col gap-2 rounded-10 bg-white p-6 shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
             <div className="mb-2 flex items-center justify-between">
-              <img
-                src={HyphenLogoDark}
-                className="h-8 w-auto"
-                alt="Hyphen Logo"
-              />
+              <div className="flex items-center">
+                <img
+                  src={HyphenLogoDark}
+                  className="h-6 w-auto"
+                  alt="Hyphen Logo"
+                />
+                <img
+                  src={WidgetBranding}
+                  alt="Powered by biconomy"
+                  className="ml-4"
+                />
+              </div>
               <div className="flex items-center">
                 <HiInformationCircle
                   data-tip
