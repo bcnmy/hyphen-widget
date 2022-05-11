@@ -23,7 +23,8 @@ import * as HyphenWidget from "@biconomy/hyphen-widget/dist";
 import "@biconomy/hyphen-widget/dist/index.css";
 
 const wid = HyphenWidget.default.init(document.getElementById("widget"), {
-  test: true, // required if using testnet chains.
+  tag: "my-awesome-dapp", // unique identifier for your application (should ideally contain your dApp name)
+  env: "production", // can be test, staging or production. Defaults to staging.
   apiKeys: {
     // optional for gasless
     Ethereum: "Ethereum API Key",
@@ -31,7 +32,7 @@ const wid = HyphenWidget.default.init(document.getElementById("widget"), {
     Avalanche: "Avalanche API Key",
   },
   rpcUrls: {
-    // required
+    // optional
     Ethereum: "Ethereum RPC URL",
     Polygon: "Polygon RPC URL",
     Avalanche: "Avalanche RPC URL",
@@ -60,7 +61,8 @@ import * as HyphenWidget from "@biconomy/hyphen-widget/dist";
 import "@biconomy/hyphen-widget/dist/index.css";
 
 const wid = HyphenWidget.default.init(document.getElementById("widget"), {
-  test: true, // required if using testnet chains.
+  tag: "my-awesome-dapp", // unique identifier for your application (should ideally contain your dApp name)
+  env: "staging", // can be test or staging. Defaults to staging.
   apiKeys: {
     // optional for gasless
     Fuji: "Fuji API Key",
