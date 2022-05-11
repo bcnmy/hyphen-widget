@@ -17,7 +17,7 @@ const hyphen = {
 
 function getBaseURL(env: string | undefined): string {
   if (env === ENV.production) {
-    return "ttps://hyphen-v2-api.biconomy.io";
+    return "https://hyphen-v2-api.biconomy.io";
   } else if (env === ENV.test) {
     return "https://hyphen-v2-integration-api.biconomy.io";
   } else {
