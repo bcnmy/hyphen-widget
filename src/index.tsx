@@ -17,6 +17,8 @@ declare global {
 
 interface HyphenWidgetProps {
   expose: (self: HyphenWidget) => void;
+  open: (open: any) => void;
+  close: (close: any) => void;
   options: HyphenWidgetOptions & Inputs & InputConfig;
   skipToastContainer?: boolean;
 }
@@ -24,6 +26,7 @@ interface HyphenWidgetProps {
 export interface HyphenWidgetOptions {
   tag: string;
   env?: string;
+  showWidget?: boolean;
   apiKeys?: { [key: string]: string };
   rpcUrls?: { [key: string]: string };
   popupMode?: boolean;
@@ -106,11 +109,34 @@ class HyphenWidget extends React.Component<
   constructor(props: HyphenWidgetProps) {
     super(props);
     props.expose && props.expose(this);
-    this.state = props.options;
+    props.open(this.open);
+    props.close(this.close);
+    this.state = {
+      ...props.options,
+      showWidget: props.options.showWidget || true,
+    };
+  }
+
+  open() {
+    console.log("opening widget!");
+    this.setState((prevState) => ({
+      ...prevState,
+      showWidget: true,
+    }));
+  }
+
+  close() {
+    console.log("closing widget!");
+    this.setState((prevState) => ({
+      ...prevState,
+      showWidget: false,
+    }));
   }
 
   render() {
-    return (
+    const showWidget = this.state.showWidget;
+
+    return showWidget ? (
       <>
         {this.props.skipToastContainer ? null : (
           <ToastContainer className="font-sans font-semibold" />
@@ -121,10 +147,10 @@ class HyphenWidget extends React.Component<
           apiKeys={this.state.apiKeys}
           rpcUrls={this.state.rpcUrls}
         >
-          <Widget {...this.state} />
+          <Widget {...this.state} closeWidget={() => this.close()} />
         </AppProviders>
       </>
-    );
+    ) : null;
   }
 
   setElement(element: Element) {
@@ -141,7 +167,7 @@ class HyphenWidget extends React.Component<
     ele: HTMLElement,
     options: HyphenWidgetOptions & DefaultInputs & InputConfig
   ) {
-    let widget;
+    let widget: any;
 
     if (!options.tag) {
       throw new Error(
@@ -155,6 +181,12 @@ class HyphenWidget extends React.Component<
           expose={(component) => {
             widget = component;
             widget.setElement(ele);
+          }}
+          open={(open) => {
+            widget.open = open;
+          }}
+          close={(close) => {
+            widget.close = close;
           }}
           options={options}
         />

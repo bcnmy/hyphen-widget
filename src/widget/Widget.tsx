@@ -22,6 +22,10 @@ import { HiInformationCircle } from "react-icons/hi";
 import { HyphenWidgetOptions, InputConfig, Inputs } from "../";
 import { useToken } from "../context/Token";
 import { useHyphen } from "../context/Hyphen";
+import HyphenLogoDark from "assets/images/hyphen-logo-dark.svg";
+import WidgetBranding from "assets/images/widget-branding.svg";
+import { IoMdClose } from "react-icons/io";
+
 export interface WidgetProps {
   sourceChain: string | undefined;
   destinationChain: string | undefined;
@@ -29,7 +33,6 @@ export interface WidgetProps {
   amount: string;
   receiver: string;
   gasless: boolean;
-
   lockSourceChain?: boolean;
   lockDestinationChain?: boolean;
   lockToken?: boolean;
@@ -44,6 +47,7 @@ interface WidgetSetFunctions {
   setAmount: (newValue: string) => void;
   setReceiver: (newValue: string) => void;
   setGasless: (newValue: boolean) => void;
+  closeWidget: () => void;
 }
 
 const Widget: React.FC<
@@ -89,6 +93,7 @@ const Widget: React.FC<
   const [state, setState] = useState<HyphenWidgetOptions & WidgetProps>({
     tag: props.tag,
     env: props.env,
+    showWidget: props.showWidget,
     apiKeys: props.apiKeys,
     rpcUrls: props.rpcUrls,
     popupMode: props.popupMode,
@@ -126,6 +131,7 @@ const Widget: React.FC<
     setState({
       tag: props.tag,
       env: props.env,
+      showWidget: props.showWidget,
       apiKeys: props.apiKeys,
       rpcUrls: props.rpcUrls,
       popupMode: props.popupMode,
@@ -179,41 +185,61 @@ const Widget: React.FC<
       <ErrorModal error={executeApproveTokenError} title={"Approval Error"} />
       <div className="max-w-xl">
         <div className="relative z-10">
-          <div className="flex flex-col gap-2 rounded-10 bg-white p-6 shadow-lg">
-            <div className="mb-2 flex items-center justify-end">
-              <div className="flex items-center">
-                <HiInformationCircle
-                  data-tip
-                  data-for="gaslessMode"
-                  className="mr-2 text-gray-500"
+          <div className="flex flex-col gap-2 rounded-10 bg-white p-6 shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
+            <div className="mb-2 flex items-center justify-between">
+              <div className="flex flex-col items-center">
+                <img
+                  src={HyphenLogoDark}
+                  className="h-6 w-auto"
+                  alt="Hyphen Logo"
                 />
-                <CustomTooltip id="gaslessMode">
-                  <span>This transaction is sponsored by Biconomy</span>
-                </CustomTooltip>
-                <div
-                  className={
-                    !isBiconomyAllowed
-                      ? "flex cursor-not-allowed opacity-50"
-                      : "flex"
-                  }
-                  data-tip
-                  data-for="whyGaslessDisabled"
-                >
-                  <span className="mr-2 text-base font-semibold text-gray-500">
-                    Gasless Mode
-                  </span>
-                  <Toggle
-                    label="Gasless Mode"
-                    enabled={isBiconomyEnabled}
-                    onToggle={(enabled) => setIsBiconomyToggledOn(enabled)}
-                  />
-                </div>
+                <img
+                  src={WidgetBranding}
+                  alt="Powered by biconomy"
+                  className="ml-4 mt-2"
+                />
               </div>
-              {!isBiconomyAllowed && (
-                <CustomTooltip id="whyGaslessDisabled">
-                  <span>Disabled for selected chain</span>
-                </CustomTooltip>
-              )}
+              <div>
+                <div className="flex items-center">
+                  <HiInformationCircle
+                    data-tip
+                    data-for="gaslessMode"
+                    className="mr-2 text-gray-500"
+                  />
+                  <CustomTooltip id="gaslessMode">
+                    <span>This transaction is sponsored by Biconomy</span>
+                  </CustomTooltip>
+                  <div
+                    className={
+                      !isBiconomyAllowed
+                        ? "flex items-center cursor-not-allowed opacity-50"
+                        : "flex items-center"
+                    }
+                    data-tip
+                    data-for="whyGaslessDisabled"
+                  >
+                    <span className="mr-2 text-xxs font-semibold text-hyphen-gray-400 uppercase">
+                      Gasless Mode
+                    </span>
+                    <Toggle
+                      label="Gasless Mode"
+                      enabled={isBiconomyEnabled}
+                      onToggle={(enabled) => setIsBiconomyToggledOn(enabled)}
+                    />
+                  </div>
+                </div>
+                {!isBiconomyAllowed && (
+                  <CustomTooltip id="whyGaslessDisabled">
+                    <span>Disabled for selected chain</span>
+                  </CustomTooltip>
+                )}
+                <button
+                  className="rounded hover:bg-gray-100"
+                  onClick={props.closeWidget}
+                >
+                  <IoMdClose className="h-6 w-auto text-gray-500" />
+                </button>
+              </div>
             </div>
             <div className="grid grid-cols-[1fr_34px_1fr] gap-2 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 hover:border-opacity-30">
               <NetworkSelectors />
