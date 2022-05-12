@@ -234,7 +234,7 @@ const Widget: React.FC<
                   </CustomTooltip>
                 )}
                 <button
-                  className="rounded hover:bg-gray-100 ml-2"
+                  className="rounded hover:bg-gray-100 ml-4"
                   onClick={props.closeWidget}
                 >
                   <IoMdClose className="h-6 w-auto text-gray-500" />
