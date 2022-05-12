@@ -23,19 +23,31 @@ import * as HyphenWidget from "@biconomy/hyphen-widget/dist";
 import "@biconomy/hyphen-widget/dist/index.css";
 
 const wid = HyphenWidget.default.init(document.getElementById("widget"), {
-  tag: "my-awesome-dapp", // unique identifier for your application (should ideally contain your dApp name)
-  env: "production", // can be test, staging or production. Defaults to staging.
+  // unique identifier for your application (should ideally contain your dApp name),
+  // this is a required field.
+  tag: string,
+});
+```
+
+## Optional configuration
+
+The following additional configuration options can be passed while initializing the widget:
+
+```typescript
+{
+  env: string, // can be test, staging or production. Default: "staging"
+  showWidget: boolean, // should the widget be shown by default or not. Default: true
+  // API keys for using Gasless.
   apiKeys: {
-    // optional for gasless
-    Ethereum: "Ethereum API Key",
-    Polygon: "Polygon API Key",
-    Avalanche: "Avalanche API Key",
+    Ethereum: string,
+    Polygon: string,
+    Avalanche: string,
   },
+  // Custom RPC URLs for the supported networks.
   rpcUrls: {
-    // optional
-    Ethereum: "Ethereum RPC URL",
-    Polygon: "Polygon RPC URL",
-    Avalanche: "Avalanche RPC URL",
+    Ethereum: string,
+    Polygon: string,
+    Avalanche: string,
   },
   // NOTE: following 2 callback emit when tx is *sent*, you should check the status by yourself
   onDeposit: (e) => console.log("Deposit " + e), // emit when depost tx is sent
@@ -51,26 +63,25 @@ const wid = HyphenWidget.default.init(document.getElementById("widget"), {
       }
   */
   onChange: (input) => console.log("Input " + JSON.stringify(input)),
-});
+}
 ```
 
-For testnets this would look somewhat like this:
+For testnets the initialization would look somewhat like this:
 
 ```javascript
 import * as HyphenWidget from "@biconomy/hyphen-widget/dist";
 import "@biconomy/hyphen-widget/dist/index.css";
 
 const wid = HyphenWidget.default.init(document.getElementById("widget"), {
-  tag: "my-awesome-dapp", // unique identifier for your application (should ideally contain your dApp name)
-  env: "staging", // can be test or staging. Defaults to staging.
+  tag: "my-awesome-dapp",
+  env: "staging",
+  showWidget: true,
   apiKeys: {
-    // optional for gasless
     Fuji: "Fuji API Key",
     Goerli: "Goerli API Key",
     Mumbai: "Mumbai API Key",
   },
   rpcUrls: {
-    // required
     Fuji: "Fuji RPC URL",
     Goerli: "Goerli RPC URL",
     Mumbai: "Mumbai RPC URL",
