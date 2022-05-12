@@ -94,6 +94,7 @@ const Widget: React.FC<
     tag: props.tag,
     env: props.env,
     showWidget: props.showWidget,
+    showCloseButton: props.showCloseButton,
     apiKeys: props.apiKeys,
     rpcUrls: props.rpcUrls,
     popupMode: props.popupMode,
@@ -132,6 +133,7 @@ const Widget: React.FC<
       tag: props.tag,
       env: props.env,
       showWidget: props.showWidget,
+      showCloseButton: props.showCloseButton,
       apiKeys: props.apiKeys,
       rpcUrls: props.rpcUrls,
       popupMode: props.popupMode,
@@ -233,12 +235,14 @@ const Widget: React.FC<
                     <span>Disabled for selected chain</span>
                   </CustomTooltip>
                 )}
-                <button
-                  className="rounded hover:bg-gray-100 ml-4"
-                  onClick={props.closeWidget}
-                >
-                  <IoMdClose className="h-6 w-auto text-gray-500" />
-                </button>
+                {props.showCloseButton ? (
+                  <button
+                    className="rounded hover:bg-gray-100 ml-4"
+                    onClick={props.closeWidget}
+                  >
+                    <IoMdClose className="h-6 w-auto text-gray-500" />
+                  </button>
+                ) : null}
               </div>
             </div>
             <div className="grid grid-cols-[1fr_34px_1fr] gap-2 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 hover:border-opacity-30">
