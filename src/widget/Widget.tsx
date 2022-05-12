@@ -199,7 +199,7 @@ const Widget: React.FC<
                   className="ml-4 mt-2"
                 />
               </div>
-              <div>
+              <div className="flex">
                 <div className="flex items-center">
                   <HiInformationCircle
                     data-tip
@@ -234,7 +234,7 @@ const Widget: React.FC<
                   </CustomTooltip>
                 )}
                 <button
-                  className="rounded hover:bg-gray-100"
+                  className="rounded hover:bg-gray-100 ml-2"
                   onClick={props.closeWidget}
                 >
                   <IoMdClose className="h-6 w-auto text-gray-500" />
