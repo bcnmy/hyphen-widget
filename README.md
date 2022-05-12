@@ -55,7 +55,8 @@ The following additional configuration options can be passed while initializing 
 ```typescript
 {
   env: string, // can be test, staging or production. Default: "staging"
-  showWidget: boolean, // should the widget be shown by default or not. Default: true
+  showWidget: boolean, // should the widget be shown by default or not. Default: false
+  showCloseButton: boolean, // should the widget have a close button to close it. Default: false
   // API keys for using Gasless.
   apiKeys: {
     Ethereum: string,
