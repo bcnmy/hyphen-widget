@@ -17,16 +17,35 @@ yarn add @biconomy/hyphen-widget
 - Obtain Biconomy api keys from [Biconomy](https://dashboard.biconomy.io/)
 - Obtain RPC endpoints from providers like [Infura](https://infura.io/) or [Alchemy](https://www.alchemy.com/)
 - To use the widget in any html page, create an element and use HyphenWidget.default.init
+- Add an element in your HTML with an appropriate ID which will render the widget.
 
 ```javascript
 import * as HyphenWidget from "@biconomy/hyphen-widget/dist";
 import "@biconomy/hyphen-widget/dist/index.css";
 
-const wid = HyphenWidget.default.init(document.getElementById("widget"), {
+const hyphenWidget = HyphenWidget.default.init(document.getElementById("widget"), {
   // unique identifier for your application (should ideally contain your dApp name),
   // this is a required field.
   tag: string,
 });
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+  </head>
+  <body>
+    <div class="widget-container">
+      <div id="widget"></div>
+    </div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
 ```
 
 ## Optional configuration
@@ -72,7 +91,7 @@ For testnets the initialization would look somewhat like this:
 import * as HyphenWidget from "@biconomy/hyphen-widget/dist";
 import "@biconomy/hyphen-widget/dist/index.css";
 
-const wid = HyphenWidget.default.init(document.getElementById("widget"), {
+const hyphenWidget = HyphenWidget.default.init(document.getElementById("widget"), {
   tag: "my-awesome-dapp",
   env: "staging",
   showWidget: true,
@@ -91,22 +110,34 @@ const wid = HyphenWidget.default.init(document.getElementById("widget"), {
 });
 ```
 
-- Add an element in your HTML with an appropriate ID which will render the widget.
+## Methods
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
-  </head>
-  <body>
-    <div class="widget-container">
-      <div id="widget"></div>
-    </div>
-    <script type="module" src="/main.js"></script>
-  </body>
-</html>
+### open
+
+Use the `open` method to open the modal:
+
+```typescript
+import * as HyphenWidget from "@biconomy/hyphen-widget/dist";
+import "@biconomy/hyphen-widget/dist/index.css";
+
+const hyphenWidget = HyphenWidget.default.init(document.getElementById("widget"), {
+  tag: "my-awesome-dapp",
+});
+
+hyphenWidget.open();
+```
+
+### close
+
+Use the `close` method to close the modal:
+
+```typescript
+import * as HyphenWidget from "@biconomy/hyphen-widget/dist";
+import "@biconomy/hyphen-widget/dist/index.css";
+
+const hyphenWidget = HyphenWidget.default.init(document.getElementById("widget"), {
+  tag: "my-awesome-dapp",
+});
+
+hyphenWidget.close();
 ```
