@@ -42,8 +42,11 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
       {(state) => (
         <div
           className={twMerge(
-            "transform-gpu transition-transform",
-            (state === "exiting" || state === "exited") && "-translate-y-full"
+            "invisible transition-opacity",
+            state === "entering" && "visible opacity-100",
+            state === "entered" && "visible opacity-100",
+            state === "exiting" && "visible opacity-0",
+            state === "exited" && "invisible opacity-0"
           )}
         >
           <div className="mx-10 rounded-b-lg border-x border-b border-white/10 bg-gray-700">

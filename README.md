@@ -23,11 +23,14 @@ yarn add @biconomy/hyphen-widget
 import * as HyphenWidget from "@biconomy/hyphen-widget/dist";
 import "@biconomy/hyphen-widget/dist/index.css";
 
-const hyphenWidget = HyphenWidget.default.init(document.getElementById("widget"), {
-  // unique identifier for your application (should ideally contain your dApp name),
-  // this is a required field.
-  tag: string,
-});
+const hyphenWidget = HyphenWidget.default.init(
+  document.getElementById("widget"),
+  {
+    // unique identifier for your application (should ideally contain your dApp name),
+    // this is a required field.
+    tag: string,
+  }
+);
 ```
 
 ```html
@@ -57,6 +60,7 @@ The following additional configuration options can be passed while initializing 
   env: string, // can be test, staging or production. Default: "staging"
   showWidget: boolean, // should the widget be shown by default or not. Default: false
   showCloseButton: boolean, // should the widget have a close button to close it. Default: false
+  showChangeAddress: boolean, // should the widget allow ability to change receiver address. Default: true
   // API keys for using Gasless.
   apiKeys: {
     Ethereum: string,
@@ -121,9 +125,12 @@ Use the `open` method to open the modal:
 import * as HyphenWidget from "@biconomy/hyphen-widget/dist";
 import "@biconomy/hyphen-widget/dist/index.css";
 
-const hyphenWidget = HyphenWidget.default.init(document.getElementById("widget"), {
-  tag: "my-awesome-dapp",
-});
+const hyphenWidget = HyphenWidget.default.init(
+  document.getElementById("widget"),
+  {
+    tag: "my-awesome-dapp",
+  }
+);
 
 hyphenWidget.open();
 ```
@@ -136,9 +143,12 @@ Use the `close` method to close the modal:
 import * as HyphenWidget from "@biconomy/hyphen-widget/dist";
 import "@biconomy/hyphen-widget/dist/index.css";
 
-const hyphenWidget = HyphenWidget.default.init(document.getElementById("widget"), {
-  tag: "my-awesome-dapp",
-});
+const hyphenWidget = HyphenWidget.default.init(
+  document.getElementById("widget"),
+  {
+    tag: "my-awesome-dapp",
+  }
+);
 
 hyphenWidget.close();
 ```

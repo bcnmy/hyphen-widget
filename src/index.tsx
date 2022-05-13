@@ -28,6 +28,7 @@ export interface HyphenWidgetOptions {
   env?: string;
   showWidget?: boolean;
   showCloseButton?: boolean;
+  showChangeAddress?: boolean;
   apiKeys?: { [key: string]: string };
   rpcUrls?: { [key: string]: string };
   popupMode?: boolean;
@@ -114,8 +115,9 @@ class HyphenWidget extends React.Component<
     props.close(this.close);
     this.state = {
       ...props.options,
-      showWidget: props.options.showWidget || false,
-      showCloseButton: props.options.showCloseButton || false,
+      showWidget: props.options.showWidget ?? false,
+      showCloseButton: props.options.showCloseButton ?? false,
+      showChangeAddress: props.options.showChangeAddress ?? true,
     };
   }
 
