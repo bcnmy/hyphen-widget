@@ -95,6 +95,7 @@ const Widget: React.FC<
     env: props.env,
     showWidget: props.showWidget,
     showCloseButton: props.showCloseButton,
+    showChangeAddress: props.showChangeAddress,
     apiKeys: props.apiKeys,
     rpcUrls: props.rpcUrls,
     popupMode: props.popupMode,
@@ -134,6 +135,7 @@ const Widget: React.FC<
       env: props.env,
       showWidget: props.showWidget,
       showCloseButton: props.showCloseButton,
+      showChangeAddress: props.showChangeAddress,
       apiKeys: props.apiKeys,
       rpcUrls: props.rpcUrls,
       popupMode: props.popupMode,
@@ -265,7 +267,7 @@ const Widget: React.FC<
             />
           </div>
 
-          <ChangeReceiverAddress />
+          {props.showChangeAddress ? <ChangeReceiverAddress /> : null}
 
           <CallToAction
             onApproveButtonClick={showApprovalModal}
