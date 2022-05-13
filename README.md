@@ -14,9 +14,7 @@ yarn add @biconomy/hyphen-widget
 
 ### Importing & Instantiation
 
-- Obtain Biconomy api keys from [Biconomy](https://dashboard.biconomy.io/)
-- Obtain RPC endpoints from providers like [Infura](https://infura.io/) or [Alchemy](https://www.alchemy.com/)
-- To use the widget in any html page, create an element and use HyphenWidget.default.init
+- To use the widget import the HyphenWidget component and initialize it in your JavaScript file by passing a "tag" value in its configuration. This is the only mandatory parameter, other parameters are optional.
 - Add an element in your HTML with an appropriate ID which will render the widget.
 
 ```javascript
@@ -89,6 +87,8 @@ The following additional configuration options can be passed while initializing 
   onChange: (input) => console.log("Input " + JSON.stringify(input)),
 }
 ```
+
+Note: For using Gasless obtain Biconomy api keys from [Biconomy](https://dashboard.biconomy.io/) and pass those during initialization using `apiKeys` object. Similarly for passing custom RPC URLs obtain RPC endpoints from providers like [Infura](https://infura.io/) or [Alchemy](https://www.alchemy.com/) and pass them using `rpcUrls` object.
 
 For testnets the initialization would look something like this:
 
