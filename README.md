@@ -144,7 +144,9 @@ hyphenWidget.close();
 
 ## Demo
 
-You can check out the demo repository [here](https://github.com/bcnmy/hyphen-widget-demo), below is a video going through the integration:
+You can check out the demo repository [here](https://github.com/bcnmy/hyphen-widget-demo). The hosted versions of the demo can be checked over here: [mainnet](https://hyphen-widget-demo.biconomy.io/) and [testnet](https://hyphen-widget-demo-test.biconomy.io/).
+
+We also have a video going through the widget's integration:
 
 https://www.youtube.com/watch?v=1ErNhH6TKj0
 
