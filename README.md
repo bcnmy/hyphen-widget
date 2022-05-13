@@ -20,7 +20,7 @@ yarn add @biconomy/hyphen-widget
 - Add an element in your HTML with an appropriate ID which will render the widget.
 
 ```javascript
-import * as HyphenWidget from "@biconomy/hyphen-widget/dist";
+import * as HyphenWidget from "@biconomy/hyphen-widget";
 import "@biconomy/hyphen-widget/dist/index.css";
 
 const hyphenWidget = HyphenWidget.default.init(
@@ -90,28 +90,17 @@ The following additional configuration options can be passed while initializing 
 }
 ```
 
-For testnets the initialization would look somewhat like this:
+For testnets the initialization would look something like this:
 
 ```javascript
-import * as HyphenWidget from "@biconomy/hyphen-widget/dist";
+import * as HyphenWidget from "@biconomy/hyphen-widget";
 import "@biconomy/hyphen-widget/dist/index.css";
 
 const hyphenWidget = HyphenWidget.default.init(document.getElementById("widget"), {
   tag: "my-awesome-dapp",
-  env: "staging",
-  showWidget: true,
-  apiKeys: {
-    Fuji: "Fuji API Key",
-    Goerli: "Goerli API Key",
-    Mumbai: "Mumbai API Key",
-  },
-  rpcUrls: {
-    Fuji: "Fuji RPC URL",
-    Goerli: "Goerli RPC URL",
-    Mumbai: "Mumbai RPC URL",
-  },
-  ...
+  env: "test",
   // Other options.
+  ...
 });
 ```
 
@@ -122,7 +111,7 @@ const hyphenWidget = HyphenWidget.default.init(document.getElementById("widget")
 Use the `open` method to open the modal:
 
 ```typescript
-import * as HyphenWidget from "@biconomy/hyphen-widget/dist";
+import * as HyphenWidget from "@biconomy/hyphen-widget";
 import "@biconomy/hyphen-widget/dist/index.css";
 
 const hyphenWidget = HyphenWidget.default.init(
@@ -140,7 +129,7 @@ hyphenWidget.open();
 Use the `close` method to close the modal:
 
 ```typescript
-import * as HyphenWidget from "@biconomy/hyphen-widget/dist";
+import * as HyphenWidget from "@biconomy/hyphen-widget";
 import "@biconomy/hyphen-widget/dist/index.css";
 
 const hyphenWidget = HyphenWidget.default.init(
@@ -152,3 +141,10 @@ const hyphenWidget = HyphenWidget.default.init(
 
 hyphenWidget.close();
 ```
+
+## Demo
+
+You can check out the demo repository [here](https://github.com/bcnmy/hyphen-widget-demo), below is a video going through the integration:
+
+https://www.youtube.com/watch?v=1ErNhH6TKj0
+
