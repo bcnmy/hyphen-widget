@@ -2,7 +2,7 @@
 
 Getting started with the Hyphen widget is quite easy, no need to worry about building your own UI. Having seamless bridging inside your dApp has never been easier!
 
-### Installation
+## Installation
 
 ```shell
 npm install @biconomy/hyphen-widget
@@ -12,7 +12,7 @@ or
 yarn add @biconomy/hyphen-widget
 ```
 
-### Importing & Instantiation
+## Importing & Instantiation
 
 - To use the widget import the HyphenWidget component and initialize it in your JavaScript file by passing a "tag" value in its configuration. This is the only mandatory parameter, other parameters are optional.
 - Add an element in your HTML with an appropriate ID which will render the widget.
@@ -47,6 +47,50 @@ const hyphenWidget = HyphenWidget.default.init(
     <script type="module" src="/main.js"></script>
   </body>
 </html>
+```
+
+### Using the Widget in React
+
+```typescript
+import { useState, useEffect } from "react";
+import * as HyphenWidget from "@biconomy/hyphen-widget";
+import "@biconomy/hyphen-widget/dist/index.css";
+
+function App() {
+  const [hyphenWidget, setHyphenWidget] = useState();
+
+  useEffect(() => {
+    const widget = HyphenWidget.default.init(
+      document.getElementById("widget"),
+      {
+        tag: "expecto-patronum",
+        showWidget: true,
+        showCloseButton: true,
+      }
+    );
+
+    if (widget) {
+      setHyphenWidget(widget);
+    }
+  }, []);
+
+  function handleOpen() {
+    hyphenWidget.open();
+  }
+
+  function handleClose() {
+    hyphenWidget.close();
+  }
+
+  return <div className="App">
+    <button onClick={handleOpen}>Open Widget</button>
+    <button onClick={handleClose}>Close Widget</button>
+
+    <div id="widget"></div>
+  </div>;
+}
+
+export default App;
 ```
 
 ## Optional configuration
