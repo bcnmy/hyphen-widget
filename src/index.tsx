@@ -29,6 +29,7 @@ export interface HyphenWidgetOptions {
   showWidget?: boolean;
   showCloseButton?: boolean;
   showChangeAddress?: boolean;
+  showGasTokenSwap?: boolean;
   apiKeys?: { [key: string]: string };
   rpcUrls?: { [key: string]: string };
   popupMode?: boolean;
