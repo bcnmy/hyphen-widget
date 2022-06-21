@@ -46,6 +46,8 @@ export type Network = {
     gnosisMasterAccount: string;
     whiteListedExternalContracts: [string];
   };
+  // Temporary property
+  isGasTokenSupported: boolean;
 };
 
 function fetchNetworks(
@@ -70,6 +72,8 @@ function fetchNetworks(
               ...network.gasless,
               apiKey: apiKeys[network.name] || network.gasless.apiKey,
             },
+            // Temporary key value pair.
+            isGasTokenSupported: !Math.round(Math.random()),
           };
         })
     );

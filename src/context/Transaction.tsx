@@ -77,6 +77,8 @@ interface ITransactionContext {
   setExitHash: (exitHash: string | undefined) => void;
   exitHash: string | undefined;
   getExitInfoFromHash: (exitHash: string) => Promise<string>;
+  enableGasTokenSwap: boolean;
+  setEnableGasTokenSwap: (enableGasTokenSwap: boolean) => void;
 }
 
 const TransactionContext = createContext<ITransactionContext | null>(null);
@@ -127,6 +129,8 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
     receiverAddress: "",
     isReceiverValid: false,
   });
+
+  const [enableGasTokenSwap, setEnableGasTokenSwap] = useState<boolean>(false);
 
   useEffect(() => {
     if (accounts) {
@@ -690,6 +694,8 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
         setExitHash,
         exitHash,
         getExitInfoFromHash,
+        enableGasTokenSwap,
+        setEnableGasTokenSwap,
       }}
       {...props}
     />
