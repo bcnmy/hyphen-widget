@@ -10,10 +10,12 @@ import { twMerge } from "tailwind-merge";
 import CustomTooltip from "components/CustomTooltip";
 
 interface ITokenSelectorProps {
+  allowedTokens?: string[];
   disabled?: boolean;
 }
 
 const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
+  allowedTokens = [],
   disabled,
 }) => {
   const {
@@ -36,7 +38,12 @@ const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
       ? Object.keys(tokens)
           .filter((tokenSymbol) => {
             const token = tokens[tokenSymbol];
-            return compatibleTokensForCurrentChains.indexOf(token) !== -1;
+            return (
+              compatibleTokensForCurrentChains.indexOf(token) !== -1 &&
+              (allowedTokens.length > 0
+                ? allowedTokens.includes(tokenSymbol)
+                : true)
+            );
           })
           .map((tokenSymbol) => ({
             id: tokens[tokenSymbol].symbol,
@@ -44,7 +51,7 @@ const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
             image: tokens[tokenSymbol].image,
           }))
       : [];
-  }, [compatibleTokensForCurrentChains, fromChain, tokens]);
+  }, [allowedTokens, compatibleTokensForCurrentChains, fromChain, tokens]);
 
   return (
     <div className="flex flex-col justify-between">

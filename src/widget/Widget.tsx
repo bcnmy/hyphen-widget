@@ -211,6 +211,7 @@ const Widget: React.FC<HyphenWidgetOptions & WidgetSetFunctions> = (props) => {
               }
             />
             <TokenSelector
+              allowedTokens={props.allowedTokens}
               disabled={
                 !areChainsReady ||
                 !poolInfo?.minDepositAmount ||
