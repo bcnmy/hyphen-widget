@@ -29,9 +29,9 @@ export interface HyphenWidgetOptions {
   showWidget?: boolean;
   showCloseButton?: boolean;
   showChangeAddress?: boolean;
-  allowedSourceChains: string[];
-  allowedDestinationChains: string[];
-  allowedTokens: string[];
+  allowedSourceChains?: number[];
+  allowedDestinationChains?: number[];
+  allowedTokens?: string[];
   apiKeys?: { [key: string]: string };
   rpcUrls?: { [key: string]: string };
   onDeposit?: (hash: string) => any;

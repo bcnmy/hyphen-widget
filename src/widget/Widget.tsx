@@ -197,7 +197,10 @@ const Widget: React.FC<HyphenWidgetOptions & WidgetSetFunctions> = (props) => {
             </div>
           </div>
           <div className="grid grid-cols-[1fr_34px_1fr] gap-2 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 hover:border-opacity-30">
-            <NetworkSelectors />
+            <NetworkSelectors
+              allowedSourceChains={props.allowedSourceChains}
+              allowedDestinationChains={props.allowedDestinationChains}
+            />
           </div>
           <div className="grid grid-cols-2 items-center gap-12 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 hover:border-opacity-30">
             <AmountInput

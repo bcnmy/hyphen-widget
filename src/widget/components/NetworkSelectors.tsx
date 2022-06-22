@@ -5,32 +5,50 @@ import React, { useMemo } from "react";
 import { HiArrowRight } from "react-icons/hi";
 import CustomTooltip from "components/CustomTooltip";
 
-interface INetworkSelectorsProps {}
+interface INetworkSelectorsProps {
+  allowedSourceChains?: number[];
+  allowedDestinationChains?: number[];
+}
 
-const NetworkSelectors: React.FC<INetworkSelectorsProps> = () => {
+const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
+  allowedSourceChains = [],
+  allowedDestinationChains = [],
+}) => {
   const { isLoggedIn } = useWalletProvider()!;
   const { networks, fromChain, toChain, changeFromChain, changeToChain } =
     useChains()!;
 
   const fromChainOptions = useMemo(
     () =>
-      networks?.map((network) => ({
-        id: network.chainId,
-        name: network.name,
-        image: network.image,
-      })),
-    [networks]
+      networks
+        ?.filter((network) =>
+          allowedSourceChains.length > 0
+            ? allowedSourceChains.includes(network.chainId)
+            : true
+        )
+        .map((network) => ({
+          id: network.chainId,
+          name: network.name,
+          image: network.image,
+        })),
+    [allowedSourceChains, networks]
   );
 
   const toChainOptions = useMemo(() => {
     return networks
-      ?.filter((network) => network.chainId !== fromChain?.chainId)
+      ?.filter(
+        (network) =>
+          network.chainId !== fromChain?.chainId &&
+          (allowedDestinationChains.length > 0
+            ? allowedDestinationChains.includes(network.chainId)
+            : true)
+      )
       .map((network) => ({
         id: network.chainId,
         name: network.name,
         image: network.image,
       }));
-  }, [fromChain?.chainId, networks]);
+  }, [allowedDestinationChains, fromChain?.chainId, networks]);
 
   const selectedFromChain = useMemo(() => {
     if (!fromChain) return undefined;
