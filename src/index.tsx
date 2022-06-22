@@ -29,10 +29,11 @@ export interface HyphenWidgetOptions {
   showWidget?: boolean;
   showCloseButton?: boolean;
   showChangeAddress?: boolean;
+  allowedSourceChains: string[];
+  allowedDestinationChains: string[];
+  allowedTokens: string[];
   apiKeys?: { [key: string]: string };
   rpcUrls?: { [key: string]: string };
-  popupMode?: boolean;
-  widgetMode?: boolean;
   onDeposit?: (hash: string) => any;
   onExit?: (hash: string) => any;
   onChange?: (obj: {

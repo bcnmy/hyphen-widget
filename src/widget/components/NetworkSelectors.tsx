@@ -9,14 +9,8 @@ interface INetworkSelectorsProps {}
 
 const NetworkSelectors: React.FC<INetworkSelectorsProps> = () => {
   const { isLoggedIn } = useWalletProvider()!;
-  const {
-    networks,
-    fromChain,
-    toChain,
-    changeFromChain,
-    changeToChain,
-    switchChains,
-  } = useChains()!;
+  const { networks, fromChain, toChain, changeFromChain, changeToChain } =
+    useChains()!;
 
   const fromChainOptions = useMemo(
     () =>
@@ -68,12 +62,9 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = () => {
         )}
       </div>
       <div className="mb-3 flex items-end">
-        <button
-          className="rounded-full border border-hyphen-purple/10 bg-hyphen-purple bg-opacity-20 p-2 text-hyphen-purple transition-all"
-          onClick={switchChains}
-        >
+        <div className="rounded-full border border-hyphen-purple/10 bg-hyphen-purple bg-opacity-20 p-2 text-hyphen-purple transition-all">
           <HiArrowRight />
-        </button>
+        </div>
       </div>
       <div data-tip data-for="networkSelect">
         {toChainOptions ? (

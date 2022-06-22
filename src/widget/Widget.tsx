@@ -19,7 +19,7 @@ import { useTransaction } from "../context/Transaction";
 import { useBiconomy } from "../context/Biconomy";
 import CustomTooltip from "../components/CustomTooltip";
 import { HiInformationCircle } from "react-icons/hi";
-import { HyphenWidgetOptions, InputConfig, Inputs } from "../";
+import { HyphenWidgetOptions } from "../";
 import { useToken } from "../context/Token";
 import { useHyphen } from "../context/Hyphen";
 import HyphenLogoDark from "assets/images/hyphen-logo-dark.svg";
@@ -50,9 +50,7 @@ interface WidgetSetFunctions {
   closeWidget: () => void;
 }
 
-const Widget: React.FC<
-  HyphenWidgetOptions & WidgetSetFunctions & Inputs & InputConfig
-> = (props) => {
+const Widget: React.FC<HyphenWidgetOptions & WidgetSetFunctions> = (props) => {
   const { areChainsReady, fromChain, toChain, toChainRpcUrlProvider } =
     useChains()!;
   const {
@@ -90,29 +88,6 @@ const Widget: React.FC<
     showModal: showTransferModal,
   } = useModal();
 
-  const [state, setState] = useState<HyphenWidgetOptions & WidgetProps>({
-    tag: props.tag,
-    env: props.env,
-    showWidget: props.showWidget,
-    showCloseButton: props.showCloseButton,
-    showChangeAddress: props.showChangeAddress,
-    apiKeys: props.apiKeys,
-    rpcUrls: props.rpcUrls,
-    popupMode: props.popupMode,
-    widgetMode: props.widgetMode,
-    lockSourceChain: props.lockSourceChain,
-    lockDestinationChain: props.lockDestinationChain,
-    lockToken: props.lockToken,
-    lockAmount: props.lockAmount,
-    lockReceiver: props.lockReceiver,
-    sourceChain: props.defaultSourceChain || props.sourceChain,
-    destinationChain: props.defaultDestinationChain || props.destinationChain,
-    token: props.defaultToken || props.token || "ETH",
-    amount: props.defaultAmount || props.amount || "",
-    receiver: props.defaultReceiver || props.receiver || "",
-    gasless: props.defaultGaslessMode || props.gasless || false,
-  });
-
   const [transferModalData, setTransferModalData] = useState<any>();
 
   function handleTransferButtonClick() {
@@ -128,31 +103,6 @@ const Widget: React.FC<
     setTransferModalData(updatedTransferModalData);
     showTransferModal();
   }
-
-  useEffect(() => {
-    setState({
-      tag: props.tag,
-      env: props.env,
-      showWidget: props.showWidget,
-      showCloseButton: props.showCloseButton,
-      showChangeAddress: props.showChangeAddress,
-      apiKeys: props.apiKeys,
-      rpcUrls: props.rpcUrls,
-      popupMode: props.popupMode,
-      widgetMode: props.widgetMode,
-      lockSourceChain: props.lockSourceChain,
-      lockDestinationChain: props.lockDestinationChain,
-      lockToken: props.lockToken,
-      lockAmount: props.lockAmount,
-      lockReceiver: props.lockReceiver,
-      sourceChain: props.defaultSourceChain || props.sourceChain,
-      destinationChain: props.defaultDestinationChain || props.destinationChain,
-      token: props.defaultToken || props.token || "ETH",
-      amount: props.defaultAmount || props.amount || "",
-      receiver: props.defaultReceiver || props.receiver || "",
-      gasless: props.defaultGaslessMode || props.gasless || false,
-    });
-  }, [props]);
 
   useEffect(() => {
     (async () => {
@@ -252,7 +202,6 @@ const Widget: React.FC<
           <div className="grid grid-cols-2 items-center gap-12 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 hover:border-opacity-30">
             <AmountInput
               disabled={
-                state.lockAmount ||
                 !areChainsReady ||
                 !poolInfo?.minDepositAmount ||
                 !poolInfo?.maxDepositAmount
