@@ -26,31 +26,11 @@ import HyphenLogoDark from "assets/images/hyphen-logo-dark.svg";
 import WidgetBranding from "assets/images/widget-branding.svg";
 import { IoMdClose } from "react-icons/io";
 
-export interface WidgetProps {
-  sourceChain: string | undefined;
-  destinationChain: string | undefined;
-  token: string;
-  amount: string;
-  receiver: string;
-  gasless: boolean;
-  lockSourceChain?: boolean;
-  lockDestinationChain?: boolean;
-  lockToken?: boolean;
-  lockAmount?: boolean;
-  lockReceiver?: boolean;
-}
-
-interface WidgetSetFunctions {
-  setSourceChain: (newValue: string) => void;
-  setDestinationChain: (newValue: string | undefined) => void;
-  setToken: (newValue: string) => void;
-  setAmount: (newValue: string) => void;
-  setReceiver: (newValue: string) => void;
-  setGasless: (newValue: boolean) => void;
+interface IWidgetProps {
   closeWidget: () => void;
 }
 
-const Widget: React.FC<HyphenWidgetOptions & WidgetSetFunctions> = (props) => {
+const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
   const { areChainsReady, fromChain, toChain, toChainRpcUrlProvider } =
     useChains()!;
   const {
