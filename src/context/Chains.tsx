@@ -139,10 +139,17 @@ const ChainsProvider: React.FC<IChainsProviderProps> = (props) => {
     })();
   });
 
-  const changeFromChain = useCallback((chain: Network) => {
-    setToChain(undefined);
-    setFromChain(chain);
-  }, []);
+  const changeFromChain = useCallback(
+    (chain: Network) => {
+      // If the new source chain is same as destination chain
+      // reset the destination chain.
+      if (toChain && chain.chainId === toChain.chainId) {
+        setToChain(undefined);
+      }
+      setFromChain(chain);
+    },
+    [toChain]
+  );
 
   const changeToChain = useCallback(
     (chain: Network) => {

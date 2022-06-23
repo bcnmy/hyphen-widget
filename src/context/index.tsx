@@ -39,7 +39,12 @@ export const AppProviders: React.FC<{
         >
           <GraphQLProvider>
             <NotificationsProvider>
-              <TokenProvider env={env} apiKeys={apiKeys} rpcUrls={rpcUrls}>
+              <TokenProvider
+                env={env}
+                defaultToken={defaultToken}
+                apiKeys={apiKeys}
+                rpcUrls={rpcUrls}
+              >
                 <BiconomyProvider>
                   <HyphenProvider env={env}>
                     <TokenApprovalProvider>
