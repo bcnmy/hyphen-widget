@@ -66,7 +66,6 @@ const ChainsProvider: React.FC<IChainsProviderProps> = (props) => {
   // default from chain to current metamak chain on startup
   // else if default chain is not supported, then use the first supported chain
   useEffect(() => {
-    setToChain(undefined);
     if (!currentChainId) {
       setFromChain(networks?.[0]);
       return;
@@ -78,18 +77,39 @@ const ChainsProvider: React.FC<IChainsProviderProps> = (props) => {
     // Sets the initial source chain, using the following precedence:
     // 1. defaultSourceChain.
     // 2. Metamask chain.
-    // 3. The first network from available networks.
+    // 3. The first chain from available chains.
+    let newFromChain: Network | undefined;
     if (props.defaultSourceChain) {
-      const defaultSourceChain = networks?.find(
+      newFromChain = networks?.find(
         (network) => network.chainId === props.defaultSourceChain
       );
-      setFromChain(defaultSourceChain);
     } else if (currentMetamaskChain) {
-      setFromChain(currentMetamaskChain);
+      newFromChain = currentMetamaskChain;
     } else {
-      setFromChain(networks?.[0]);
+      newFromChain = networks?.[0];
     }
-  }, [currentChainId, networks, props.defaultSourceChain]);
+    setFromChain(newFromChain);
+
+    // Sets the initial destination chain, using the following precedence:
+    // 1. defaultDestinationChain.
+    // 2. The first chain from available chains which is not the source chain.
+    let newToChain: Network | undefined;
+    if (props.defaultDestinationChain) {
+      newToChain = networks?.find(
+        (network) => network.chainId === props.defaultDestinationChain
+      );
+    } else {
+      newToChain = networks?.find(
+        (network) => network.chainId !== newFromChain?.chainId
+      );
+    }
+    setToChain(newToChain);
+  }, [
+    currentChainId,
+    networks,
+    props.defaultDestinationChain,
+    props.defaultSourceChain,
+  ]);
 
   useEffect(() => {
     const network = networks?.find(
