@@ -30,11 +30,15 @@ interface IChainsContext {
 
 const ChainsContext = createContext<IChainsContext | null>(null);
 
-const ChainsProvider: React.FC<{
+interface IChainsProviderProps {
   env?: string;
+  defaultSourceChain?: number;
+  defaultDestinationChain?: number;
   apiKeys?: { [key: string]: string };
   rpcUrls?: { [key: string]: string };
-}> = (props) => {
+}
+
+const ChainsProvider: React.FC<IChainsProviderProps> = (props) => {
   const { currentChainId } = useWalletProvider()!;
   const {
     data: networks,
@@ -71,12 +75,21 @@ const ChainsProvider: React.FC<{
       (network) => network.chainId === currentChainId
     );
 
-    if (currentMetamaskChain) {
+    // Sets the initial source chain, using the following precedence:
+    // 1. defaultSourceChain.
+    // 2. Metamask chain.
+    // 3. The first network from available networks.
+    if (props.defaultSourceChain) {
+      const defaultSourceChain = networks?.find(
+        (network) => network.chainId === props.defaultSourceChain
+      );
+      setFromChain(defaultSourceChain);
+    } else if (currentMetamaskChain) {
       setFromChain(currentMetamaskChain);
     } else {
       setFromChain(networks?.[0]);
     }
-  }, [currentChainId, networks]);
+  }, [currentChainId, networks, props.defaultSourceChain]);
 
   useEffect(() => {
     const network = networks?.find(

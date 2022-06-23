@@ -32,6 +32,9 @@ export interface HyphenWidgetOptions {
   allowedSourceChains?: number[];
   allowedDestinationChains?: number[];
   allowedTokens?: string[];
+  defaultSourceChain?: number;
+  defaultDestinationChain?: number;
+  defaultToken?: string;
   apiKeys?: { [key: string]: string };
   rpcUrls?: { [key: string]: string };
   onDeposit?: (hash: string) => any;
@@ -89,12 +92,7 @@ class HyphenWidget extends React.Component<
         {this.props.skipToastContainer ? null : (
           <ToastContainer className="font-sans font-semibold" />
         )}
-        <AppProviders
-          tag={this.state.tag}
-          env={this.state.env}
-          apiKeys={this.state.apiKeys}
-          rpcUrls={this.state.rpcUrls}
-        >
+        <AppProviders options={this.props.options}>
           <Widget {...this.state} closeWidget={() => this.close()} />
         </AppProviders>
       </>
