@@ -112,7 +112,7 @@ const TokenProvider: React.FC<ITokenProviderProps> = (props) => {
       const defaultTokenObj = compatibleTokensForCurrentChains.find(
         (token) => token.symbol === props.defaultToken
       );
-      // If we can't find a token object or if it is not compatible
+      // If token for defaultToken is not found or is not compatible
       // with selected chains revert to the first token in the list
       // of available tokens.
       newToken =

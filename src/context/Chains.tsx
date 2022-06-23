@@ -80,9 +80,12 @@ const ChainsProvider: React.FC<IChainsProviderProps> = (props) => {
     // 3. The first chain from available chains.
     let newFromChain: Network | undefined;
     if (props.defaultSourceChain) {
-      newFromChain = networks?.find(
+      const defaultSourceChainObj = networks?.find(
         (network) => network.chainId === props.defaultSourceChain
       );
+      // If chain for defaultSourceChain is not found
+      // revert to the first chain as a fallback.
+      newFromChain = defaultSourceChainObj ?? networks?.[0];
     } else if (currentMetamaskChain) {
       newFromChain = currentMetamaskChain;
     } else {
@@ -95,9 +98,20 @@ const ChainsProvider: React.FC<IChainsProviderProps> = (props) => {
     // 2. The first chain from available chains which is not the source chain.
     let newToChain: Network | undefined;
     if (props.defaultDestinationChain) {
-      newToChain = networks?.find(
+      const defaultDestinationChainObj = networks?.find(
         (network) => network.chainId === props.defaultDestinationChain
       );
+      // If chain for defaultDestinationChain is not found
+      // or it is the same as the defaultSourceChain
+      // revert to the first chain which is different from
+      // the source chain as a fallback.
+      newToChain =
+        defaultDestinationChainObj &&
+        defaultDestinationChainObj.chainId !== newFromChain?.chainId
+          ? defaultDestinationChainObj
+          : networks?.find(
+              (network) => network.chainId !== newFromChain?.chainId
+            );
     } else {
       newToChain = networks?.find(
         (network) => network.chainId !== newFromChain?.chainId
