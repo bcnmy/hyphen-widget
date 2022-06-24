@@ -18,36 +18,46 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
   const { networks, fromChain, toChain, changeFromChain, changeToChain } =
     useChains()!;
 
-  const fromChainOptions = useMemo(
-    () =>
-      networks
-        ?.filter((network) =>
-          allowedSourceChains.length > 0
-            ? allowedSourceChains.includes(network.chainId)
-            : true
-        )
-        .map((network) => ({
-          id: network.chainId,
-          name: network.name,
-          image: network.image,
-        })),
-    [allowedSourceChains, networks]
-  );
+  const fromChainOptions = useMemo(() => {
+    let sourceChains = networks;
+
+    if (allowedSourceChains.length > 0) {
+      const allowedChains = networks?.filter((network) =>
+        allowedSourceChains.includes(network.chainId)
+      );
+
+      if (allowedChains && allowedChains.length > 0) {
+        sourceChains = allowedChains;
+      }
+    }
+
+    return sourceChains?.map((network) => ({
+      id: network.chainId,
+      name: network.name,
+      image: network.image,
+    }));
+  }, [allowedSourceChains, networks]);
 
   const toChainOptions = useMemo(() => {
-    return networks
-      ?.filter(
-        (network) =>
-          network.chainId !== fromChain?.chainId &&
-          (allowedDestinationChains.length > 0
-            ? allowedDestinationChains.includes(network.chainId)
-            : true)
-      )
-      .map((network) => ({
-        id: network.chainId,
-        name: network.name,
-        image: network.image,
-      }));
+    let destinationChains = networks?.filter(
+      (network) => network.chainId !== fromChain?.chainId
+    );
+
+    if (allowedDestinationChains.length > 0) {
+      const allowedChains = networks?.filter((network) =>
+        allowedDestinationChains.includes(network.chainId)
+      );
+
+      if (allowedChains && allowedChains.length > 0) {
+        destinationChains = allowedChains;
+      }
+    }
+
+    return destinationChains?.map((network) => ({
+      id: network.chainId,
+      name: network.name,
+      image: network.image,
+    }));
   }, [allowedDestinationChains, fromChain?.chainId, networks]);
 
   const selectedFromChain = useMemo(() => {
