@@ -19,16 +19,16 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
     useChains()!;
 
   const fromChainOptions = useMemo(() => {
-    let sourceChains;
+    let sourceChains = networks;
 
     if (allowedSourceChains.length > 0) {
       const allowedChains = networks?.filter((network) =>
         allowedSourceChains.includes(network.chainId)
       );
-      sourceChains =
-        allowedChains && allowedChains.length > 0 ? allowedChains : networks;
-    } else {
-      sourceChains = networks;
+
+      if (allowedChains && allowedChains.length > 0) {
+        sourceChains = allowedChains;
+      }
     }
 
     return sourceChains?.map((network) => ({
@@ -39,24 +39,18 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
   }, [allowedSourceChains, networks]);
 
   const toChainOptions = useMemo(() => {
-    let destinationChains;
+    let destinationChains = networks?.filter(
+      (network) => network.chainId !== fromChain?.chainId
+    );
 
     if (allowedDestinationChains.length > 0) {
-      const allowedChains = networks?.filter(
-        (network) =>
-          network.chainId !== fromChain?.chainId &&
-          allowedDestinationChains.includes(network.chainId)
+      const allowedChains = networks?.filter((network) =>
+        allowedDestinationChains.includes(network.chainId)
       );
-      destinationChains =
-        allowedChains && allowedChains.length > 0
-          ? allowedChains
-          : networks?.filter(
-              (network) => network.chainId !== fromChain?.chainId
-            );
-    } else {
-      destinationChains = networks?.filter(
-        (network) => network.chainId !== fromChain?.chainId
-      );
+
+      if (allowedChains && allowedChains.length > 0) {
+        destinationChains = allowedChains;
+      }
     }
 
     return destinationChains?.map((network) => ({

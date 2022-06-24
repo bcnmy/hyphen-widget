@@ -34,22 +34,30 @@ const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
 
   const tokenOptions = useMemo(() => {
     if (!fromChain || !compatibleTokensForCurrentChains) return [];
+
+    let compatibleTokens = tokens
+      ? Object.keys(tokens).filter((tokenSymbol) => {
+          const token = tokens[tokenSymbol];
+          return compatibleTokensForCurrentChains.indexOf(token) !== -1;
+        })
+      : [];
+
+    if (allowedTokens.length > 0) {
+      const allowedCompatibleTokens = compatibleTokens.filter((tokenSymbol) =>
+        allowedTokens.includes(tokenSymbol)
+      );
+
+      if (allowedCompatibleTokens.length > 0) {
+        compatibleTokens = allowedCompatibleTokens;
+      }
+    }
+
     return tokens
-      ? Object.keys(tokens)
-          .filter((tokenSymbol) => {
-            const token = tokens[tokenSymbol];
-            return (
-              compatibleTokensForCurrentChains.indexOf(token) !== -1 &&
-              (allowedTokens.length > 0
-                ? allowedTokens.includes(tokenSymbol)
-                : true)
-            );
-          })
-          .map((tokenSymbol) => ({
-            id: tokens[tokenSymbol].symbol,
-            name: tokens[tokenSymbol].symbol,
-            image: tokens[tokenSymbol].image,
-          }))
+      ? compatibleTokens.map((tokenSymbol) => ({
+          id: tokens[tokenSymbol].symbol,
+          name: tokens[tokenSymbol].symbol,
+          image: tokens[tokenSymbol].image,
+        }))
       : [];
   }, [allowedTokens, compatibleTokensForCurrentChains, fromChain, tokens]);
 
