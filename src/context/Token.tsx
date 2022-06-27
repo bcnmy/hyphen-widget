@@ -105,6 +105,9 @@ const TokenProvider: React.FC<ITokenProviderProps> = (props) => {
       return;
     }
 
+    // Check if allowedTokens is provided:
+    // If it is, filter compatibleTokensForCurrentChains based on that list
+    // fallback to compatibleTokensForCurrentChains if filtering produces no valid list.
     let allowedTokens = compatibleTokensForCurrentChains.filter((token) =>
       props.allowedTokens?.includes(token.symbol)
     );

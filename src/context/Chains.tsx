@@ -66,8 +66,8 @@ const ChainsProvider: React.FC<IChainsProviderProps> = (props) => {
   }, [toChain]);
 
   useEffect(() => {
-    // Check if allowedSourceChains are provided:
-    // If it is filter networks based on that list
+    // Check if allowedSourceChains is provided:
+    // If it is, filter networks based on that list
     // fallback to network if filtering produces no valid list.
     let allowedSourceChains = networks?.filter((network) =>
       props.allowedSourceChains?.includes(network.chainId)
@@ -76,8 +76,8 @@ const ChainsProvider: React.FC<IChainsProviderProps> = (props) => {
       allowedSourceChains = networks;
     }
 
-    // Check if allowedDestinationChains are provided:
-    // If it is filter networks based on that list
+    // Check if allowedDestinationChains is provided:
+    // If it is, filter networks based on that list
     // fallback to network if filtering produces no valid list.
     let allowedDestinationChains = networks?.filter((network) =>
       props.allowedDestinationChains?.includes(network.chainId)

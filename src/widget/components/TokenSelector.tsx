@@ -35,6 +35,8 @@ const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
   const tokenOptions = useMemo(() => {
     if (!fromChain || !compatibleTokensForCurrentChains) return [];
 
+    // Populate token options depending
+    // upon allowedTokens list.
     let compatibleTokens = tokens
       ? Object.keys(tokens).filter((tokenSymbol) => {
           const token = tokens[tokenSymbol];

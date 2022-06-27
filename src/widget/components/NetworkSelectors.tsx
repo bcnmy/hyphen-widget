@@ -21,6 +21,8 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
   const fromChainOptions = useMemo(() => {
     let sourceChains = networks;
 
+    // Populate source chain options depending
+    // upon allowedSourceChains list.
     if (allowedSourceChains.length > 0) {
       const allowedChains = sourceChains?.filter((network) =>
         allowedSourceChains.includes(network.chainId)
@@ -43,6 +45,8 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
       (network) => network.chainId !== fromChain?.chainId
     );
 
+    // Populate destination chain options depending
+    // upon allowedDestinationChains list.
     if (allowedDestinationChains.length > 0) {
       const allowedChains = destinationChains?.filter((network) =>
         allowedDestinationChains.includes(network.chainId)
