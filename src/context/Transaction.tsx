@@ -377,6 +377,7 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
     fromChain,
     getRewardAmount,
     getTransferFee,
+    props.env,
     selectedToken,
     toChain,
     transferAmount,
