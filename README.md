@@ -95,7 +95,7 @@ export default App;
 
 ## Optional configuration
 
-The following additional configuration options can be passed while initializing the widget:
+The following additional configuration options can be passed while initializing the widget, these are optional and can be skipped:
 
 ```typescript
 {
