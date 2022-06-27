@@ -99,16 +99,26 @@ The following additional configuration options can be passed while initializing 
 
 ```typescript
 {
-  env: string, // can be test, staging or production. Default: "staging"
-  showWidget: boolean, // should the widget be shown by default or not. Default: false
-  showCloseButton: boolean, // should the widget have a close button to close it. Default: false
-  showChangeAddress: boolean, // should the widget allow ability to change receiver address. Default: true
-  allowedSourceChains: number[]; // array of chain ids to specify the possible source chains. Chains not in this list will be excluded.
-  allowedDestinationChains: number[]; // array of chain ids to specify the possible destination chains. Chains not in this list will be excluded.
-  allowedTokens: string[]; // array of token symbols to specify the possible tokens. Tokens not in this list will be excluded.
-  defaultSourceChain: number; // chain id to specify the default source chain which should be selected.
-  defaultDestinationChain: number; // chain id to specify the default destination chain which should be selected.
-  defaultToken: string; // token symbol to specify the default token which should be selected.
+  // can be test, staging or production. Default: "staging"
+  env: string,
+  // should the widget be shown by default or not. Default: false
+  showWidget: boolean,
+  // should the widget have a close button to close it. Default: false
+  showCloseButton: boolean,
+  // should the widget allow ability to change receiver address. Default: true
+  showChangeAddress: boolean,
+  // array of chain ids to specify the possible source chains. Chains not in this list will be excluded.
+  allowedSourceChains: number[],
+  // array of chain ids to specify the possible destination chains. Chains not in this list will be excluded.
+  allowedDestinationChains: number[],
+   // array of token symbols to specify the possible tokens. Tokens not in this list will be excluded.
+  allowedTokens: string[],
+  // chain id to specify the default source chain which should be selected.
+  defaultSourceChain: number,
+  // chain id to specify the default destination chain which should be selected.
+  defaultDestinationChain: number,
+  // token symbol to specify the default token which should be selected.
+  defaultToken: string,
   // API keys for using Gasless.
   apiKeys: {
     Ethereum: string,
