@@ -19,40 +19,18 @@ import { useTransaction } from "../context/Transaction";
 import { useBiconomy } from "../context/Biconomy";
 import CustomTooltip from "../components/CustomTooltip";
 import { HiInformationCircle } from "react-icons/hi";
-import { HyphenWidgetOptions, InputConfig, Inputs } from "../";
+import { HyphenWidgetOptions } from "../";
 import { useToken } from "../context/Token";
 import { useHyphen } from "../context/Hyphen";
 import HyphenLogoDark from "assets/images/hyphen-logo-dark.svg";
 import WidgetBranding from "assets/images/widget-branding.svg";
 import { IoMdClose } from "react-icons/io";
 
-export interface WidgetProps {
-  sourceChain: string | undefined;
-  destinationChain: string | undefined;
-  token: string;
-  amount: string;
-  receiver: string;
-  gasless: boolean;
-  lockSourceChain?: boolean;
-  lockDestinationChain?: boolean;
-  lockToken?: boolean;
-  lockAmount?: boolean;
-  lockReceiver?: boolean;
-}
-
-interface WidgetSetFunctions {
-  setSourceChain: (newValue: string) => void;
-  setDestinationChain: (newValue: string | undefined) => void;
-  setToken: (newValue: string) => void;
-  setAmount: (newValue: string) => void;
-  setReceiver: (newValue: string) => void;
-  setGasless: (newValue: boolean) => void;
+interface IWidgetProps {
   closeWidget: () => void;
 }
 
-const Widget: React.FC<
-  HyphenWidgetOptions & WidgetSetFunctions & Inputs & InputConfig
-> = (props) => {
+const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
   const { areChainsReady, fromChain, toChain, toChainRpcUrlProvider } =
     useChains()!;
   const {
@@ -90,29 +68,6 @@ const Widget: React.FC<
     showModal: showTransferModal,
   } = useModal();
 
-  const [state, setState] = useState<HyphenWidgetOptions & WidgetProps>({
-    tag: props.tag,
-    env: props.env,
-    showWidget: props.showWidget,
-    showCloseButton: props.showCloseButton,
-    showChangeAddress: props.showChangeAddress,
-    apiKeys: props.apiKeys,
-    rpcUrls: props.rpcUrls,
-    popupMode: props.popupMode,
-    widgetMode: props.widgetMode,
-    lockSourceChain: props.lockSourceChain,
-    lockDestinationChain: props.lockDestinationChain,
-    lockToken: props.lockToken,
-    lockAmount: props.lockAmount,
-    lockReceiver: props.lockReceiver,
-    sourceChain: props.defaultSourceChain || props.sourceChain,
-    destinationChain: props.defaultDestinationChain || props.destinationChain,
-    token: props.defaultToken || props.token || "ETH",
-    amount: props.defaultAmount || props.amount || "",
-    receiver: props.defaultReceiver || props.receiver || "",
-    gasless: props.defaultGaslessMode || props.gasless || false,
-  });
-
   const [transferModalData, setTransferModalData] = useState<any>();
 
   function handleTransferButtonClick() {
@@ -128,31 +83,6 @@ const Widget: React.FC<
     setTransferModalData(updatedTransferModalData);
     showTransferModal();
   }
-
-  useEffect(() => {
-    setState({
-      tag: props.tag,
-      env: props.env,
-      showWidget: props.showWidget,
-      showCloseButton: props.showCloseButton,
-      showChangeAddress: props.showChangeAddress,
-      apiKeys: props.apiKeys,
-      rpcUrls: props.rpcUrls,
-      popupMode: props.popupMode,
-      widgetMode: props.widgetMode,
-      lockSourceChain: props.lockSourceChain,
-      lockDestinationChain: props.lockDestinationChain,
-      lockToken: props.lockToken,
-      lockAmount: props.lockAmount,
-      lockReceiver: props.lockReceiver,
-      sourceChain: props.defaultSourceChain || props.sourceChain,
-      destinationChain: props.defaultDestinationChain || props.destinationChain,
-      token: props.defaultToken || props.token || "ETH",
-      amount: props.defaultAmount || props.amount || "",
-      receiver: props.defaultReceiver || props.receiver || "",
-      gasless: props.defaultGaslessMode || props.gasless || false,
-    });
-  }, [props]);
 
   useEffect(() => {
     (async () => {
@@ -247,18 +177,21 @@ const Widget: React.FC<
             </div>
           </div>
           <div className="grid grid-cols-[1fr_34px_1fr] gap-2 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 hover:border-opacity-30">
-            <NetworkSelectors />
+            <NetworkSelectors
+              allowedSourceChains={props.allowedSourceChains}
+              allowedDestinationChains={props.allowedDestinationChains}
+            />
           </div>
           <div className="grid grid-cols-2 items-center gap-12 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 hover:border-opacity-30">
             <AmountInput
               disabled={
-                state.lockAmount ||
                 !areChainsReady ||
                 !poolInfo?.minDepositAmount ||
                 !poolInfo?.maxDepositAmount
               }
             />
             <TokenSelector
+              allowedTokens={props.allowedTokens}
               disabled={
                 !areChainsReady ||
                 !poolInfo?.minDepositAmount ||

@@ -19,7 +19,7 @@ interface HyphenWidgetProps {
   expose: (self: HyphenWidget) => void;
   open: (open: any) => void;
   close: (close: any) => void;
-  options: HyphenWidgetOptions & Inputs & InputConfig;
+  options: HyphenWidgetOptions;
   skipToastContainer?: boolean;
 }
 
@@ -29,10 +29,14 @@ export interface HyphenWidgetOptions {
   showWidget?: boolean;
   showCloseButton?: boolean;
   showChangeAddress?: boolean;
+  allowedSourceChains?: number[];
+  allowedDestinationChains?: number[];
+  allowedTokens?: string[];
+  defaultSourceChain?: number;
+  defaultDestinationChain?: number;
+  defaultToken?: string;
   apiKeys?: { [key: string]: string };
   rpcUrls?: { [key: string]: string };
-  popupMode?: boolean;
-  widgetMode?: boolean;
   onDeposit?: (hash: string) => any;
   onExit?: (hash: string) => any;
   onChange?: (obj: {
@@ -45,66 +49,9 @@ export interface HyphenWidgetOptions {
   }) => any;
 }
 
-interface DefaultInputs {
-  defaultSourceChain?: string;
-  defaultDestinationChain?: string;
-  defaultToken?: string;
-  defaultAmount?: string;
-  defaultReceiver?: string;
-  defaultGaslessMode?: boolean;
-
-  // Never ExternalControlledInputs
-  sourceChain?: never;
-  destinationChain?: never;
-  token?: never;
-  amount?: never;
-  receiver?: never;
-  gasless?: never;
-  setSourceChain: never;
-  setDestinationChain: never;
-  setToken: never;
-  setAmount: never;
-  setReceiver: never;
-  setGasless: never;
-}
-
-interface ExternalControlledInputs {
-  sourceChain?: string;
-  destinationChain?: string;
-  token?: string;
-  amount?: string;
-  receiver?: string;
-  gasless?: boolean;
-  setSourceChain: (newValue: string) => void;
-  setDestinationChain: (newValue: string | undefined) => void;
-  setToken: (newValue: string) => void;
-  setAmount: (newValue: string) => void;
-  setReceiver: (newValue: string) => void;
-  setGasless: (newValue: boolean) => void;
-
-  // Never DefaultInputs
-  defaultSourceChain?: never;
-  defaultDestinationChain?: never;
-  defaultToken?: never;
-  defaultAmount?: never;
-  defaultReceiver?: never;
-  defaultGaslessMode?: never;
-}
-
-// Input format can only fully controlled or fully uncontrolled
-export type Inputs = DefaultInputs | ExternalControlledInputs;
-
-export interface InputConfig {
-  lockSourceChain?: boolean;
-  lockDestinationChain?: boolean;
-  lockToken?: boolean;
-  lockAmount?: boolean;
-  lockReceiver?: boolean;
-}
-
 class HyphenWidget extends React.Component<
   HyphenWidgetProps,
-  HyphenWidgetOptions & Inputs & InputConfig
+  HyphenWidgetOptions
 > {
   private element?: Element;
 
@@ -145,12 +92,7 @@ class HyphenWidget extends React.Component<
         {this.props.skipToastContainer ? null : (
           <ToastContainer className="font-sans font-semibold" />
         )}
-        <AppProviders
-          tag={this.state.tag}
-          env={this.state.env}
-          apiKeys={this.state.apiKeys}
-          rpcUrls={this.state.rpcUrls}
-        >
+        <AppProviders options={this.props.options}>
           <Widget {...this.state} closeWidget={() => this.close()} />
         </AppProviders>
       </>
@@ -167,10 +109,7 @@ class HyphenWidget extends React.Component<
     ReactDOM.unmountComponentAtNode(this.element);
   }
 
-  static init(
-    ele: HTMLElement,
-    options: HyphenWidgetOptions & DefaultInputs & InputConfig
-  ) {
+  static init(ele: HTMLElement, options: HyphenWidgetOptions) {
     let widget: any;
 
     if (!options.tag) {

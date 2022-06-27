@@ -5,38 +5,64 @@ import React, { useMemo } from "react";
 import { HiArrowRight } from "react-icons/hi";
 import CustomTooltip from "components/CustomTooltip";
 
-interface INetworkSelectorsProps {}
+interface INetworkSelectorsProps {
+  allowedSourceChains?: number[];
+  allowedDestinationChains?: number[];
+}
 
-const NetworkSelectors: React.FC<INetworkSelectorsProps> = () => {
+const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
+  allowedSourceChains = [],
+  allowedDestinationChains = [],
+}) => {
   const { isLoggedIn } = useWalletProvider()!;
-  const {
-    networks,
-    fromChain,
-    toChain,
-    changeFromChain,
-    changeToChain,
-    switchChains,
-  } = useChains()!;
+  const { networks, fromChain, toChain, changeFromChain, changeToChain } =
+    useChains()!;
 
-  const fromChainOptions = useMemo(
-    () =>
-      networks?.map((network) => ({
-        id: network.chainId,
-        name: network.name,
-        image: network.image,
-      })),
-    [networks]
-  );
+  const fromChainOptions = useMemo(() => {
+    let sourceChains = networks;
+
+    // Populate source chain options depending
+    // upon allowedSourceChains list.
+    if (allowedSourceChains.length > 0) {
+      const allowedChains = sourceChains?.filter((network) =>
+        allowedSourceChains.includes(network.chainId)
+      );
+
+      if (allowedChains && allowedChains.length > 0) {
+        sourceChains = allowedChains;
+      }
+    }
+
+    return sourceChains?.map((network) => ({
+      id: network.chainId,
+      name: network.name,
+      image: network.image,
+    }));
+  }, [allowedSourceChains, networks]);
 
   const toChainOptions = useMemo(() => {
-    return networks
-      ?.filter((network) => network.chainId !== fromChain?.chainId)
-      .map((network) => ({
-        id: network.chainId,
-        name: network.name,
-        image: network.image,
-      }));
-  }, [fromChain?.chainId, networks]);
+    let destinationChains = networks?.filter(
+      (network) => network.chainId !== fromChain?.chainId
+    );
+
+    // Populate destination chain options depending
+    // upon allowedDestinationChains list.
+    if (allowedDestinationChains.length > 0) {
+      const allowedChains = destinationChains?.filter((network) =>
+        allowedDestinationChains.includes(network.chainId)
+      );
+
+      if (allowedChains && allowedChains.length > 0) {
+        destinationChains = allowedChains;
+      }
+    }
+
+    return destinationChains?.map((network) => ({
+      id: network.chainId,
+      name: network.name,
+      image: network.image,
+    }));
+  }, [allowedDestinationChains, fromChain?.chainId, networks]);
 
   const selectedFromChain = useMemo(() => {
     if (!fromChain) return undefined;
@@ -68,12 +94,9 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = () => {
         )}
       </div>
       <div className="mb-3 flex items-end">
-        <button
-          className="rounded-full border border-hyphen-purple/10 bg-hyphen-purple bg-opacity-20 p-2 text-hyphen-purple transition-all"
-          onClick={switchChains}
-        >
+        <div className="rounded-full border border-hyphen-purple/10 bg-hyphen-purple bg-opacity-20 p-2 text-hyphen-purple transition-all">
           <HiArrowRight />
-        </button>
+        </div>
       </div>
       <div data-tip data-for="networkSelect">
         {toChainOptions ? (

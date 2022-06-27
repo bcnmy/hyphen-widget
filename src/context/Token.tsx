@@ -13,12 +13,12 @@ import { useWalletProvider } from "context/WalletProvider";
 import { BigNumber, ethers } from "ethers";
 
 import erc20ABI from "abis/erc20.abi.json";
-import toFixed from "utils/toFixed";
+import { DEFAULT_FIXED_DECIMAL_POINT } from "config/constants";
 import useAsync, { Status } from "hooks/useLoading";
-import formatRawEthValue from "utils/formatRawEthValue";
 import { Network } from "hooks/useNetworks";
 import useTokens, { Token } from "hooks/useTokens";
-import { DEFAULT_FIXED_DECIMAL_POINT } from "config/constants";
+import formatRawEthValue from "utils/formatRawEthValue";
+import toFixed from "utils/toFixed";
 
 interface ITokenBalance {
   formattedBalance: string;
@@ -54,11 +54,15 @@ function isTokenValidForChains(
   return !!(token[fromChain.chainId] && token[toChain.chainId]);
 }
 
-const TokenProvider: React.FC<{
+interface ITokenProviderProps {
   env?: string;
+  allowedTokens?: string[];
+  defaultToken?: string;
   apiKeys?: { [key: string]: string };
   rpcUrls?: { [key: string]: string };
-}> = (props) => {
+}
+
+const TokenProvider: React.FC<ITokenProviderProps> = (props) => {
   const { accounts } = useWalletProvider()!;
   const { fromChain, fromChainRpcUrlProvider, toChain } = useChains()!;
   const [selectedToken, setSelectedToken] = useState<Token>();
@@ -100,13 +104,42 @@ const TokenProvider: React.FC<{
       setSelectedToken(undefined);
       return;
     }
-    if (
-      !selectedToken ||
-      !isTokenValidForChains(selectedToken, fromChain, toChain)
-    ) {
-      setSelectedToken(compatibleTokensForCurrentChains[0]);
+
+    // Check if allowedTokens is provided:
+    // If it is, filter compatibleTokensForCurrentChains based on that list
+    // fallback to compatibleTokensForCurrentChains if filtering produces no valid list.
+    let allowedTokens = compatibleTokensForCurrentChains.filter((token) =>
+      props.allowedTokens?.includes(token.symbol)
+    );
+    if (allowedTokens && allowedTokens.length === 0) {
+      allowedTokens = compatibleTokensForCurrentChains;
     }
-  }, [fromChain, toChain, selectedToken, compatibleTokensForCurrentChains]);
+
+    // Sets the initial token, using the following precedence:
+    // 1. defaultToken if it is compatible.
+    // 2. The first token from available tokens if it is compatible.
+    let newToken = allowedTokens[0];
+    if (props.defaultToken) {
+      const defaultTokenObj = allowedTokens.find(
+        (token) => token.symbol === props.defaultToken
+      );
+      // If token for defaultToken is not found or is not compatible
+      // with selected chains revert to the first token in the list
+      // of available tokens.
+      if (
+        defaultTokenObj &&
+        isTokenValidForChains(defaultTokenObj, fromChain, toChain)
+      ) {
+        newToken = defaultTokenObj;
+      }
+    }
+    setSelectedToken(newToken);
+  }, [
+    compatibleTokensForCurrentChains,
+    fromChain,
+    props.defaultToken,
+    toChain,
+  ]);
 
   const changeSelectedToken = useCallback(
     (tokenSymbol: string | undefined) => {

@@ -30,11 +30,17 @@ interface IChainsContext {
 
 const ChainsContext = createContext<IChainsContext | null>(null);
 
-const ChainsProvider: React.FC<{
+interface IChainsProviderProps {
   env?: string;
+  allowedSourceChains?: number[];
+  allowedDestinationChains?: number[];
+  defaultSourceChain?: number;
+  defaultDestinationChain?: number;
   apiKeys?: { [key: string]: string };
   rpcUrls?: { [key: string]: string };
-}> = (props) => {
+}
+
+const ChainsProvider: React.FC<IChainsProviderProps> = (props) => {
   const { currentChainId } = useWalletProvider()!;
   const {
     data: networks,
@@ -59,24 +65,78 @@ const ChainsProvider: React.FC<{
     return new ethers.providers.JsonRpcProvider(toChain.rpc);
   }, [toChain]);
 
-  // default from chain to current metamak chain on startup
-  // else if default chain is not supported, then use the first supported chain
   useEffect(() => {
-    setToChain(undefined);
-    if (!currentChainId) {
-      setFromChain(networks?.[0]);
-      return;
+    // Check if allowedSourceChains is provided:
+    // If it is, filter networks based on that list
+    // fallback to network if filtering produces no valid list.
+    let allowedSourceChains = networks?.filter((network) =>
+      props.allowedSourceChains?.includes(network.chainId)
+    );
+    if (allowedSourceChains && allowedSourceChains.length === 0) {
+      allowedSourceChains = networks;
     }
-    let currentMetamaskChain = networks?.find(
+
+    // Check if allowedDestinationChains is provided:
+    // If it is, filter networks based on that list
+    // fallback to network if filtering produces no valid list.
+    let allowedDestinationChains = networks?.filter((network) =>
+      props.allowedDestinationChains?.includes(network.chainId)
+    );
+    if (allowedDestinationChains && allowedDestinationChains.length === 0) {
+      allowedDestinationChains = networks;
+    }
+
+    // If a valid metamask chain is present use that.
+    const currentMetamaskChain = allowedSourceChains?.find(
       (network) => network.chainId === currentChainId
     );
 
-    if (currentMetamaskChain) {
-      setFromChain(currentMetamaskChain);
-    } else {
-      setFromChain(networks?.[0]);
+    // Sets the initial source chain, using the following precedence:
+    // 1. defaultSourceChain.
+    // 2. Metamask chain.
+    // 3. The first chain from available/allowed chains.
+    let newFromChain = allowedSourceChains?.[0];
+    if (props.defaultSourceChain) {
+      const defaultSourceChainObj = allowedSourceChains?.find(
+        (network) => network.chainId === props.defaultSourceChain
+      );
+      // If chain for defaultSourceChain is not found
+      // revert to the first chain as a fallback.
+      if (defaultSourceChainObj) {
+        newFromChain = defaultSourceChainObj;
+      }
+    } else if (currentMetamaskChain) {
+      newFromChain = currentMetamaskChain;
     }
-  }, [currentChainId, networks]);
+    setFromChain(newFromChain);
+
+    // Sets the initial destination chain, using the following precedence:
+    // 1. defaultDestinationChain.
+    // 2. The first chain from available/allowed chains which is not the source chain.
+    let newToChain = allowedDestinationChains?.find(
+      (network) => network.chainId !== newFromChain?.chainId
+    );
+    if (props.defaultDestinationChain) {
+      const defaultDestinationChainObj = allowedDestinationChains?.find(
+        (network) => network.chainId === props.defaultDestinationChain
+      );
+      // If chain for defaultDestinationChain is not found
+      // or it is the same as the defaultSourceChain
+      // revert to the first chain which is different from
+      // the source chain as a fallback.
+      if (defaultDestinationChainObj) {
+        newToChain = defaultDestinationChainObj;
+      }
+    }
+    setToChain(newToChain);
+  }, [
+    currentChainId,
+    networks,
+    props.allowedDestinationChains,
+    props.allowedSourceChains,
+    props.defaultDestinationChain,
+    props.defaultSourceChain,
+  ]);
 
   useEffect(() => {
     const network = networks?.find(
@@ -106,10 +166,17 @@ const ChainsProvider: React.FC<{
     })();
   });
 
-  const changeFromChain = useCallback((chain: Network) => {
-    setToChain(undefined);
-    setFromChain(chain);
-  }, []);
+  const changeFromChain = useCallback(
+    (chain: Network) => {
+      // If the new source chain is same as destination chain
+      // reset the destination chain.
+      if (toChain && chain.chainId === toChain.chainId) {
+        setToChain(undefined);
+      }
+      setFromChain(chain);
+    },
+    [toChain]
+  );
 
   const changeToChain = useCallback(
     (chain: Network) => {
