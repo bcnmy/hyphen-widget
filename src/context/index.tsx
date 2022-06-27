@@ -20,6 +20,9 @@ export const AppProviders: React.FC<{
   const {
     tag,
     env,
+    allowedSourceChains,
+    allowedDestinationChains,
+    allowedTokens,
     defaultSourceChain,
     defaultDestinationChain,
     defaultToken,
@@ -32,6 +35,8 @@ export const AppProviders: React.FC<{
       <WalletProviderProvider>
         <ChainsProvider
           env={env}
+          allowedSourceChains={allowedSourceChains}
+          allowedDestinationChains={allowedDestinationChains}
           defaultSourceChain={defaultSourceChain}
           defaultDestinationChain={defaultDestinationChain}
           apiKeys={apiKeys}
@@ -41,6 +46,7 @@ export const AppProviders: React.FC<{
             <NotificationsProvider>
               <TokenProvider
                 env={env}
+                allowedTokens={allowedTokens}
                 defaultToken={defaultToken}
                 apiKeys={apiKeys}
                 rpcUrls={rpcUrls}

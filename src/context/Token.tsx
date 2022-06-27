@@ -56,6 +56,7 @@ function isTokenValidForChains(
 
 interface ITokenProviderProps {
   env?: string;
+  allowedTokens?: string[];
   defaultToken?: string;
   apiKeys?: { [key: string]: string };
   rpcUrls?: { [key: string]: string };
@@ -104,24 +105,30 @@ const TokenProvider: React.FC<ITokenProviderProps> = (props) => {
       return;
     }
 
+    let allowedTokens = compatibleTokensForCurrentChains.filter((token) =>
+      props.allowedTokens?.includes(token.symbol)
+    );
+    if (allowedTokens && allowedTokens.length === 0) {
+      allowedTokens = compatibleTokensForCurrentChains;
+    }
+
     // Sets the initial token, using the following precedence:
     // 1. defaultToken if it is compatible.
     // 2. The first token from available tokens if it is compatible.
-    let newToken;
+    let newToken = allowedTokens[0];
     if (props.defaultToken) {
-      const defaultTokenObj = compatibleTokensForCurrentChains.find(
+      const defaultTokenObj = allowedTokens.find(
         (token) => token.symbol === props.defaultToken
       );
       // If token for defaultToken is not found or is not compatible
       // with selected chains revert to the first token in the list
       // of available tokens.
-      newToken =
+      if (
         defaultTokenObj &&
         isTokenValidForChains(defaultTokenObj, fromChain, toChain)
-          ? defaultTokenObj
-          : compatibleTokensForCurrentChains[0];
-    } else {
-      newToken = compatibleTokensForCurrentChains[0];
+      ) {
+        newToken = defaultTokenObj;
+      }
     }
     setSelectedToken(newToken);
   }, [

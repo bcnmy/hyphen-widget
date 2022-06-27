@@ -22,7 +22,7 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
     let sourceChains = networks;
 
     if (allowedSourceChains.length > 0) {
-      const allowedChains = networks?.filter((network) =>
+      const allowedChains = sourceChains?.filter((network) =>
         allowedSourceChains.includes(network.chainId)
       );
 
@@ -44,7 +44,7 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
     );
 
     if (allowedDestinationChains.length > 0) {
-      const allowedChains = networks?.filter((network) =>
+      const allowedChains = destinationChains?.filter((network) =>
         allowedDestinationChains.includes(network.chainId)
       );
 
