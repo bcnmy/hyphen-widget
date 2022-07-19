@@ -11,7 +11,17 @@ import { TransactionProvider } from "./Transaction";
 import { TransactionInfoModalProvider } from "./TransactionInfoModal";
 import { WalletProviderProvider } from "./WalletProvider";
 
-const queryClient = new QueryClient();
+const queryClientOptions = {
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      retry: false,
+    },
+  },
+};
+const queryClient = new QueryClient(queryClientOptions);
 
 export const AppProviders: React.FC<{
   tag: string;

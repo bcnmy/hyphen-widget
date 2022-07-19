@@ -32,6 +32,7 @@ import { useWalletProvider } from "./WalletProvider";
 import { useBiconomy } from "./Biconomy";
 import { useNotifications } from "./Notifications";
 import useLiquidityPools from "hooks/contracts/useLiquidityPools";
+import { useQuery } from "react-query";
 
 export enum ValidationErrors {
   INVALID_AMOUNT,
@@ -132,6 +133,52 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
 
   const [enableGasTokenSwap, setEnableGasTokenSwap] = useState<boolean>(false);
 
+  const { data: gasTokenSwapData } = useQuery(
+    [
+      "gasTokenSwapData",
+      fromChain?.chainId,
+      toChain?.chainId,
+      selectedToken?.symbol,
+      transferAmountInputValue,
+    ],
+    () => {
+      if (
+        !fromChain ||
+        !toChain ||
+        !selectedToken ||
+        !transferAmountInputValue
+      ) {
+        return;
+      }
+
+      console.log("Making gasTokenSwapData call!");
+
+      const baseURL = config.getBaseURL(props.env);
+      return fetch(
+        `${baseURL}/api/v1/insta-exit/gas-token-distribution?fromChainId=${
+          fromChain.chainId
+        }&fromChainTokenAddress=${
+          selectedToken[fromChain.chainId].address
+        }&gasTokenAmount=${
+          toChain.gasTokenSwap.gasTokenAmount
+        }&amount=${ethers.utils.parseUnits(
+          transferAmountInputValue,
+          selectedToken[toChain.chainId].decimal
+        )}&toChainId=${toChain.chainId}`
+      );
+    },
+    {
+      enabled:
+        enableGasTokenSwap &&
+        !!fromChain &&
+        !!toChain &&
+        !!selectedToken &&
+        !!transferAmountInputValue,
+    }
+  );
+
+  console.log(gasTokenSwapData);
+
   useEffect(() => {
     if (accounts) {
       setReceiver({
@@ -141,9 +188,10 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
     }
   }, [accounts]);
 
-  // reset the input after conditions change
+  // reset the input and gas token swap after conditions change
   useEffect(() => {
     setTransferAmountInputValue("");
+    setEnableGasTokenSwap(false);
   }, [fromChain, toChain, selectedToken]);
 
   const transferAmount = useMemo(
@@ -219,6 +267,10 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
     // having the string input value and number value seperate allows for the validation logic to run without intefering each other
     let status = regExp.test(amount);
 
+    if (amount === "") {
+      setEnableGasTokenSwap(false);
+    }
+
     if (status) {
       // validation must run in the same function where transferAmount is being changed
       // this is to prevent a re-render in the middle which will fire fetchTransactionFee
@@ -248,15 +300,20 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
         return;
       }
       let tokenAddress = selectedToken[toChain.chainId].address;
-      let tokenDecimal = selectedToken[toChain.chainId].decimal;
-      let rawTransferAmount = ethers.utils.parseUnits(
+      let fromChainTokenDecimal = selectedToken[fromChain.chainId].decimal;
+      let toChainTokenDecimal = selectedToken[toChain.chainId].decimal;
+      let fromChainRawTransferAmount = ethers.utils.parseUnits(
         transferAmount.toString(),
-        tokenDecimal
+        fromChainTokenDecimal
+      );
+      let toChainRawTransferAmount = ethers.utils.parseUnits(
+        transferAmount.toString(),
+        toChainTokenDecimal
       );
 
       let transferFee = await getTransferFee(
         tokenAddress,
-        rawTransferAmount.toString()
+        toChainRawTransferAmount.toString()
       );
       if (!transferFee) {
         return;
@@ -315,7 +372,7 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
 
       let rewardAmount = await getRewardAmount(
         tokenAddressFromChain,
-        rawTransferAmount.toString()
+        fromChainRawTransferAmount.toString()
       );
 
       // console.log('************** REWARD AMOUNT  *********', rewardAmount);
@@ -334,7 +391,7 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
 
       let transactionFee = formatRawEthValue(
         transactionFeeRaw.toString(),
-        tokenDecimal
+        toChainTokenDecimal
       );
 
       let transactionFeeProcessedString = toFixed(
@@ -376,6 +433,7 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
     fromChain,
     getRewardAmount,
     getTransferFee,
+    props.env,
     selectedToken,
     toChain,
     transferAmount,

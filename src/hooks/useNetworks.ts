@@ -46,8 +46,11 @@ export type Network = {
     gnosisMasterAccount: string;
     whiteListedExternalContracts: [string];
   };
-  // Temporary property
-  isGasTokenSupported: boolean;
+  gasTokenSwap: {
+    supported: boolean;
+    gasTokenAmount: string;
+    swapSlippage: number;
+  };
 };
 
 function fetchNetworks(
