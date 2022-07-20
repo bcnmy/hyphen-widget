@@ -80,6 +80,8 @@ interface ITransactionContext {
   getExitInfoFromHash: (exitHash: string) => Promise<string>;
   enableGasTokenSwap: boolean;
   setEnableGasTokenSwap: (enableGasTokenSwap: boolean) => void;
+  gasTokenSwapData: any;
+  isGasTokenSwapDataLoading: boolean;
 }
 
 const TransactionContext = createContext<ITransactionContext | null>(null);
@@ -133,52 +135,6 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
 
   const [enableGasTokenSwap, setEnableGasTokenSwap] = useState<boolean>(false);
 
-  const { data: gasTokenSwapData } = useQuery(
-    [
-      "gasTokenSwapData",
-      fromChain?.chainId,
-      toChain?.chainId,
-      selectedToken?.symbol,
-      transferAmountInputValue,
-    ],
-    () => {
-      if (
-        !fromChain ||
-        !toChain ||
-        !selectedToken ||
-        !transferAmountInputValue
-      ) {
-        return;
-      }
-
-      console.log("Making gasTokenSwapData call!");
-
-      const baseURL = config.getBaseURL(props.env);
-      return fetch(
-        `${baseURL}/api/v1/insta-exit/gas-token-distribution?fromChainId=${
-          fromChain.chainId
-        }&fromChainTokenAddress=${
-          selectedToken[fromChain.chainId].address
-        }&gasTokenAmount=${
-          toChain.gasTokenSwap.gasTokenAmount
-        }&amount=${ethers.utils.parseUnits(
-          transferAmountInputValue,
-          selectedToken[toChain.chainId].decimal
-        )}&toChainId=${toChain.chainId}`
-      );
-    },
-    {
-      enabled:
-        enableGasTokenSwap &&
-        !!fromChain &&
-        !!toChain &&
-        !!selectedToken &&
-        !!transferAmountInputValue,
-    }
-  );
-
-  console.log(gasTokenSwapData);
-
   useEffect(() => {
     if (accounts) {
       setReceiver({
@@ -214,52 +170,48 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
     executeApproveTokenStatus,
   ]);
 
-  // useEffect(() => {
-  //   console.log({
-  //     fetchSelectedTokenApprovalStatus,
-  //     fetchSelectedTokenApprovalValue,
-  //     fetchSelectedTokenApprovalError,
-  //   });
-  // }, [
-  //   fetchSelectedTokenApprovalStatus,
-  //   fetchSelectedTokenApprovalValue,
-  //   fetchSelectedTokenApprovalError,
-  // ]);
+  const { data: gasTokenSwapData, isLoading: isGasTokenSwapDataLoading } =
+    useQuery(
+      [
+        "gasTokenSwapData",
+        fromChain?.chainId,
+        toChain?.chainId,
+        selectedToken?.symbol,
+        transferAmountInputValue,
+      ],
+      () => {
+        if (
+          !fromChain ||
+          !toChain ||
+          !selectedToken ||
+          !transferAmountInputValue
+        ) {
+          return;
+        }
 
-  // let { data: transferFee, isLoading: isTransferFeeLoading } = useQuery(
-  //   ['transferFeeByToken', selectedToken, toChain, transferAmount],
-  //   async () => {
-  //     if (!selectedToken || !toChain || !transferAmount) {
-  //       return;
-  //     }
-  //     let tokenAddress = selectedToken[toChain.chainId].address;
-  //     let tokenDecimal = selectedToken[toChain.chainId].decimal;
-  //     let rawTransferAmount = transferAmount * Math.pow(10, tokenDecimal);
-  //     return await getTransferFee(tokenAddress, rawTransferAmount.toString());
-  //   },
-  //   {
-  //     // Execute only when tokenAddress is available.
-  //     enabled: !!(selectedToken && toChain && transferAmount),
-  //   },
-  // );
-
-  // let { data: rewardAmount } = useQuery(
-  //   ['rewardAmountByToken', selectedToken, fromChain, transferAmount],
-  //   () => {
-  //     if (!selectedToken || !fromChain || !transferAmount) {
-  //       return;
-  //     }
-  //     let tokenAddress = selectedToken[fromChain.chainId].address;
-  //     let tokenDecimal = selectedToken[fromChain.chainId].decimal;
-
-  //     let rawTransferAmount = transferAmount * Math.pow(10, tokenDecimal);
-  //     return getRewardAmount(tokenAddress, rawTransferAmount.toString());
-  //   },
-  //   {
-  //     // Execute only when tokenAddress is available.
-  //     enabled: !!(selectedToken && fromChain && transferAmount),
-  //   },
-  // );
+        const baseURL = config.getBaseURL(props.env);
+        return fetch(
+          `${baseURL}/api/v1/insta-exit/gas-token-distribution?fromChainId=${
+            fromChain.chainId
+          }&fromChainTokenAddress=${
+            selectedToken[fromChain.chainId].address
+          }&gasTokenAmount=${
+            toChain.gasTokenSwap.gasTokenAmount
+          }&amount=${ethers.utils.parseUnits(
+            transferAmountInputValue,
+            selectedToken[toChain.chainId].decimal
+          )}&toChainId=${toChain.chainId}`
+        ).then((res) => res.json());
+      },
+      {
+        enabled:
+          enableGasTokenSwap &&
+          !!fromChain &&
+          !!toChain &&
+          !!selectedToken &&
+          !!transferAmountInputValue,
+      }
+    );
 
   const changeTransferAmountInputValue = (amount: string) => {
     const regExp = /^((\d+)?(\.\d{0,3})?)$/;
@@ -754,6 +706,8 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
         getExitInfoFromHash,
         enableGasTokenSwap,
         setEnableGasTokenSwap,
+        gasTokenSwapData,
+        isGasTokenSwapDataLoading,
       }}
       {...props}
     />
