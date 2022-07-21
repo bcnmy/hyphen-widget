@@ -82,6 +82,7 @@ interface ITransactionContext {
   setEnableGasTokenSwap: (enableGasTokenSwap: boolean) => void;
   gasTokenSwapData: any;
   isGasTokenSwapDataLoading: boolean;
+  removeGasTokenSwapData: () => void;
 }
 
 const TransactionContext = createContext<ITransactionContext | null>(null);
@@ -135,6 +136,55 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
 
   const [enableGasTokenSwap, setEnableGasTokenSwap] = useState<boolean>(false);
 
+  const {
+    data: gasTokenSwapData,
+    isLoading: isGasTokenSwapDataLoading,
+    remove: removeGasTokenSwapData,
+  } = useQuery(
+    [
+      "gasTokenSwapData",
+      fromChain?.chainId,
+      toChain?.chainId,
+      selectedToken?.symbol,
+      transferAmountInputValue,
+    ],
+    () => {
+      if (
+        !fromChain ||
+        !toChain ||
+        !selectedToken ||
+        !selectedToken[fromChain.chainId] ||
+        !selectedToken[toChain.chainId] ||
+        !transferAmountInputValue
+      ) {
+        return;
+      }
+
+      const baseURL = config.getBaseURL(props.env);
+      return fetch(
+        `${baseURL}/api/v1/insta-exit/gas-token-distribution?fromChainId=${
+          fromChain.chainId
+        }&fromChainTokenAddress=${
+          selectedToken[fromChain.chainId].address
+        }&gasTokenAmount=${
+          toChain.gasTokenSwap.gasTokenAmount
+        }&amount=${ethers.utils.parseUnits(
+          transferAmountInputValue,
+          selectedToken[toChain.chainId].decimal
+        )}&toChainId=${toChain.chainId}`
+      ).then((res) => res.json());
+    },
+    {
+      enabled:
+        enableGasTokenSwap &&
+        !!fromChain &&
+        !!toChain &&
+        !!selectedToken &&
+        !!transferAmountInputValue,
+      cacheTime: 0,
+    }
+  );
+
   useEffect(() => {
     if (accounts) {
       setReceiver({
@@ -169,49 +219,6 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
     errors,
     executeApproveTokenStatus,
   ]);
-
-  const { data: gasTokenSwapData, isLoading: isGasTokenSwapDataLoading } =
-    useQuery(
-      [
-        "gasTokenSwapData",
-        fromChain?.chainId,
-        toChain?.chainId,
-        selectedToken?.symbol,
-        transferAmountInputValue,
-      ],
-      () => {
-        if (
-          !fromChain ||
-          !toChain ||
-          !selectedToken ||
-          !transferAmountInputValue
-        ) {
-          return;
-        }
-
-        const baseURL = config.getBaseURL(props.env);
-        return fetch(
-          `${baseURL}/api/v1/insta-exit/gas-token-distribution?fromChainId=${
-            fromChain.chainId
-          }&fromChainTokenAddress=${
-            selectedToken[fromChain.chainId].address
-          }&gasTokenAmount=${
-            toChain.gasTokenSwap.gasTokenAmount
-          }&amount=${ethers.utils.parseUnits(
-            transferAmountInputValue,
-            selectedToken[toChain.chainId].decimal
-          )}&toChainId=${toChain.chainId}`
-        ).then((res) => res.json());
-      },
-      {
-        enabled:
-          enableGasTokenSwap &&
-          !!fromChain &&
-          !!toChain &&
-          !!selectedToken &&
-          !!transferAmountInputValue,
-      }
-    );
 
   const changeTransferAmountInputValue = (amount: string) => {
     const regExp = /^((\d+)?(\.\d{0,3})?)$/;
@@ -360,6 +367,12 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
         amountToGet += parseFloat(rewardAmount);
       }
 
+      if (gasTokenSwapData) {
+        amountToGet -= parseFloat(
+          gasTokenSwapData?.gasTokenAmountInDepositCurrency
+        );
+      }
+
       let amountToGetProcessedString = toFixed(
         amountToGet.toString(),
         fixedDecimalPoint
@@ -383,6 +396,7 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
     }
   }, [
     fromChain,
+    gasTokenSwapData,
     getRewardAmount,
     getTransferFee,
     props.env,
@@ -708,6 +722,7 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
         setEnableGasTokenSwap,
         gasTokenSwapData,
         isGasTokenSwapDataLoading,
+        removeGasTokenSwapData,
       }}
       {...props}
     />

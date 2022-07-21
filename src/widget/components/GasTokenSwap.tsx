@@ -13,6 +13,7 @@ function GasTokenSwap() {
     gasTokenSwapData,
     setEnableGasTokenSwap,
     transferAmount,
+    removeGasTokenSwapData,
   } = useTransaction()!;
 
   // Destination chain & token should be selected.
@@ -41,8 +42,6 @@ function GasTokenSwap() {
     disableGasTokenSwapMsg = "";
   }
 
-  console.log(gasTokenSwapData);
-
   return (
     <div className="px-4 py-2 bg-hyphen-purple bg-opacity-[0.05] rounded-lg hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75">
       <div className="flex items-center">
@@ -67,7 +66,13 @@ function GasTokenSwap() {
             label="Gasless Mode"
             enabled={enableGasTokenSwap}
             disabled={disableGasTokenSwap}
-            onToggle={() => setEnableGasTokenSwap(!enableGasTokenSwap)}
+            onToggle={() => {
+              // Remove any existing data.
+              if (enableGasTokenSwap) {
+                removeGasTokenSwapData();
+              }
+              setEnableGasTokenSwap(!enableGasTokenSwap);
+            }}
           />
         </div>
         {disableGasTokenSwap ? (
@@ -79,10 +84,12 @@ function GasTokenSwap() {
           <span>Gas token tooltip!</span>
         </CustomTooltip>
       </div>
-      {gasTokenSwapData && gasTokenSwapData?.gasTokenPercentage ? (
+      {enableGasTokenSwap &&
+      gasTokenSwapData &&
+      gasTokenSwapData?.gasTokenPercentage ? (
         <span className="text-xxs font-semibold text-hyphen-gray-400 ml-6">
-          You will get {gasTokenSwapData.gasTokenPercentage.toFixed(3)}% of gas
-          tokens
+          {gasTokenSwapData.gasTokenPercentage.toFixed(3)}% of {transferAmount}{" "}
+          {selectedToken?.symbol} will be used for gas token swap
         </span>
       ) : null}
     </div>
