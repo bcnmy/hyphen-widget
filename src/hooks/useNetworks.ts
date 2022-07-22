@@ -51,6 +51,7 @@ export type Network = {
     gasTokenAmount: string;
     swapSlippage: number;
   };
+  wrappedNativeTokenAddress: string;
 };
 
 function fetchNetworks(

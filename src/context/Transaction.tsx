@@ -577,19 +577,47 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
         );
       }
 
-      let depositTx = await hyphen.depositManager.deposit({
-        sender: accounts[0],
-        receiver: receiverAddress,
-        tokenAddress: selectedToken[fromChain.chainId].address,
-        depositContractAddress: executePreDepositCheckValue.depositContract,
-        amount: ethers.utils
-          .parseUnits(transferAmount.toString(), tokenDecimals)
-          .toString(),
-        fromChainId: fromChain.chainId,
-        toChainId: toChain.chainId,
-        useBiconomy: isBiconomyEnabled,
-        tag: props.tag,
-      });
+      let depositTx;
+      if (enableGasTokenSwap) {
+        depositTx = await hyphen.depositManager.depositAndSwap({
+          sender: accounts[0],
+          receiver: receiverAddress,
+          tokenAddress: selectedToken[fromChain.chainId].address,
+          depositContractAddress: executePreDepositCheckValue.depositContract,
+          amount: ethers.utils
+            .parseUnits(transferAmount.toString(), tokenDecimals)
+            .toString(),
+          fromChainId: fromChain.chainId,
+          toChainId: toChain.chainId,
+          useBiconomy: isBiconomyEnabled,
+          tag: props.tag,
+          swapRequest: [
+            {
+              tokenAddress: toChain.wrappedNativeTokenAddress,
+              percentage: gasTokenSwapData?.gasTokenPercentage,
+              amount: ethers.utils
+                .parseUnits(transferAmount.toString(), tokenDecimals)
+                .toString(),
+              operations: 0,
+              path: "0x0000000000000000000000000000000000000000",
+            },
+          ],
+        });
+      } else {
+        depositTx = await hyphen.depositManager.deposit({
+          sender: accounts[0],
+          receiver: receiverAddress,
+          tokenAddress: selectedToken[fromChain.chainId].address,
+          depositContractAddress: executePreDepositCheckValue.depositContract,
+          amount: ethers.utils
+            .parseUnits(transferAmount.toString(), tokenDecimals)
+            .toString(),
+          fromChainId: fromChain.chainId,
+          toChainId: toChain.chainId,
+          useBiconomy: isBiconomyEnabled,
+          tag: props.tag,
+        });
+      }
 
       addTxNotification(
         depositTx,
@@ -602,16 +630,18 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
       // await depositTx.wait(1);
     },
     [
-      accounts,
       executePreDepositCheckValue?.depositContract,
       fromChain,
-      hyphen,
-      isBiconomyEnabled,
-      selectedToken,
       toChain,
-      transferAmount,
+      accounts,
+      selectedToken,
+      enableGasTokenSwap,
       addTxNotification,
+      hyphen,
+      transferAmount,
+      isBiconomyEnabled,
       props.tag,
+      gasTokenSwapData?.gasTokenPercentage,
     ]
   );
 
