@@ -594,10 +594,8 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
           swapRequest: [
             {
               tokenAddress: toChain.wrappedNativeTokenAddress,
-              percentage: gasTokenSwapData?.gasTokenPercentage,
-              amount: ethers.utils
-                .parseUnits(transferAmount.toString(), tokenDecimals)
-                .toString(),
+              percentage: (gasTokenSwapData?.gasTokenPercentage).toString(),
+              amount: 0,
               operations: 0,
               path: "0x0000000000000000000000000000000000000000",
             },
