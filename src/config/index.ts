@@ -10,19 +10,23 @@ if (process.env.REACT_APP_ENV === ENV.production) {
   hyphenBaseUrl = "https://hyphen-v2-staging-api.biconomy.io";
 }
 
+hyphenBaseUrl = "https://hyphen-v2-staging-api.biconomy.io";
+
 const hyphen = {
   baseURL: hyphenBaseUrl,
   getTokenGasPricePath: "/api/v1/insta-exit/get-token-price",
 };
 
 function getBaseURL(env: string | undefined): string {
-  if (env === ENV.production) {
-    return "https://hyphen-v2-api.biconomy.io";
-  } else if (env === ENV.test) {
-    return "https://hyphen-v2-integration-api.biconomy.io";
-  } else {
-    return "https://hyphen-v2-staging-api.biconomy.io";
-  }
+  return "https://hyphen-v2-staging-api.biconomy.io";
+
+  // if (env === ENV.production) {
+  //   return "https://hyphen-v2-api.biconomy.io";
+  // } else if (env === ENV.test) {
+  //   return "https://hyphen-v2-integration-api.biconomy.io";
+  // } else {
+  //   return "https://hyphen-v2-staging-api.biconomy.io";
+  // }
 }
 
 export const config = {

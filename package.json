@@ -20,7 +20,7 @@
   "homepage": "https://github.com/bcnmy/hyphen-widget",
   "dependencies": {
     "@apollo/client": "^3.5.7",
-    "@biconomy/hyphen": "^1.1.3",
+    "@biconomy/hyphen": "/Users/asheerrizvi/Desktop/hyphen-sdk",
     "@biconomy/mexa": "^2.0.24",
     "@walletconnect/web3-provider": "^1.6.6",
     "assert": "^2.0.0",
@@ -49,7 +49,7 @@
     "web3modal": "^1.9.4"
   },
   "scripts": {
-    "build": "REACT_APP_ENV=production GENERATE_SOURCEMAP=false webpack",
+    "build": "REACT_APP_ENV=staging GENERATE_SOURCEMAP=false webpack",
     "start": "REACT_APP_ENV=staging webpack --watch"
   },
   "eslintConfig": {
