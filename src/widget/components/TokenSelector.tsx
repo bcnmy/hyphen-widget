@@ -10,10 +10,12 @@ import { twMerge } from "tailwind-merge";
 import CustomTooltip from "components/CustomTooltip";
 
 interface ITokenSelectorProps {
+  allowedTokens?: string[];
   disabled?: boolean;
 }
 
 const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
+  allowedTokens = [],
   disabled,
 }) => {
   const {
@@ -32,19 +34,34 @@ const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
 
   const tokenOptions = useMemo(() => {
     if (!fromChain || !compatibleTokensForCurrentChains) return [];
-    return tokens
-      ? Object.keys(tokens)
-          .filter((tokenSymbol) => {
-            const token = tokens[tokenSymbol];
-            return compatibleTokensForCurrentChains.indexOf(token) !== -1;
-          })
-          .map((tokenSymbol) => ({
-            id: tokens[tokenSymbol].symbol,
-            name: tokens[tokenSymbol].symbol,
-            image: tokens[tokenSymbol].image,
-          }))
+
+    // Populate token options depending
+    // upon allowedTokens list.
+    let compatibleTokens = tokens
+      ? Object.keys(tokens).filter((tokenSymbol) => {
+          const token = tokens[tokenSymbol];
+          return compatibleTokensForCurrentChains.indexOf(token) !== -1;
+        })
       : [];
-  }, [compatibleTokensForCurrentChains, fromChain, tokens]);
+
+    if (allowedTokens.length > 0) {
+      const allowedCompatibleTokens = compatibleTokens.filter((tokenSymbol) =>
+        allowedTokens.includes(tokenSymbol)
+      );
+
+      if (allowedCompatibleTokens.length > 0) {
+        compatibleTokens = allowedCompatibleTokens;
+      }
+    }
+
+    return tokens
+      ? compatibleTokens.map((tokenSymbol) => ({
+          id: tokens[tokenSymbol].symbol,
+          name: tokens[tokenSymbol].symbol,
+          image: tokens[tokenSymbol].image,
+        }))
+      : [];
+  }, [allowedTokens, compatibleTokensForCurrentChains, fromChain, tokens]);
 
   return (
     <div className="flex flex-col justify-between">

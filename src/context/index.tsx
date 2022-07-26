@@ -1,3 +1,4 @@
+import { HyphenWidgetOptions } from "index";
 import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BiconomyProvider } from "./Biconomy";
@@ -24,18 +25,42 @@ const queryClientOptions = {
 const queryClient = new QueryClient(queryClientOptions);
 
 export const AppProviders: React.FC<{
-  tag: string;
-  env?: string;
-  apiKeys?: { [key: string]: string };
-  rpcUrls?: { [key: string]: string };
-}> = ({ children, tag, env, apiKeys, rpcUrls }) => {
+  options: HyphenWidgetOptions;
+}> = ({ children, options }) => {
+  const {
+    tag,
+    env,
+    allowedSourceChains,
+    allowedDestinationChains,
+    allowedTokens,
+    defaultSourceChain,
+    defaultDestinationChain,
+    defaultToken,
+    apiKeys,
+    rpcUrls,
+  } = options;
+
   return (
     <QueryClientProvider client={queryClient}>
       <WalletProviderProvider>
-        <ChainsProvider env={env} apiKeys={apiKeys} rpcUrls={rpcUrls}>
+        <ChainsProvider
+          env={env}
+          allowedSourceChains={allowedSourceChains}
+          allowedDestinationChains={allowedDestinationChains}
+          defaultSourceChain={defaultSourceChain}
+          defaultDestinationChain={defaultDestinationChain}
+          apiKeys={apiKeys}
+          rpcUrls={rpcUrls}
+        >
           <GraphQLProvider>
             <NotificationsProvider>
-              <TokenProvider env={env} apiKeys={apiKeys} rpcUrls={rpcUrls}>
+              <TokenProvider
+                env={env}
+                allowedTokens={allowedTokens}
+                defaultToken={defaultToken}
+                apiKeys={apiKeys}
+                rpcUrls={rpcUrls}
+              >
                 <BiconomyProvider>
                   <HyphenProvider env={env}>
                     <TokenApprovalProvider>
