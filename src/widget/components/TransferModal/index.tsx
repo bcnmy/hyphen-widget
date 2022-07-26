@@ -1,27 +1,26 @@
-import PrimaryButtonLight from "components/Buttons/PrimaryButtonLight";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { formatDistanceStrict } from "date-fns";
-import { IoMdClose } from "react-icons/io";
-import { twMerge } from "tailwind-merge";
-import Skeleton from "react-loading-skeleton";
+import PrimaryButtonLight from 'components/Buttons/PrimaryButtonLight';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { formatDistanceStrict } from 'date-fns';
+import { IoMdClose } from 'react-icons/io';
+import { twMerge } from 'tailwind-merge';
+import Skeleton from 'react-loading-skeleton';
 
-import { Dialog } from "@headlessui/react";
-import Modal from "components/Modal";
-import { useTransaction } from "context/Transaction";
-import { Transition as TransitionReact } from "react-transition-group";
-import { Status } from "hooks/useLoading";
-import { PrimaryButtonDark } from "components/Buttons/PrimaryButtonDark";
-import Spinner from "components/Buttons/Spinner";
-import AnimateHeight from "react-animate-height";
-import { useChains } from "context/Chains";
-import { useToken } from "context/Token";
-import { HiExclamation, HiOutlineArrowSmRight } from "react-icons/hi";
-import SpinnerDark from "components/Buttons/SpinnerDark";
+import { Dialog } from '@headlessui/react';
+import Modal from 'components/Modal';
+import { useTransaction } from 'context/Transaction';
+import { Transition as TransitionReact } from 'react-transition-group';
+import { Status } from 'hooks/useLoading';
+import { PrimaryButtonDark } from 'components/Buttons/PrimaryButtonDark';
+import Spinner from 'components/Buttons/Spinner';
+import AnimateHeight from 'react-animate-height';
+import { useToken } from 'context/Token';
+import { HiExclamation, HiOutlineArrowSmRight } from 'react-icons/hi';
+import SpinnerDark from 'components/Buttons/SpinnerDark';
 import {
   ITransferRecord,
   useTransactionInfoModal,
-} from "context/TransactionInfoModal";
-import CustomTooltip from "components/CustomTooltip";
+} from 'context/TransactionInfoModal';
+import CustomTooltip from 'components/CustomTooltip';
 // import { MANUAL_EXIT_RETRIES } from "../../../../config/constants";
 
 export interface ITransferModalProps {
@@ -80,7 +79,7 @@ const PreDepositStep: React.FC<
   }, [executed, executePreDepositCheckStatus, onNextStep, active]);
 
   return (
-    <div className={!active && !completed ? "opacity-30" : ""}>
+    <div className={!active && !completed ? 'opacity-30' : ''}>
       <div className="flex items-center gap-4 py-2 font-medium text-hyphen-purple-darker/70">
         <div className="relative rounded-full border border-hyphen-purple-dark/10 bg-hyphen-purple/30 p-3 text-hyphen-purple-darker/80 shadow-sm">
           <span className="absolute inset-0 flex items-center justify-center text-center text-xs">
@@ -89,7 +88,7 @@ const PreDepositStep: React.FC<
         </div>
         <span>Checking Available Liquidity</span>
       </div>
-      <AnimateHeight height={active ? "auto" : 0}>
+      <AnimateHeight height={active ? 'auto' : 0}>
         <div className="mx-10 mt-2 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 transition-colors hover:border-opacity-30">
           <div className="text-center text-sm font-medium text-hyphen-purple-dark/60">
             {executePreDepositCheckError ? (
@@ -167,7 +166,7 @@ const DepositStep: React.FC<
   ]);
 
   return (
-    <div className={!active && !completed ? "opacity-30" : ""}>
+    <div className={!active && !completed ? 'opacity-30' : ''}>
       <div className="flex items-center gap-4 py-2 font-medium text-hyphen-purple-darker/70">
         <div className="relative rounded-full border border-hyphen-purple-dark/10 bg-hyphen-purple/30 p-3 text-hyphen-purple-darker/80 shadow-sm">
           <span className="absolute inset-0 flex items-center justify-center text-center text-xs">
@@ -178,7 +177,7 @@ const DepositStep: React.FC<
           Deposit {transferAmount} {selectedToken?.symbol} on {fromChain?.name}
         </span>
       </div>
-      <AnimateHeight height={active ? "auto" : 0}>
+      <AnimateHeight height={active ? 'auto' : 0}>
         <div className="mx-10 mt-2 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 transition-colors hover:border-opacity-30">
           {executeDepositError ? (
             <span className="text-sm font-medium text-red-700/70">
@@ -189,7 +188,7 @@ const DepositStep: React.FC<
               <Spinner />
               <div>
                 {executeDepositStatus === Status.PENDING &&
-                  "Confirm the deposit transaction in your wallet"}
+                  'Confirm the deposit transaction in your wallet'}
                 {executeDepositStatus === Status.SUCCESS &&
                   `Waiting for deposit confirmation on ${fromChain?.name}`}
               </div>
@@ -223,7 +222,8 @@ const ReceivalStep: React.FC<
   const active = currentStepNumber === stepNumber;
   const completed = currentStepNumber > stepNumber;
 
-  const { checkReceival, exitHash, setExitHash } = useTransaction()!;
+  const { checkReceival, exitHash, setExitHash, gasTokenSwapData } =
+    useTransaction()!;
   const { selectedToken, toChainRpcUrlProvider, toChain, transactionFee } =
     transferModalData;
 
@@ -249,7 +249,7 @@ const ReceivalStep: React.FC<
           // }
           else if (tries > 300) {
             clearInterval(keepChecking);
-            throw new Error("exhauseted max retries");
+            throw new Error('exhauseted max retries');
           }
         } catch (e) {
           setReceivalError(e);
@@ -270,13 +270,13 @@ const ReceivalStep: React.FC<
     try {
       if (!toChainRpcUrlProvider) {
         console.error(
-          "We were not able to fetch the details, please refresh and try again later."
+          'We were not able to fetch the details, please refresh and try again later.'
         );
         setReceivalError(
-          "We were not able to fetch the details, please refresh and try again later."
+          'We were not able to fetch the details, please refresh and try again later.'
         );
         throw new Error(
-          "We were not able to fetch the details, please refresh and try again later."
+          'We were not able to fetch the details, please refresh and try again later.'
         );
       } else if (exitHash && executed && active) {
         setReceivalState(Status.PENDING);
@@ -303,7 +303,7 @@ const ReceivalStep: React.FC<
   ]);
 
   return (
-    <div className={!active && !completed ? "opacity-30" : ""}>
+    <div className={!active && !completed ? 'opacity-30' : ''}>
       <div className="flex items-center gap-4 py-2 font-medium text-hyphen-purple-darker/70">
         <div className="relative rounded-full border border-hyphen-purple-dark/10 bg-hyphen-purple/30 p-3 text-hyphen-purple-darker/80 shadow-sm">
           <span className="absolute inset-0 flex items-center justify-center text-center text-xs">
@@ -311,11 +311,15 @@ const ReceivalStep: React.FC<
           </span>
         </div>
         <span>
-          Get ~{transactionFee?.amountToGetProcessedString}{" "}
-          {selectedToken?.symbol} on {toChain?.name}
+          Get ~{transactionFee?.amountToGetProcessedString}{' '}
+          {selectedToken?.symbol}{' '}
+          {gasTokenSwapData
+            ? `& ${gasTokenSwapData.gasTokenAmountInDepositCurrency} ${selectedToken?.symbol} in gas tokens`
+            : null}{' '}
+          on {toChain?.name}
         </span>
       </div>
-      <AnimateHeight height={active ? "auto" : 0}>
+      <AnimateHeight height={active ? 'auto' : 0}>
         <div className="mx-10 mt-2 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 transition-colors hover:border-opacity-30">
           {receivalError ? (
             <span className="font-medium text-red-700/70">
@@ -326,8 +330,12 @@ const ReceivalStep: React.FC<
               <Spinner />
               Waiting to receive ~{
                 transactionFee?.amountToGetProcessedString
-              }{" "}
-              {selectedToken?.symbol} on {toChain?.name}
+              }{' '}
+              {selectedToken?.symbol}{' '}
+              {gasTokenSwapData
+                ? `& ${gasTokenSwapData.gasTokenAmountInDepositCurrency} ${selectedToken?.symbol} in gas tokens`
+                : null}{' '}
+              on {toChain?.name}
             </div>
           )}
         </div>
@@ -577,9 +585,9 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
           {(state) => (
             <div
               className={twMerge(
-                "transform-gpu transition-transform",
-                (state === "exiting" || state === "exited") &&
-                  "-translate-y-full"
+                'transform-gpu transition-transform',
+                (state === 'exiting' || state === 'exited') &&
+                  '-translate-y-full'
               )}
             >
               <div className="relative mx-10">
@@ -594,7 +602,7 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
                   </article>
                   <div
                     className="grid gap-y-2 text-white/75"
-                    style={{ gridTemplateColumns: "1fr auto" }}
+                    style={{ gridTemplateColumns: '1fr auto' }}
                   >
                     <span className="flex items-center gap-3 font-normal">
                       Deposit on {fromChain?.name}
@@ -607,7 +615,7 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
                           onClick={() => {
                             window.open(
                               `${fromChain?.explorerUrl}/tx/${executeDepositValue.hash}`,
-                              "_blank"
+                              '_blank'
                             );
                           }}
                         >
@@ -663,7 +671,7 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
                             onClick={() => {
                               window.open(
                                 `${toChain?.explorerUrl}/tx/${exitHash}`,
-                                "_blank"
+                                '_blank'
                               );
                             }}
                           >

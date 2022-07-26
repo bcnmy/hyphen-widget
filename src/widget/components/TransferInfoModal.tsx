@@ -23,20 +23,20 @@ export const TransferInfoModal: React.FC<ITransferInfoModal> = ({
   isVisible,
   onClose,
 }) => {
-  const { getExitInfoFromHash } = useTransaction()!;
+  const { getExitInfoFromHash, gasTokenSwapData } = useTransaction()!;
   const { networks } = useChains()!;
 
   const { execute: getExitInfo } = useAsync(getExitInfoFromHash);
 
   const fromChainExplorerUrl = `${
     networks?.find(
-      network => network.chainId === transferRecord.fromChain.chainId,
+      (network) => network.chainId === transferRecord.fromChain.chainId
     )!.explorerUrl
   }/tx/${transferRecord.depositHash}`;
 
   const toChainExplorerUrl = `${
     networks?.find(
-      network => network.chainId === transferRecord.toChain.chainId,
+      (network) => network.chainId === transferRecord.toChain.chainId
     )!.explorerUrl
   }/tx/${transferRecord.exitHash}`;
 
@@ -122,6 +122,15 @@ export const TransferInfoModal: React.FC<ITransferInfoModal> = ({
                 {transferRecord.transactionFee} {transferRecord.token.symbol}
               </span>
             </li>
+            {gasTokenSwapData ? (
+              <li className="mt-1 flex justify-between">
+                <span className="text-gray-500">Gas token worth</span>
+                <span className="text-gray-700">
+                  {gasTokenSwapData.gasTokenAmountInDepositCurrency}{' '}
+                  {transferRecord.token.symbol}
+                </span>
+              </li>
+            ) : null}
           </ul>
         </article>
       </div>
