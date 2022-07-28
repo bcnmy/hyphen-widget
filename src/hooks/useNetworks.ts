@@ -1,7 +1,9 @@
-import { config } from "config";
-import { useQuery } from "react-query";
+import { config } from 'config';
+import { useQuery } from 'react-query';
 
 export type Network = {
+  bridgeOpen: boolean;
+  poolsOpen: boolean;
   enabled: boolean;
   nativeToken: string;
   nativeDecimal: number;
@@ -67,7 +69,14 @@ function fetchNetworks(
     .then((res) => res.json())
     .then((data) =>
       data.message
-        .filter((network: Network) => network.enabled)
+        .filter(
+          // Filter out networks which are not enabled and
+          // have neither of bridgeOpen or poolsOpen booleans set to true.
+          // When both bridgeOpen & poolsOpen booleans are false
+          // the network is hidden across the whole app.
+          (network: Network) =>
+            network.enabled && (network.bridgeOpen || network.poolsOpen)
+        )
         .map((network: Network) => {
           return {
             ...network,
@@ -83,8 +92,8 @@ function fetchNetworks(
     );
 }
 
-function useNetworks(env = "", apiKeys = {}, rpcUrls = {}) {
-  return useQuery<Network[], Error>(["networks", env, apiKeys, rpcUrls], () =>
+function useNetworks(env = '', apiKeys = {}, rpcUrls = {}) {
+  return useQuery<Network[], Error>(['networks', env, apiKeys, rpcUrls], () =>
     fetchNetworks(env, apiKeys, rpcUrls)
   );
 }
