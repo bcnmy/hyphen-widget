@@ -12,6 +12,7 @@ export type Token = {
     decimal: number;
     symbol: string;
     chainColor: string;
+    allowGasSwap: boolean;
     isSupported?: boolean;
     metaTransactionData: {
       supportsEip2612: boolean;

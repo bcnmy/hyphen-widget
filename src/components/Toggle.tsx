@@ -1,15 +1,16 @@
 import { Switch } from "@headlessui/react";
-import { useState } from "react";
 
 interface IToggleProps {
   label: string;
   enabled: boolean;
+  disabled?: boolean;
   onToggle: (enabled: boolean) => void;
 }
 
 export const Toggle: React.FC<IToggleProps> = ({
   label,
   enabled,
+  disabled,
   onToggle,
 }) => {
   return (
@@ -17,10 +18,12 @@ export const Toggle: React.FC<IToggleProps> = ({
       <div className="flex flex-col">
         <Switch
           checked={enabled}
+          disabled={disabled}
           onChange={onToggle}
           className={`${
             enabled ? "bg-hyphen-purple" : "bg-hyphen-purple-dark/20"
-          }
+          } 
+          ${disabled ? "cursor-not-allowed" : "cursor-pointer"}
           relative inline-flex items-center flex-shrink-0 h-[24px] w-[40px] border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
         >
           <span className="sr-only">{label}</span>
