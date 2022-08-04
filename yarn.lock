@@ -1094,10 +1094,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@biconomy/hyphen@^1.1.4":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@biconomy/hyphen/-/hyphen-1.1.4.tgz#a20d0858513657b371f81402bda725b32d8d13c9"
-  integrity sha512-5ciW92aCeX+MdfG+LhlxSR0WzZ5bQGnQiJ4DJ2JdcPpKUkzhluM8C2l79E/CvFNpdikjRXjNnc8Ulqe689YrOg==
+"@biconomy/hyphen@^1.1.6":
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/@biconomy/hyphen/-/hyphen-1.1.6.tgz#f0a18a94605eb615b6b24fc4a4101f5e6442f8b3"
+  integrity sha512-xyDbqu7/j4U1AeTeWOmrR+eH3TArtOiYShPXlHonM+HPTN93T1AmnTA0Q1uOIvUa3sFmkHa6PMRLZYmEpCH9bA==
   dependencies:
     "@biconomy/mexa" "^2.0.24"
     cross-fetch "^3.1.5"
@@ -6636,9 +6636,9 @@ is-core-module@^2.2.0, is-core-module@^2.8.0, is-core-module@^2.8.1:
     has "^1.0.3"
 
 is-core-module@^2.9.0:
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/is-core-module/-/is-core-module-2.9.0.tgz#e1c34429cd51c6dd9e09e0799e396e27b19a9c69"
-  integrity sha512-+5FPy5PnwmO3lvfMb0AsoPaBG+5KHUI0wYFXOtYPnVVVspTFUuMZNfNaNVRt3FZadstu2c8x23vykRW/NBoU6A==
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/is-core-module/-/is-core-module-2.10.0.tgz#9012ede0a91c69587e647514e1d5277019e728ed"
+  integrity sha512-Erxj2n/LDAZ7H8WNJXd9tw38GYM3dv8rk8Zcs+jJuxYTW7sozH+SS8NtrSjVL1/vpLvWi1hxy96IzjJ3EHTJJg==
   dependencies:
     has "^1.0.3"
 
