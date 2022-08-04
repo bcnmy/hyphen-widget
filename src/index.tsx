@@ -1,13 +1,13 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-import "react-loading-skeleton/dist/skeleton.css";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import 'react-loading-skeleton/dist/skeleton.css';
 
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-import Widget from "./widget/Widget";
-import AppProviders from "./context";
+import Widget from './widget/Widget';
+import AppProviders from './context';
 
 declare global {
   interface Window {
@@ -29,6 +29,7 @@ export interface HyphenWidgetOptions {
   showWidget?: boolean;
   showCloseButton?: boolean;
   showChangeAddress?: boolean;
+  showGasTokenSwap?: boolean;
   allowedSourceChains?: number[];
   allowedDestinationChains?: number[];
   allowedTokens?: string[];
@@ -69,7 +70,7 @@ class HyphenWidget extends React.Component<
   }
 
   open() {
-    console.log("opening widget!");
+    console.log('opening widget!');
     this.setState((prevState) => ({
       ...prevState,
       showWidget: true,
@@ -77,7 +78,7 @@ class HyphenWidget extends React.Component<
   }
 
   close() {
-    console.log("closing widget!");
+    console.log('closing widget!');
     this.setState((prevState) => ({
       ...prevState,
       showWidget: false,
@@ -100,12 +101,12 @@ class HyphenWidget extends React.Component<
   }
 
   setElement(element: Element) {
-    if (this.element) throw new Error("Cannot override element ref");
+    if (this.element) throw new Error('Cannot override element ref');
     this.element = element;
   }
 
   destroy() {
-    if (!this.element) throw new Error("Element ref not found");
+    if (!this.element) throw new Error('Element ref not found');
     ReactDOM.unmountComponentAtNode(this.element);
   }
 
@@ -114,7 +115,7 @@ class HyphenWidget extends React.Component<
 
     if (!options.tag) {
       throw new Error(
-        "Tag is a mandatory field, please specify it to use the widget!"
+        'Tag is a mandatory field, please specify it to use the widget!'
       );
     }
 

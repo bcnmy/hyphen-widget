@@ -1,30 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-import { useWalletProvider } from "../context/WalletProvider";
-import { useChains } from "../context/Chains";
+import { useChains } from '../context/Chains';
+import { useWalletProvider } from '../context/WalletProvider';
 
-import NetworkSelectors from "./components/NetworkSelectors";
-import TokenSelector from "./components/TokenSelector";
-import AmountInput from "./components/AmountInput";
-import TransactionFee from "./components/TransactionFee";
-import ChangeReceiverAddress from "./components/ChangeReceiverAddress";
-import CallToAction from "./components/CallToAction";
-import { Toggle } from "../components/Toggle";
-import useModal from "../hooks/useModal";
-import ApprovalModal from "./components/ApprovalModal";
-import { useTokenApproval } from "../context/TokenApproval";
-import ErrorModal from "./components/ErrorModal";
-import TransferModal from "./components/TransferModal";
-import { useTransaction } from "../context/Transaction";
-import { useBiconomy } from "../context/Biconomy";
-import CustomTooltip from "../components/CustomTooltip";
-import { HiInformationCircle } from "react-icons/hi";
-import { HyphenWidgetOptions } from "../";
-import { useToken } from "../context/Token";
-import { useHyphen } from "../context/Hyphen";
-import HyphenLogoDark from "assets/images/hyphen-logo-dark.svg";
-import WidgetBranding from "assets/images/widget-branding.svg";
-import { IoMdClose } from "react-icons/io";
+import HyphenLogoDark from 'assets/images/hyphen-logo-dark.svg';
+import WidgetBranding from 'assets/images/widget-branding.svg';
+import { HiInformationCircle } from 'react-icons/hi';
+import { IoMdClose } from 'react-icons/io';
+import { HyphenWidgetOptions } from '../';
+import CustomTooltip from '../components/CustomTooltip';
+import { Toggle } from '../components/Toggle';
+import { useBiconomy } from '../context/Biconomy';
+import { useHyphen } from '../context/Hyphen';
+import { useToken } from '../context/Token';
+import { useTokenApproval } from '../context/TokenApproval';
+import { useTransaction } from '../context/Transaction';
+import useModal from '../hooks/useModal';
+import AmountInput from './components/AmountInput';
+import ApprovalModal from './components/ApprovalModal';
+import CallToAction from './components/CallToAction';
+import ChangeReceiverAddress from './components/ChangeReceiverAddress';
+import ErrorModal from './components/ErrorModal';
+import GasTokenSwap from './components/GasTokenSwap';
+import NetworkSelectors from './components/NetworkSelectors';
+import TokenSelector from './components/TokenSelector';
+import TransactionFee from './components/TransactionFee';
+import TransferModal from './components/TransferModal';
 
 interface IWidgetProps {
   closeWidget: () => void;
@@ -109,14 +110,14 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
         <TransferModal
           isVisible={isTransferModalVisible}
           onClose={() => {
-            changeTransferAmountInputValue("");
+            changeTransferAmountInputValue('');
             hideTransferlModal();
           }}
           transferModalData={transferModalData}
         />
       ) : null}
 
-      <ErrorModal error={executeApproveTokenError} title={"Approval Error"} />
+      <ErrorModal error={executeApproveTokenError} title={'Approval Error'} />
       <div className="max-w-xl">
         <div className="flex flex-col gap-2 rounded-10 bg-white p-6 shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
           <div className="mb-2 flex items-center justify-between">
@@ -145,8 +146,8 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
                 <div
                   className={
                     !isBiconomyAllowed
-                      ? "flex items-center cursor-not-allowed opacity-50"
-                      : "flex items-center"
+                      ? 'flex items-center cursor-not-allowed opacity-50'
+                      : 'flex items-center'
                   }
                   data-tip
                   data-for="whyGaslessDisabled"
@@ -201,6 +202,8 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
           </div>
 
           {props.showChangeAddress ? <ChangeReceiverAddress /> : null}
+
+          {props.showGasTokenSwap ? <GasTokenSwap /> : null}
 
           <CallToAction
             onApproveButtonClick={showApprovalModal}

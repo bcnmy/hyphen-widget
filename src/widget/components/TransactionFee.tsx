@@ -14,6 +14,7 @@ interface ITransactionFeeProps {}
 
 const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
   const {
+    gasTokenSwapData,
     transferAmountInputValue,
     transactionFee,
     fetchTransactionFeeStatus,
@@ -26,7 +27,10 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
 
   const totalFee = transactionFee
     ? Number.parseFloat(transactionFee.lpFeeProcessedString) +
-      Number.parseFloat(transactionFee.transactionFeeProcessedString) -
+      Number.parseFloat(transactionFee.transactionFeeProcessedString) +
+      Number.parseFloat(
+        gasTokenSwapData?.gasTokenAmountInDepositCurrency || "0"
+      ) -
       Number.parseFloat(transactionFee.rewardAmountString || "0")
     : undefined;
 
@@ -116,6 +120,24 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
                           />
                         )}
                       </div>
+                      {gasTokenSwapData &&
+                      gasTokenSwapData?.gasTokenAmountInDepositCurrency ? (
+                        <div>
+                          <span>Gas token worth: </span>
+                          {gasTokenSwapData ? (
+                            <>{`${gasTokenSwapData?.gasTokenAmountInDepositCurrency.toFixed(
+                              5
+                            )} ${selectedToken?.symbol}`}</>
+                          ) : (
+                            <Skeleton
+                              baseColor="#ffffff10"
+                              enableAnimation
+                              highlightColor="#615ccd05"
+                              className="!w-12"
+                            />
+                          )}
+                        </div>
+                      ) : null}
                     </CustomTooltip>
                   ) : null}
                   Total fee
@@ -123,7 +145,7 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
                 <div className="text-right font-mono">
                   {fetchTransactionFeeStatus === Status.SUCCESS &&
                   transactionFee ? (
-                    <>{`${totalFee?.toFixed(3)} ${selectedToken?.symbol}`}</>
+                    <>{`${totalFee?.toFixed(5)} ${selectedToken?.symbol}`}</>
                   ) : (
                     <Skeleton
                       baseColor="#ffffff10"

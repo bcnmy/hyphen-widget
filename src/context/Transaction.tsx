@@ -1,5 +1,5 @@
-import AwesomeDebouncePromise from "awesome-debounce-promise";
-import { BigNumber, ethers } from "ethers";
+import AwesomeDebouncePromise from 'awesome-debounce-promise';
+import { BigNumber, ethers } from 'ethers';
 import {
   createContext,
   FormEvent,
@@ -8,30 +8,31 @@ import {
   useEffect,
   useMemo,
   useState,
-} from "react";
+} from 'react';
 
-import lpmanagerABI from "abis/LiquidityPools.abi.json";
+import lpmanagerABI from 'abis/LiquidityPools.abi.json';
 
 // @ts-ignore
-import { RESPONSE_CODES } from "@biconomy/hyphen";
+import { RESPONSE_CODES } from '@biconomy/hyphen';
 
 import {
   BASE_DIVISOR,
   DEFAULT_FIXED_DECIMAL_POINT,
   NATIVE_ADDRESS,
-} from "config/constants";
-import { useChains } from "./Chains";
-import { useHyphen } from "./Hyphen";
-import { useToken } from "./Token";
-import { useTokenApproval } from "./TokenApproval";
-import config from "config";
-import toFixed from "utils/toFixed";
-import formatRawEthValue from "utils/formatRawEthValue";
-import useAsync, { Status } from "hooks/useLoading";
-import { useWalletProvider } from "./WalletProvider";
-import { useBiconomy } from "./Biconomy";
-import { useNotifications } from "./Notifications";
-import useLiquidityPools from "hooks/contracts/useLiquidityPools";
+} from 'config/constants';
+import { useChains } from './Chains';
+import { useHyphen } from './Hyphen';
+import { useToken } from './Token';
+import { useTokenApproval } from './TokenApproval';
+import config from 'config';
+import toFixed from 'utils/toFixed';
+import formatRawEthValue from 'utils/formatRawEthValue';
+import useAsync, { Status } from 'hooks/useLoading';
+import { useWalletProvider } from './WalletProvider';
+import { useBiconomy } from './Biconomy';
+import { useNotifications } from './Notifications';
+import useLiquidityPools from 'hooks/contracts/useLiquidityPools';
+import { useQuery } from 'react-query';
 
 export enum ValidationErrors {
   INVALID_AMOUNT,
@@ -77,6 +78,11 @@ interface ITransactionContext {
   setExitHash: (exitHash: string | undefined) => void;
   exitHash: string | undefined;
   getExitInfoFromHash: (exitHash: string) => Promise<string>;
+  enableGasTokenSwap: boolean;
+  setEnableGasTokenSwap: (enableGasTokenSwap: boolean) => void;
+  gasTokenSwapData: any;
+  isGasTokenSwapDataLoading: boolean;
+  removeGasTokenSwapData: () => void;
 }
 
 const TransactionContext = createContext<ITransactionContext | null>(null);
@@ -118,15 +124,66 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
   const [errors, setErrors] = useState<ValidationErrors[]>([]);
 
   const [transferAmountInputValue, setTransferAmountInputValue] =
-    useState<string>("");
+    useState<string>('');
 
   const [receiver, setReceiver] = useState<{
     receiverAddress: string;
     isReceiverValid: boolean;
   }>({
-    receiverAddress: "",
+    receiverAddress: '',
     isReceiverValid: false,
   });
+
+  const [enableGasTokenSwap, setEnableGasTokenSwap] = useState<boolean>(false);
+
+  const {
+    data: gasTokenSwapData,
+    isLoading: isGasTokenSwapDataLoading,
+    remove: removeGasTokenSwapData,
+  } = useQuery(
+    [
+      'gasTokenSwapData',
+      fromChain?.chainId,
+      toChain?.chainId,
+      selectedToken?.symbol,
+      transferAmountInputValue,
+    ],
+    () => {
+      if (
+        !fromChain ||
+        !toChain ||
+        !selectedToken ||
+        !selectedToken[fromChain.chainId] ||
+        !selectedToken[toChain.chainId] ||
+        !transferAmountInputValue
+      ) {
+        return;
+      }
+
+      const baseURL = config.getBaseURL(props.env);
+      return fetch(
+        `${baseURL}/api/v1/insta-exit/gas-token-distribution?fromChainId=${
+          fromChain.chainId
+        }&fromChainTokenAddress=${
+          selectedToken[fromChain.chainId].address
+        }&gasTokenAmount=${
+          toChain.gasTokenSwap.gasTokenAmount
+        }&amount=${ethers.utils.parseUnits(
+          transferAmountInputValue,
+          selectedToken[toChain.chainId].decimal
+        )}&toChainId=${toChain.chainId}`
+      ).then((res) => res.json());
+    },
+    {
+      enabled:
+        enableGasTokenSwap &&
+        !!fromChain &&
+        !!toChain &&
+        !!selectedToken &&
+        !!transferAmountInputValue,
+      cacheTime: 0,
+    }
+  );
 
   useEffect(() => {
     if (accounts) {
@@ -137,9 +194,10 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
     }
   }, [accounts]);
 
-  // reset the input after conditions change
+  // reset the input and gas token swap after conditions change
   useEffect(() => {
-    setTransferAmountInputValue("");
+    setTransferAmountInputValue('');
+    setEnableGasTokenSwap(false);
   }, [fromChain, toChain, selectedToken]);
 
   const transferAmount = useMemo(
@@ -162,58 +220,15 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
     executeApproveTokenStatus,
   ]);
 
-  // useEffect(() => {
-  //   console.log({
-  //     fetchSelectedTokenApprovalStatus,
-  //     fetchSelectedTokenApprovalValue,
-  //     fetchSelectedTokenApprovalError,
-  //   });
-  // }, [
-  //   fetchSelectedTokenApprovalStatus,
-  //   fetchSelectedTokenApprovalValue,
-  //   fetchSelectedTokenApprovalError,
-  // ]);
-
-  // let { data: transferFee, isLoading: isTransferFeeLoading } = useQuery(
-  //   ['transferFeeByToken', selectedToken, toChain, transferAmount],
-  //   async () => {
-  //     if (!selectedToken || !toChain || !transferAmount) {
-  //       return;
-  //     }
-  //     let tokenAddress = selectedToken[toChain.chainId].address;
-  //     let tokenDecimal = selectedToken[toChain.chainId].decimal;
-  //     let rawTransferAmount = transferAmount * Math.pow(10, tokenDecimal);
-  //     return await getTransferFee(tokenAddress, rawTransferAmount.toString());
-  //   },
-  //   {
-  //     // Execute only when tokenAddress is available.
-  //     enabled: !!(selectedToken && toChain && transferAmount),
-  //   },
-  // );
-
-  // let { data: rewardAmount } = useQuery(
-  //   ['rewardAmountByToken', selectedToken, fromChain, transferAmount],
-  //   () => {
-  //     if (!selectedToken || !fromChain || !transferAmount) {
-  //       return;
-  //     }
-  //     let tokenAddress = selectedToken[fromChain.chainId].address;
-  //     let tokenDecimal = selectedToken[fromChain.chainId].decimal;
-
-  //     let rawTransferAmount = transferAmount * Math.pow(10, tokenDecimal);
-  //     return getRewardAmount(tokenAddress, rawTransferAmount.toString());
-  //   },
-  //   {
-  //     // Execute only when tokenAddress is available.
-  //     enabled: !!(selectedToken && fromChain && transferAmount),
-  //   },
-  // );
-
   const changeTransferAmountInputValue = (amount: string) => {
     const regExp = /^((\d+)?(\.\d{0,3})?)$/;
     // match any number of digits, and after that also optionally match, one decimal point followed by any number of digits
     // having the string input value and number value seperate allows for the validation logic to run without intefering each other
     let status = regExp.test(amount);
+
+    if (amount === '') {
+      setEnableGasTokenSwap(false);
+    }
 
     if (status) {
       // validation must run in the same function where transferAmount is being changed
@@ -227,17 +242,17 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
   const calculateTransactionFee = useCallback(async () => {
     try {
       const fetchOptions = {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json;charset=utf-8",
+          'Content-Type': 'application/json;charset=utf-8',
         },
       };
 
       if (!fromChain || !selectedToken || !toChain || !transferAmount)
-        throw new Error("App not initialised");
+        throw new Error('App not initialised');
 
-      if (isNaN(transferAmount)) throw new Error("Transfer amount is invalid");
-      console.log("calculate fee for amount", transferAmount);
+      if (isNaN(transferAmount)) throw new Error('Transfer amount is invalid');
+      console.log('calculate fee for amount', transferAmount);
 
       let fixedDecimalPoint = DEFAULT_FIXED_DECIMAL_POINT;
       if (!selectedToken || !toChain || !transferAmount) {
@@ -270,7 +285,7 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
       lpFeeProcessedString = lpFeeAmountRaw.toFixed(fixedDecimalPoint);
 
       let fetchResponse = await getTokenGasPriceDebounced(
-        props.env || "staging",
+        props.env || 'staging',
         selectedToken[toChain.chainId].address,
         toChain.chainId,
         fetchOptions
@@ -304,7 +319,7 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
 
       if (!tokenGasPrice) {
         throw new Error(
-          "Error while getting selectedTokenConfig and tokenGasPrice from hyphen API"
+          'Error while getting selectedTokenConfig and tokenGasPrice from hyphen API'
         );
       }
 
@@ -327,7 +342,7 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
 
       if (!overhead || !decimal) {
         throw new Error(
-          "Error while getting token overhead gas and decimal from config"
+          'Error while getting token overhead gas and decimal from config'
         );
       }
 
@@ -352,6 +367,12 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
         amountToGet += parseFloat(rewardAmount);
       }
 
+      if (gasTokenSwapData) {
+        amountToGet -= parseFloat(
+          gasTokenSwapData?.gasTokenAmountInDepositCurrency
+        );
+      }
+
       let amountToGetProcessedString = toFixed(
         amountToGet.toString(),
         fixedDecimalPoint
@@ -361,7 +382,7 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
         transferFee.toString() / BASE_DIVISOR
       ).toFixed(3);
 
-      if (amountToGet <= 0) throw new Error("Amount too low");
+      if (amountToGet <= 0) throw new Error('Amount too low');
 
       return {
         rewardAmountString,
@@ -375,6 +396,7 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
     }
   }, [
     fromChain,
+    gasTokenSwapData,
     getRewardAmount,
     getTransferFee,
     props.env,
@@ -453,17 +475,17 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
 
   const preDepositCheck = useCallback(async () => {
     if (!transferAmount || errors.length > 0) {
-      throw new Error("Invalid transfer amount");
+      throw new Error('Invalid transfer amount');
     }
     if (!fromChain || !toChain || !selectedToken) {
-      throw new Error("Prerequisites missing");
+      throw new Error('Prerequisites missing');
     }
     if (fromChain.chainId === toChain.chainId) {
-      throw new Error("Same chain transfers are not allowed, please refresh.");
+      throw new Error('Same chain transfers are not allowed, please refresh.');
     }
 
-    if (!accounts || !accounts[0]) throw new Error("Wallet not connected");
-    if (!hyphen) throw new Error("Hyphen not initialized");
+    if (!accounts || !accounts[0]) throw new Error('Wallet not connected');
+    if (!hyphen) throw new Error('Hyphen not initialized');
 
     let tokenDecimals;
 
@@ -480,7 +502,7 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
       tokenDecimals
     );
 
-    console.log("Total amount to  be transfered: ", amount.toString());
+    console.log('Total amount to  be transfered: ', amount.toString());
 
     let transferStatus = await hyphen.depositManager.preDepositStatus({
       tokenAddress: selectedToken[fromChain.chainId].address,
@@ -491,11 +513,11 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
     });
 
     if (transferStatus.code === RESPONSE_CODES.ALLOWANCE_NOT_GIVEN) {
-      throw new Error("Approval not given for token");
+      throw new Error('Approval not given for token');
     }
 
     if (transferStatus.code === RESPONSE_CODES.UNSUPPORTED_NETWORK) {
-      throw new Error("Target chain id is not supported yet");
+      throw new Error('Target chain id is not supported yet');
     }
 
     if (transferStatus.code === RESPONSE_CODES.NO_LIQUIDITY) {
@@ -505,7 +527,7 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
     }
 
     if (transferStatus.code === RESPONSE_CODES.UNSUPPORTED_TOKEN) {
-      throw new Error("Requested token is not supported yet");
+      throw new Error('Requested token is not supported yet');
     }
 
     if (transferStatus.code !== RESPONSE_CODES.OK) {
@@ -536,12 +558,12 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
     async (receiverAddress) => {
       // showFeedbackMessage("Checking approvals and initiating deposit transaction");
       if (!executePreDepositCheckValue?.depositContract)
-        throw new Error("Pre deposit check not completed");
+        throw new Error('Pre deposit check not completed');
       if (!fromChain || !toChain || !accounts?.[0] || !selectedToken)
-        throw new Error("Prerequisites missing from chain");
+        throw new Error('Prerequisites missing from chain');
       if (fromChain.chainId === toChain.chainId) {
         throw new Error(
-          "Same chain transfers are not allowed, please refresh."
+          'Same chain transfers are not allowed, please refresh.'
         );
       }
 
@@ -555,23 +577,51 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
         );
       }
 
-      let depositTx = await hyphen.depositManager.deposit({
-        sender: accounts[0],
-        receiver: receiverAddress,
-        tokenAddress: selectedToken[fromChain.chainId].address,
-        depositContractAddress: executePreDepositCheckValue.depositContract,
-        amount: ethers.utils
-          .parseUnits(transferAmount.toString(), tokenDecimals)
-          .toString(),
-        fromChainId: fromChain.chainId,
-        toChainId: toChain.chainId,
-        useBiconomy: isBiconomyEnabled,
-        tag: props.tag,
-      });
+      let depositTx;
+      if (enableGasTokenSwap) {
+        depositTx = await hyphen.depositManager.depositAndSwap({
+          sender: accounts[0],
+          receiver: receiverAddress,
+          tokenAddress: selectedToken[fromChain.chainId].address,
+          depositContractAddress: executePreDepositCheckValue.depositContract,
+          amount: ethers.utils
+            .parseUnits(transferAmount.toString(), tokenDecimals)
+            .toString(),
+          fromChainId: fromChain.chainId,
+          toChainId: toChain.chainId,
+          useBiconomy: isBiconomyEnabled,
+          tag: props.tag,
+          swapRequest: [
+            {
+              tokenAddress: toChain.wrappedNativeTokenAddress,
+              percentage: Math.round(
+                gasTokenSwapData?.gasTokenPercentage * BASE_DIVISOR
+              ).toString(),
+              amount: 0,
+              operation: 0,
+              path: '0x0000000000000000000000000000000000000000',
+            },
+          ],
+        });
+      } else {
+        depositTx = await hyphen.depositManager.deposit({
+          sender: accounts[0],
+          receiver: receiverAddress,
+          tokenAddress: selectedToken[fromChain.chainId].address,
+          depositContractAddress: executePreDepositCheckValue.depositContract,
+          amount: ethers.utils
+            .parseUnits(transferAmount.toString(), tokenDecimals)
+            .toString(),
+          fromChainId: fromChain.chainId,
+          toChainId: toChain.chainId,
+          useBiconomy: isBiconomyEnabled,
+          tag: props.tag,
+        });
+      }
 
       addTxNotification(
         depositTx,
-        "Deposit",
+        'Deposit',
         `${fromChain.explorerUrl}/tx/${depositTx.hash}`
       );
       return depositTx;
@@ -580,16 +630,18 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
       // await depositTx.wait(1);
     },
     [
-      accounts,
       executePreDepositCheckValue?.depositContract,
       fromChain,
-      hyphen,
-      isBiconomyEnabled,
-      selectedToken,
       toChain,
-      transferAmount,
+      accounts,
+      selectedToken,
+      enableGasTokenSwap,
       addTxNotification,
+      hyphen,
+      transferAmount,
+      isBiconomyEnabled,
       props.tag,
+      gasTokenSwapData?.gasTokenPercentage,
     ]
   );
 
@@ -602,18 +654,18 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
 
   const checkReceival = useCallback(async () => {
     if (!executeDepositValue?.hash)
-      throw new Error("Deposit transaction unsuccesful");
+      throw new Error('Deposit transaction unsuccesful');
 
     const data = await hyphen.depositManager.checkDepositStatus({
       depositHash: executeDepositValue.hash,
       fromChainId: fromChain?.chainId,
     });
-    if (data.statusCode === 1 && data.exitHash && data.exitHash !== "") {
+    if (data.statusCode === 1 && data.exitHash && data.exitHash !== '') {
       // Exit hash found but transaction is not yet confirmed
       console.log(`Exit hash on chainId ${data.toChainId} is ${data.exitHash}`);
       return data.exitHash;
-    } else if (data.statusCode === 2 && data.exitHash && data.exitHash !== "") {
-      console.log("Funds transfer successful");
+    } else if (data.statusCode === 2 && data.exitHash && data.exitHash !== '') {
+      console.log('Funds transfer successful');
       console.log(`Exit hash on chainId ${data.toChainId} is ${data.exitHash}`);
       return data.exitHash;
     } else {
@@ -624,15 +676,15 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
   const getExitInfoFromHash = useCallback(
     async (hash) => {
       if (!toChainRpcUrlProvider || !toChain || !fromChain || !selectedToken)
-        throw new Error("Prerequisites missing");
+        throw new Error('Prerequisites missing');
       let receipt;
       try {
         receipt = await toChainRpcUrlProvider.getTransactionReceipt(hash);
       } catch (e) {
-        throw new Error("Cannot get transaction");
+        throw new Error('Cannot get transaction');
       }
 
-      if (!receipt?.logs) throw new Error("No error logs");
+      if (!receipt?.logs) throw new Error('No error logs');
 
       let lpManagerInterface = new ethers.utils.Interface(lpmanagerABI);
 
@@ -641,10 +693,10 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
       );
       try {
         if (!tokenReceipt) {
-          throw new Error("No valid receipt log data");
+          throw new Error('No valid receipt log data');
         }
         const data = lpManagerInterface.parseLog(tokenReceipt);
-        if (!data?.args?.transferredAmount) throw new Error("Invalid log data");
+        if (!data?.args?.transferredAmount) throw new Error('Invalid log data');
         let amount = data.args.transferredAmount;
         let processedAmount = ethers.utils.formatUnits(
           amount,
@@ -654,7 +706,7 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
         return processedAmount;
       } catch (error) {
         console.log(error);
-        throw new Error("Error while filtering and parsing logs");
+        throw new Error('Error while filtering and parsing logs');
       }
     },
     [fromChain, toChain, selectedToken, toChainRpcUrlProvider]
@@ -696,6 +748,11 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
         setExitHash,
         exitHash,
         getExitInfoFromHash,
+        enableGasTokenSwap,
+        setEnableGasTokenSwap,
+        gasTokenSwapData,
+        isGasTokenSwapDataLoading,
+        removeGasTokenSwapData,
       }}
       {...props}
     />

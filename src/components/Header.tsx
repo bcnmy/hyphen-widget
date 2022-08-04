@@ -1,29 +1,20 @@
-import { Link, NavLink, useLocation } from 'react-router-dom';
-import { useWalletProvider } from 'context/WalletProvider';
-import { HiOutlineArrowSmRight } from 'react-icons/hi';
-import NetworkSelector from './NetworkSelector';
-import { ENV } from 'types/environment';
+import { useWalletProvider } from "context/WalletProvider";
+import { HiOutlineArrowSmRight } from "react-icons/hi";
+import { Link, NavLink } from "react-router-dom";
+import { ENV } from "types/environment";
 
 interface IHeaderProps {
   showUserInfoModal: () => void;
 }
 
 function Header({ showUserInfoModal }: IHeaderProps) {
-  const location = useLocation();
   const { accounts, connect, isLoggedIn } = useWalletProvider()!;
   const userAddress = accounts?.[0];
 
-  const showNetworkSelector = [
-    '/pools',
-    '/pools/',
-    '/farms',
-    '/farms/',
-  ].includes(location.pathname);
-
   const statsUrl =
     process.env.REACT_APP_ENV === ENV.production
-      ? 'https://hyphen-stats.biconomy.io/'
-      : 'https://hyphen-stats-staging.biconomy.io/';
+      ? "https://hyphen-stats.biconomy.io/"
+      : "https://hyphen-stats-staging.biconomy.io/";
 
   return (
     <header className="sticky top-0 z-20 flex w-full items-center justify-center bg-[#2e2c62] text-white">
@@ -40,16 +31,16 @@ function Header({ showUserInfoModal }: IHeaderProps) {
             <span
               className={
                 isActive
-                  ? 'relative'
-                  : 'relative text-gray-400 hover:text-white'
+                  ? "relative"
+                  : "relative text-gray-400 hover:text-white"
               }
             >
               Bridge
               <span
                 className={
                   isActive
-                    ? 'absolute -inset-1 top-[33px] block h-[5px] rounded-t-full bg-white'
-                    : 'hidden'
+                    ? "absolute -inset-1 top-[33px] block h-[5px] rounded-t-full bg-white"
+                    : "hidden"
                 }
                 aria-hidden="true"
               ></span>
@@ -58,22 +49,22 @@ function Header({ showUserInfoModal }: IHeaderProps) {
         </NavLink>
         <NavLink
           to="/pools"
-          className={({ isActive }) => (isActive ? 'relative' : 'relative')}
+          className={({ isActive }) => (isActive ? "relative" : "relative")}
         >
           {({ isActive }) => (
             <span
               className={
                 isActive
-                  ? 'relative'
-                  : 'relative text-gray-400 hover:text-white'
+                  ? "relative"
+                  : "relative text-gray-400 hover:text-white"
               }
             >
               Pools
               <span
                 className={
                   isActive
-                    ? 'absolute -inset-1 top-[33px] block h-[5px] rounded-t-full bg-white'
-                    : 'hidden'
+                    ? "absolute -inset-1 top-[33px] block h-[5px] rounded-t-full bg-white"
+                    : "hidden"
                 }
                 aria-hidden="true"
               ></span>
@@ -82,22 +73,22 @@ function Header({ showUserInfoModal }: IHeaderProps) {
         </NavLink>
         <NavLink
           to="/farms"
-          className={({ isActive }) => (isActive ? 'relative' : 'relative')}
+          className={({ isActive }) => (isActive ? "relative" : "relative")}
         >
           {({ isActive }) => (
             <span
               className={
                 isActive
-                  ? 'relative'
-                  : 'relative text-gray-400 hover:text-white'
+                  ? "relative"
+                  : "relative text-gray-400 hover:text-white"
               }
             >
               Farms
               <span
                 className={
                   isActive
-                    ? 'absolute -inset-1 top-[33px] block h-[5px] rounded-t-full bg-white'
-                    : 'hidden'
+                    ? "absolute -inset-1 top-[33px] block h-[5px] rounded-t-full bg-white"
+                    : "hidden"
                 }
                 aria-hidden="true"
               ></span>
@@ -115,14 +106,13 @@ function Header({ showUserInfoModal }: IHeaderProps) {
         </a>
       </nav>
       <div className="absolute right-6 flex items-center">
-        {showNetworkSelector ? <NetworkSelector /> : null}
         <button
           className="font-base ml-2.5 cursor-pointer rounded-xl bg-hyphen-purple bg-opacity-50 px-4 py-1 font-mono text-white"
           onClick={isLoggedIn ? showUserInfoModal : connect}
         >
           {isLoggedIn
             ? `${userAddress?.slice(0, 6)}...${userAddress?.slice(-6)}`
-            : 'Connect Wallet'}
+            : "Connect Wallet"}
         </button>
       </div>
     </header>
