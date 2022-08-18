@@ -155,7 +155,7 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
             fetchSelectedTokenApprovalValue === true &&
             enableGasTokenSwap &&
             gasTokenSwapData &&
-            (gasTokenSwapData.gasTokenPercentage < 1 ||
+            (gasTokenSwapData.gasTokenPercentage === 0 ||
               gasTokenSwapData.gasTokenPercentage > 80) && (
               <>
                 <span data-tip data-for="whyTransferDisabled">

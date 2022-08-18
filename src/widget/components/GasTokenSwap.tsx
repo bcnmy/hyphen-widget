@@ -58,7 +58,7 @@ function GasTokenSwap() {
   let gasTokenMsg;
   if (
     gasTokenPercentage !== undefined &&
-    (gasTokenPercentage < 1 || gasTokenPercentage > 80)
+    (gasTokenPercentage === 0 || gasTokenPercentage > 80)
   ) {
     gasTokenMsg = `Not enough funds to get ${ethers.utils.formatUnits(
       BigNumber.from(toChain?.gasTokenSwap.gasTokenAmount),
