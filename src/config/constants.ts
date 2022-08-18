@@ -3,7 +3,7 @@ export const DEFAULT_FIXED_DECIMAL_POINT = 5;
 export const LP_FEE_FRACTION = 0.1;
 export const DEPOSIT_TAG = 'HYPHEN_WIDGET';
 export const BASE_DIVISOR = 100000000;
-export const SWAP_BASE_DIVISOR = 100000000;
+export const SWAP_BASE_DIVISOR = 10000000000;
 // export const MANUAL_EXIT_RETRIES = 12;
 
 const CONSTANTS = {
