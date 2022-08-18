@@ -19,6 +19,7 @@ import {
   BASE_DIVISOR,
   DEFAULT_FIXED_DECIMAL_POINT,
   NATIVE_ADDRESS,
+  SWAP_BASE_DIVISOR,
 } from 'config/constants';
 import { useChains } from './Chains';
 import { useHyphen } from './Hyphen';
@@ -595,7 +596,7 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
             {
               tokenAddress: toChain.wrappedNativeTokenAddress,
               percentage: Math.round(
-                gasTokenSwapData?.gasTokenPercentage * BASE_DIVISOR
+                gasTokenSwapData?.gasTokenPercentage * SWAP_BASE_DIVISOR
               ).toString(),
               amount: 0,
               operation: 0,
