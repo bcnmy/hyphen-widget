@@ -1,15 +1,15 @@
-import PrimaryButtonLight from "components/Buttons/PrimaryButtonLight";
-import SecondaryButtonLight from "components/Buttons/SecondaryButtonLight";
-import Spinner from "components/Buttons/Spinner";
-import { useBiconomy } from "context/Biconomy";
-import { useChains } from "context/Chains";
-import { useTokenApproval } from "context/TokenApproval";
-import { useTransaction } from "context/Transaction";
-import { useWalletProvider } from "context/WalletProvider";
-import { Status } from "hooks/useLoading";
-import * as React from "react";
-import switchNetwork from "utils/switchNetwork";
-import CustomTooltip from "components/CustomTooltip";
+import PrimaryButtonLight from 'components/Buttons/PrimaryButtonLight';
+import SecondaryButtonLight from 'components/Buttons/SecondaryButtonLight';
+import Spinner from 'components/Buttons/Spinner';
+import { useBiconomy } from 'context/Biconomy';
+import { useChains } from 'context/Chains';
+import { useTokenApproval } from 'context/TokenApproval';
+import { useTransaction } from 'context/Transaction';
+import { useWalletProvider } from 'context/WalletProvider';
+import { Status } from 'hooks/useLoading';
+import * as React from 'react';
+import switchNetwork from 'utils/switchNetwork';
+import CustomTooltip from 'components/CustomTooltip';
 
 export interface ICallToActionProps {
   onApproveButtonClick: () => void;
@@ -33,6 +33,8 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
   const {
     receiver: { isReceiverValid },
     transactionAmountValidationErrors,
+    enableGasTokenSwap,
+    gasTokenSwapData,
   } = useTransaction()!;
   const { isBiconomyEnabled } = useBiconomy()!;
 
@@ -52,7 +54,7 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
         <PrimaryButtonLight
           onClick={() => {
             if (!walletProvider || !fromChain)
-              throw new Error("Prerequisites missing");
+              throw new Error('Prerequisites missing');
             switchNetwork(walletProvider, fromChain);
           }}
         >
@@ -145,6 +147,22 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
                 </span>
                 <CustomTooltip id="whyTransferDisabled">
                   <span>Approve token to enable token transfers</span>
+                </CustomTooltip>
+              </>
+            )}
+
+          {fetchSelectedTokenApprovalStatus === Status.SUCCESS &&
+            fetchSelectedTokenApprovalValue === true &&
+            enableGasTokenSwap &&
+            gasTokenSwapData &&
+            (gasTokenSwapData.gasTokenPercentage < 1 ||
+              gasTokenSwapData.gasTokenPercentage > 80) && (
+              <>
+                <span data-tip data-for="whyTransferDisabled">
+                  <PrimaryButtonLight disabled>Transfer</PrimaryButtonLight>
+                </span>
+                <CustomTooltip id="whyTransferDisabled">
+                  No enough funds for this transfer
                 </CustomTooltip>
               </>
             )}
