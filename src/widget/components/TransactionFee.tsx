@@ -1,19 +1,20 @@
-import React from "react";
-import Skeleton from "react-loading-skeleton";
-import { HiExclamation, HiInformationCircle } from "react-icons/hi";
-import { Transition } from "react-transition-group";
-import { twMerge } from "tailwind-merge";
-import { useChains } from "context/Chains";
-import { useToken } from "context/Token";
-import { useTransaction } from "context/Transaction";
-import { Status } from "hooks/useLoading";
-import isToChainEthereum from "utils/isToChainEthereum";
-import CustomTooltip from "components/CustomTooltip";
+import React from 'react';
+import Skeleton from 'react-loading-skeleton';
+import { HiExclamation, HiInformationCircle } from 'react-icons/hi';
+import { Transition } from 'react-transition-group';
+import { twMerge } from 'tailwind-merge';
+import { useChains } from 'context/Chains';
+import { useToken } from 'context/Token';
+import { useTransaction } from 'context/Transaction';
+import { Status } from 'hooks/useLoading';
+import isToChainEthereum from 'utils/isToChainEthereum';
+import CustomTooltip from 'components/CustomTooltip';
 
 interface ITransactionFeeProps {}
 
 const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
   const {
+    enableGasTokenSwap,
     gasTokenSwapData,
     transferAmountInputValue,
     transactionFee,
@@ -29,28 +30,31 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
     ? Number.parseFloat(transactionFee.lpFeeProcessedString) +
       Number.parseFloat(transactionFee.transactionFeeProcessedString) +
       Number.parseFloat(
-        gasTokenSwapData?.gasTokenAmountInDepositCurrency || "0"
+        gasTokenSwapData?.gasTokenAmountInDepositCurrency || '0'
       ) -
-      Number.parseFloat(transactionFee.rewardAmountString || "0")
+      Number.parseFloat(transactionFee.rewardAmountString || '0')
     : undefined;
 
+  const showTranasctionFee =
+    (fetchTransactionFeeStatus === Status.PENDING ||
+      fetchTransactionFeeStatus === Status.SUCCESS) &&
+    transferAmountInputValue !== '' &&
+    (!enableGasTokenSwap ||
+      (enableGasTokenSwap &&
+        gasTokenSwapData &&
+        gasTokenSwapData.gasTokenPercentage >= 1 &&
+        gasTokenSwapData.gasTokenPercentage <= 80));
+
   return (
-    <Transition
-      in={
-        (fetchTransactionFeeStatus === Status.PENDING ||
-          fetchTransactionFeeStatus === Status.SUCCESS) &&
-        transferAmountInputValue !== ""
-      }
-      timeout={300}
-    >
+    <Transition in={showTranasctionFee} timeout={300}>
       {(state) => (
         <div
           className={twMerge(
-            "invisible transition-opacity",
-            state === "entering" && "visible opacity-100",
-            state === "entered" && "visible opacity-100",
-            state === "exiting" && "visible opacity-0",
-            state === "exited" && "invisible opacity-0"
+            'invisible transition-opacity',
+            state === 'entering' && 'visible opacity-100',
+            state === 'entered' && 'visible opacity-100',
+            state === 'exiting' && 'visible opacity-0',
+            state === 'exited' && 'invisible opacity-0'
           )}
         >
           <div className="mx-10 rounded-b-lg border-x border-b border-white/10 bg-gray-700">
@@ -76,7 +80,7 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
                     <CustomTooltip id="lpFee">
                       <div>
                         <span>
-                          LP fee ({transactionFee.transferFeePercentage}%):{" "}
+                          LP fee ({transactionFee.transferFeePercentage}%):{' '}
                         </span>
                         {fetchTransactionFeeStatus === Status.SUCCESS &&
                         transactionFee ? (

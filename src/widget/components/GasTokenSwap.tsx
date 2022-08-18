@@ -1,13 +1,14 @@
-import CustomTooltip from "components/CustomTooltip";
-import { Toggle } from "components/Toggle";
-import { useChains } from "context/Chains";
-import { useToken } from "context/Token";
-import { useTransaction } from "context/Transaction";
-import { HiInformationCircle } from "react-icons/hi";
+import CustomTooltip from 'components/CustomTooltip';
+import { Toggle } from 'components/Toggle';
+import { useChains } from 'context/Chains';
+import { useToken } from 'context/Token';
+import { useTransaction } from 'context/Transaction';
+import { BigNumber, ethers } from 'ethers';
+import { HiInformationCircle } from 'react-icons/hi';
 
 function GasTokenSwap() {
-  const { toChain } = useChains()!;
-  const { selectedToken } = useToken()!;
+  const { fromChain, toChain } = useChains()!;
+  const { selectedToken, tokens } = useToken()!;
   const {
     enableGasTokenSwap,
     gasTokenSwapData,
@@ -33,13 +34,46 @@ function GasTokenSwap() {
   // Set a message for the tooltip.
   let disableGasTokenSwapMsg;
   if (!prerequisites) {
-    disableGasTokenSwapMsg = "Select destination chain & token";
+    disableGasTokenSwapMsg = 'Select destination chain & token';
   } else if (!isGasTokenSwapSupported) {
-    disableGasTokenSwapMsg = "Gas token swap is not supported";
+    disableGasTokenSwapMsg = 'Gas token swap is not supported';
   } else if (!transferAmount) {
-    disableGasTokenSwapMsg = "Enter an amount to transfer";
+    disableGasTokenSwapMsg = 'Enter an amount to transfer';
   } else {
-    disableGasTokenSwapMsg = "";
+    disableGasTokenSwapMsg = '';
+  }
+
+  const { gasTokenPercentage } = gasTokenSwapData ?? {};
+  const gasTokenSymbol =
+    tokens && toChain
+      ? Object.keys(tokens).find((tokenSymbol: string) => {
+          const token = tokens[tokenSymbol];
+          return token && token[toChain.chainId]
+            ? token[toChain.chainId].address ===
+                toChain?.wrappedNativeTokenAddress
+            : undefined;
+        })
+      : undefined;
+
+  let gasTokenMsg;
+  if (
+    gasTokenPercentage !== undefined &&
+    (gasTokenPercentage === 0 || gasTokenPercentage > 80)
+  ) {
+    gasTokenMsg = `Not enough funds to get ${ethers.utils.formatUnits(
+      BigNumber.from(toChain?.gasTokenSwap.gasTokenAmount),
+      fromChain?.nativeDecimal
+    )} ${gasTokenSymbol} on ${toChain?.name}`;
+  } else if (
+    gasTokenPercentage !== undefined &&
+    gasTokenPercentage >= 1 &&
+    gasTokenPercentage <= 80
+  ) {
+    gasTokenMsg = `${gasTokenSwapData.gasTokenPercentage.toFixed(
+      3
+    )}% of ${transferAmount} ${
+      selectedToken?.symbol
+    } will be used for gas token swap`;
   }
 
   return (
@@ -53,8 +87,8 @@ function GasTokenSwap() {
         <div
           className={
             disableGasTokenSwap
-              ? "flex items-center cursor-not-allowed opacity-50"
-              : "flex items-center"
+              ? 'flex items-center cursor-not-allowed opacity-50'
+              : 'flex items-center'
           }
           data-tip
           data-for="whyGasTokenDisabled"
@@ -86,10 +120,9 @@ function GasTokenSwap() {
       </div>
       {enableGasTokenSwap &&
       gasTokenSwapData &&
-      gasTokenSwapData?.gasTokenPercentage ? (
+      gasTokenSwapData?.gasTokenPercentage !== undefined ? (
         <span className="text-xxs font-semibold text-hyphen-gray-400 ml-6">
-          {gasTokenSwapData.gasTokenPercentage.toFixed(3)}% of {transferAmount}{" "}
-          {selectedToken?.symbol} will be used for gas token swap
+          {gasTokenMsg}
         </span>
       ) : null}
     </div>
