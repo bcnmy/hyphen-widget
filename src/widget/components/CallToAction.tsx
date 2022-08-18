@@ -162,7 +162,7 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
                   <PrimaryButtonLight disabled>Transfer</PrimaryButtonLight>
                 </span>
                 <CustomTooltip id="whyTransferDisabled">
-                  No enough funds for this transfer
+                  Not enough funds for this transfer
                 </CustomTooltip>
               </>
             )}
