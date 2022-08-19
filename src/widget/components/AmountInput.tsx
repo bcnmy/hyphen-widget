@@ -1,11 +1,11 @@
-import { useHyphen } from "context/Hyphen";
-import { Status } from "hooks/useLoading";
-import Skeleton from "react-loading-skeleton";
+import { useHyphen } from 'context/Hyphen';
+import { Status } from 'hooks/useLoading';
+import Skeleton from 'react-loading-skeleton';
 
-import CustomTooltip from "components/CustomTooltip";
-import { useTransaction, ValidationErrors } from "context/Transaction";
-import React from "react";
-import { twMerge } from "tailwind-merge";
+import CustomTooltip from 'components/CustomTooltip';
+import { useTransaction, ValidationErrors } from 'context/Transaction';
+import React from 'react';
+import { twMerge } from 'tailwind-merge';
 
 interface IAmountInputProps {
   disabled?: boolean;
@@ -34,8 +34,8 @@ const AmountInput: React.FunctionComponent<IAmountInputProps> = ({
           value={transferAmountInputValue}
           onChange={(e) => changeTransferAmountInputValue(e.target.value)}
           className={twMerge(
-            "mt-2 inline-block h-15 w-full rounded-2.5 border bg-white px-4 py-2 font-mono text-2xl text-hyphen-gray-400 focus:outline-none",
-            disabled && "cursor-not-allowed bg-gray-200"
+            'mt-2 inline-block h-15 w-full rounded-2.5 border bg-white px-4 py-2 font-mono text-2xl text-hyphen-gray-400 focus:outline-none',
+            disabled && 'cursor-not-allowed bg-gray-200'
           )}
           disabled={disabled}
         />
@@ -48,14 +48,16 @@ const AmountInput: React.FunctionComponent<IAmountInputProps> = ({
       <div className="my-2 flex justify-between px-2 text-xs text-hyphen-purple-dark">
         <button
           className={twMerge(
-            "flex items-center transition-colors",
+            'flex items-center transition-colors',
             transactionAmountValidationErrors.includes(
               ValidationErrors.AMOUNT_LT_MIN
-            ) && "text-red-600"
+            ) && 'text-red-600'
           )}
           onClick={() =>
             changeTransferAmountInputValue(
-              poolInfo?.minDepositAmount.toString() || ""
+              (
+                Math.trunc((poolInfo?.minDepositAmount || 0) * 1000) / 1000
+              ).toString()
             )
           }
         >
@@ -79,14 +81,16 @@ const AmountInput: React.FunctionComponent<IAmountInputProps> = ({
         </button>
         <button
           className={twMerge(
-            "flex items-center transition-colors",
+            'flex items-center transition-colors',
             transactionAmountValidationErrors.includes(
               ValidationErrors.AMOUNT_GT_MAX
-            ) && "text-red-600"
+            ) && 'text-red-600'
           )}
           onClick={() =>
             changeTransferAmountInputValue(
-              poolInfo?.maxDepositAmount.toString() || ""
+              (
+                Math.trunc((poolInfo?.maxDepositAmount || 0) * 1000) / 1000
+              ).toString()
             )
           }
         >
