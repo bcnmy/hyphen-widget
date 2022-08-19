@@ -69,7 +69,7 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
                 </article>
               ) : null}
 
-              <article className="flex items-center justify-between font-medium">
+              <div className="flex items-center justify-between font-medium">
                 <div className="flex items-center">
                   <HiInformationCircle
                     data-tip
@@ -124,24 +124,6 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
                           />
                         )}
                       </div>
-                      {gasTokenSwapData &&
-                      gasTokenSwapData?.gasTokenAmountInDepositCurrency ? (
-                        <div>
-                          <span>Gas token worth: </span>
-                          {gasTokenSwapData ? (
-                            <>{`${gasTokenSwapData?.gasTokenAmountInDepositCurrency.toFixed(
-                              5
-                            )} ${selectedToken?.symbol}`}</>
-                          ) : (
-                            <Skeleton
-                              baseColor="#ffffff10"
-                              enableAnimation
-                              highlightColor="#615ccd05"
-                              className="!w-12"
-                            />
-                          )}
-                        </div>
-                      ) : null}
                     </CustomTooltip>
                   ) : null}
                   Total fee
@@ -159,9 +141,9 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
                     />
                   )}
                 </div>
-              </article>
+              </div>
 
-              <article className="flex items-center justify-between font-medium">
+              <div className="flex items-center justify-between font-medium">
                 <div className="flex items-center">
                   <HiInformationCircle
                     data-tip
@@ -191,7 +173,43 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
                     />
                   )}
                 </div>
-              </article>
+              </div>
+
+              {gasTokenSwapData &&
+              gasTokenSwapData?.gasTokenAmountInDepositCurrency ? (
+                <div className="flex items-center justify-between font-medium">
+                  <div className="flex items-center">
+                    <HiInformationCircle
+                      data-tip
+                      data-for="gasTokenWorth"
+                      className="mr-2"
+                    />
+                    {toChain ? (
+                      <CustomTooltip id="gasTokenWorth">
+                        <span>
+                          The {selectedToken?.symbol} amount which will be
+                          swapped for gas on {toChain.name}.
+                        </span>
+                      </CustomTooltip>
+                    ) : null}
+                    Gas token worth
+                  </div>
+                  <div className="text-right font-mono">
+                    {gasTokenSwapData ? (
+                      <>{`${gasTokenSwapData?.gasTokenAmountInDepositCurrency.toFixed(
+                        5
+                      )} ${selectedToken?.symbol}`}</>
+                    ) : (
+                      <Skeleton
+                        baseColor="#ffffff10"
+                        enableAnimation
+                        highlightColor="#615ccd05"
+                        className="!w-32"
+                      />
+                    )}
+                  </div>
+                </div>
+              ) : null}
             </div>
           </div>
         </div>

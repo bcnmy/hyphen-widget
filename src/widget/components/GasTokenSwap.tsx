@@ -115,7 +115,9 @@ function GasTokenSwap() {
           </CustomTooltip>
         ) : null}
         <CustomTooltip id="gasToken">
-          <span>Gas token tooltip!</span>
+          <span>
+            A small amount of transferred token will be swapped for gas.
+          </span>
         </CustomTooltip>
       </div>
       {enableGasTokenSwap &&
