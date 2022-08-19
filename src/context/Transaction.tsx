@@ -227,8 +227,9 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
     // having the string input value and number value seperate allows for the validation logic to run without intefering each other
     let status = regExp.test(amount);
 
-    if (amount === '') {
+    if (enableGasTokenSwap) {
       setEnableGasTokenSwap(false);
+      removeGasTokenSwapData();
     }
 
     if (status) {
@@ -579,7 +580,10 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
       }
 
       let depositTx;
-      if (enableGasTokenSwap) {
+      const percentage = Math.round(
+        gasTokenSwapData?.gasTokenPercentage * SWAP_BASE_DIVISOR
+      );
+      if (enableGasTokenSwap && percentage > 0) {
         depositTx = await hyphen.depositManager.depositAndSwap({
           sender: accounts[0],
           receiver: receiverAddress,
@@ -595,9 +599,7 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
           swapRequest: [
             {
               tokenAddress: toChain.wrappedNativeTokenAddress,
-              percentage: Math.round(
-                gasTokenSwapData?.gasTokenPercentage * SWAP_BASE_DIVISOR
-              ).toString(),
+              percentage: percentage.toString(),
               amount: 0,
               operation: 0,
               path: '0x0000000000000000000000000000000000000000',

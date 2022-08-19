@@ -28,10 +28,7 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
 
   const totalFee = transactionFee
     ? Number.parseFloat(transactionFee.lpFeeProcessedString) +
-      Number.parseFloat(transactionFee.transactionFeeProcessedString) +
-      Number.parseFloat(
-        gasTokenSwapData?.gasTokenAmountInDepositCurrency || '0'
-      ) -
+      Number.parseFloat(transactionFee.transactionFeeProcessedString) -
       Number.parseFloat(transactionFee.rewardAmountString || '0')
     : undefined;
 
@@ -42,7 +39,7 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
     (!enableGasTokenSwap ||
       (enableGasTokenSwap &&
         gasTokenSwapData &&
-        gasTokenSwapData.gasTokenPercentage >= 1 &&
+        gasTokenSwapData.gasTokenPercentage > 0 &&
         gasTokenSwapData.gasTokenPercentage <= 80));
 
   return (

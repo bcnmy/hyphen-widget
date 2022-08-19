@@ -66,7 +66,7 @@ function GasTokenSwap() {
     )} ${gasTokenSymbol} on ${toChain?.name}`;
   } else if (
     gasTokenPercentage !== undefined &&
-    gasTokenPercentage >= 1 &&
+    gasTokenPercentage > 0 &&
     gasTokenPercentage <= 80
   ) {
     gasTokenMsg = `${gasTokenSwapData.gasTokenPercentage.toFixed(
