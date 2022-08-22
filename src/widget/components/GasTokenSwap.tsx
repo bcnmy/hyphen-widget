@@ -7,7 +7,7 @@ import { BigNumber, ethers } from 'ethers';
 import { HiInformationCircle } from 'react-icons/hi';
 
 function GasTokenSwap() {
-  const { fromChain, toChain } = useChains()!;
+  const { toChain } = useChains()!;
   const { selectedToken, tokens } = useToken()!;
   const {
     enableGasTokenSwap,
@@ -62,18 +62,21 @@ function GasTokenSwap() {
   ) {
     gasTokenMsg = `Not enough funds to get ${ethers.utils.formatUnits(
       BigNumber.from(toChain?.gasTokenSwap.gasTokenAmount),
-      fromChain?.nativeDecimal
+      toChain?.nativeDecimal
     )} ${gasTokenSymbol} on ${toChain?.name}`;
   } else if (
     gasTokenPercentage !== undefined &&
     gasTokenPercentage > 0 &&
     gasTokenPercentage <= 80
   ) {
-    gasTokenMsg = `${gasTokenSwapData.gasTokenPercentage.toFixed(
+    gasTokenMsg = `Swapping ~${gasTokenSwapData.gasTokenPercentage.toFixed(
       3
     )}% of ${transferAmount} ${
       selectedToken?.symbol
-    } will be used for gas token swap`;
+    } for ${ethers.utils.formatUnits(
+      BigNumber.from(toChain?.gasTokenSwap.gasTokenAmount),
+      toChain?.nativeDecimal
+    )} ${gasTokenSymbol} on ${toChain?.name}`;
   }
 
   return (
