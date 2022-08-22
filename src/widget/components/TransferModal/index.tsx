@@ -314,7 +314,7 @@ const ReceivalStep: React.FC<
           Get ~{transactionFee?.amountToGetProcessedString}{' '}
           {selectedToken?.symbol}{' '}
           {gasTokenSwapData
-            ? `& ${gasTokenSwapData.gasTokenAmountInDepositCurrency} ${selectedToken?.symbol} in gas tokens`
+            ? `& ${gasTokenSwapData.gasTokenAmountInDepositCurrency} ${selectedToken?.symbol} worth of gas tokens`
             : null}{' '}
           on {toChain?.name}
         </span>
@@ -333,7 +333,7 @@ const ReceivalStep: React.FC<
               }{' '}
               {selectedToken?.symbol}{' '}
               {gasTokenSwapData
-                ? `& ${gasTokenSwapData.gasTokenAmountInDepositCurrency} ${selectedToken?.symbol} in gas tokens`
+                ? `& ${gasTokenSwapData.gasTokenAmountInDepositCurrency} ${selectedToken?.symbol} worth of gas tokens`
                 : null}{' '}
               on {toChain?.name}
             </div>
