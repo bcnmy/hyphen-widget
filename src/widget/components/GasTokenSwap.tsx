@@ -100,6 +100,7 @@ function GasTokenSwap() {
             Get gas token on destination?
           </span>
           <Toggle
+            bgColor="#00D28F"
             label="Gasless Mode"
             enabled={enableGasTokenSwap}
             disabled={disableGasTokenSwap}

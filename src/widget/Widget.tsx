@@ -134,39 +134,6 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
               />
             </div>
             <div className="flex">
-              <div className="flex items-center">
-                <HiInformationCircle
-                  data-tip
-                  data-for="gaslessMode"
-                  className="mr-2 text-gray-500"
-                />
-                <CustomTooltip id="gaslessMode">
-                  <span>This transaction is sponsored by Biconomy</span>
-                </CustomTooltip>
-                <div
-                  className={
-                    !isBiconomyAllowed
-                      ? 'flex items-center cursor-not-allowed opacity-50'
-                      : 'flex items-center'
-                  }
-                  data-tip
-                  data-for="whyGaslessDisabled"
-                >
-                  <span className="mr-2 text-xxs font-semibold text-hyphen-gray-400 uppercase">
-                    Gasless Mode
-                  </span>
-                  <Toggle
-                    label="Gasless Mode"
-                    enabled={isBiconomyEnabled}
-                    onToggle={(enabled) => setIsBiconomyToggledOn(enabled)}
-                  />
-                </div>
-              </div>
-              {!isBiconomyAllowed && (
-                <CustomTooltip id="whyGaslessDisabled">
-                  <span>Disabled for selected chain</span>
-                </CustomTooltip>
-              )}
               {props.showCloseButton ? (
                 <button
                   className="rounded hover:bg-gray-100 ml-4"
@@ -177,12 +144,12 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
               ) : null}
             </div>
           </div>
-          <div className="grid grid-cols-[1fr_34px_1fr] gap-2 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 hover:border-opacity-30">
-            <NetworkSelectors
-              allowedSourceChains={props.allowedSourceChains}
-              allowedDestinationChains={props.allowedDestinationChains}
-            />
-          </div>
+
+          <NetworkSelectors
+            allowedSourceChains={props.allowedSourceChains}
+            allowedDestinationChains={props.allowedDestinationChains}
+          />
+
           <div className="grid grid-cols-2 items-center gap-12 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 hover:border-opacity-30">
             <AmountInput
               disabled={

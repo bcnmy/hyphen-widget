@@ -28,6 +28,7 @@ module.exports = {
           300: '#c1c1c1',
           400: '#545757',
         },
+        'bridge-section': 'hsla(243, 53%, 58%, 0.05)',
       },
       fontSize: {
         xxs: '0.625rem',
@@ -40,10 +41,10 @@ module.exports = {
         37.5: '9.375rem',
         84: '21rem',
         100: '25rem',
-        104.5: '26.125rem'
+        104.5: '26.125rem',
       },
       width: {
-        7.5: '1.875rem'
+        7.5: '1.875rem',
       },
       spacing: {
         12.5: '3.125rem',
@@ -62,7 +63,7 @@ module.exports = {
         container.append(isFirefoxRule);
         isFirefoxRule.walkRules((rule) => {
           rule.selector = `.${e(
-            `firefox${separator}${rule.selector.slice(1)}`,
+            `firefox${separator}${rule.selector.slice(1)}`
           )}`;
         });
       });

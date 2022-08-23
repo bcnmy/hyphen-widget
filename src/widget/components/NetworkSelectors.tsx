@@ -1,9 +1,10 @@
+import transferArrow from 'assets/images/transfer-arrow.svg';
+import CustomTooltip from 'components/CustomTooltip';
 import Select from 'components/Select';
 import { useChains } from 'context/Chains';
 import { useWalletProvider } from 'context/WalletProvider';
 import React, { useMemo } from 'react';
-import { HiArrowRight } from 'react-icons/hi';
-import CustomTooltip from 'components/CustomTooltip';
+import GaslessToggle from './GaslessToggle';
 
 interface INetworkSelectorsProps {
   allowedSourceChains?: number[];
@@ -91,8 +92,8 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
   }, [toChain, toChainOptions]);
 
   return (
-    <>
-      <div>
+    <div className="grid grid-cols-1 gap-5 p-5 rounded-[20px] xl:grid-cols-[1fr_40px_1fr] bg-bridge-section">
+      <div className="relative">
         {fromChainOptions ? (
           <Select
             options={fromChainOptions}
@@ -108,13 +109,17 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
         ) : (
           '...'
         )}
+        <div className="absolute top-0 right-4">
+          <GaslessToggle />
+        </div>
       </div>
-      <div className="mb-3 flex items-end">
-        <button
-          className="rounded-full border border-hyphen-purple/10 bg-hyphen-purple bg-opacity-20 p-2 text-hyphen-purple transition-all"
-          onClick={switchChains}
-        >
-          <HiArrowRight />
+      <div className="flex items-end justify-center xl:mb-3">
+        <button onClick={switchChains}>
+          <img
+            src={transferArrow}
+            alt="Direction of transfer"
+            className="h-7.5 w-7.5 rotate-90 xl:h-auto xl:w-auto xl:rotate-0"
+          />
         </button>
       </div>
       <div data-tip data-for="networkSelect">
@@ -140,7 +145,7 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
           </CustomTooltip>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
