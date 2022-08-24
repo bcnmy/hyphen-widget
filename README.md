@@ -107,6 +107,8 @@ The following additional configuration options can be passed while initializing 
   showCloseButton: boolean,
   // should the widget allow ability to change receiver address. Default: true
   showChangeAddress: boolean,
+  // allows ability to swap for gas tokens while making a transfer.
+  showGasTokenSwap: true,
   // array of chain ids to specify the possible source chains. Chains not in this list will be excluded.
   allowedSourceChains: number[],
   // array of chain ids to specify the possible destination chains. Chains not in this list will be excluded.
