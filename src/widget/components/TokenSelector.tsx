@@ -115,64 +115,6 @@ const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
           <span>Select source & destination chains</span>
         </CustomTooltip>
       )}
-
-      {/* <div className="my-2 flex items-center justify-between gap-4 pl-2 text-xs text-hyphen-purple-dark">
-        <span className="flex flex-grow items-baseline">
-          <span
-            className={twMerge(
-              'mr-1',
-              transactionAmountValidationErrors.includes(
-                ValidationErrors.INADEQUATE_BALANCE
-              ) && 'text-red-600',
-              'transition-colors'
-            )}
-          >
-            Balance:
-          </span>
-          <span className="flex-grow font-mono">
-            {getSelectedTokenBalanceStatus &&
-            getSelectedTokenBalanceStatus === Status.SUCCESS &&
-            selectedTokenBalance?.displayBalance ? (
-              <span
-                className={twMerge(
-                  transactionAmountValidationErrors.includes(
-                    ValidationErrors.INADEQUATE_BALANCE
-                  ) && 'text-red-600',
-                  'transition-colors'
-                )}
-              >
-                {selectedTokenBalance?.displayBalance || ''}
-              </span>
-            ) : (
-              <Skeleton
-                baseColor="#615ccd20"
-                enableAnimation={!!selectedToken}
-                highlightColor="#615ccd05"
-              />
-            )}
-          </span>
-        </span>
-        <button
-          className="flex h-4 items-center rounded-full bg-hyphen-purple px-1.5 text-xxs text-white"
-          onClick={() => {
-            selectedTokenBalance &&
-              poolInfo &&
-              parseFloat(selectedTokenBalance.formattedBalance) &&
-              changeTransferAmountInputValue(
-                (
-                  Math.trunc(
-                    Math.min(
-                      parseFloat(selectedTokenBalance?.displayBalance),
-                      poolInfo?.maxDepositAmount
-                    ) * 1000
-                  ) / 1000
-                ).toString()
-              );
-          }}
-        >
-          MAX
-        </button>
-      </div> */}
     </div>
   );
 };

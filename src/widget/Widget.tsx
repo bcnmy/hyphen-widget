@@ -26,6 +26,7 @@ import NetworkSelectors from './components/NetworkSelectors';
 import TokenSelector from './components/TokenSelector';
 import TransactionFee from './components/TransactionFee';
 import TransferModal from './components/TransferModal';
+import ReceiveMinimum from './components/ReceiveMinimum';
 
 interface IWidgetProps {
   closeWidget: () => void;
@@ -145,10 +146,12 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
             </div>
           </div>
 
-          <NetworkSelectors
-            allowedSourceChains={props.allowedSourceChains}
-            allowedDestinationChains={props.allowedDestinationChains}
-          />
+          <div className="grid grid-cols-1 gap-5 rounded-[20px] bg-bridge-section p-5 xl:grid-cols-[1fr_40px_1fr]">
+            <NetworkSelectors
+              allowedSourceChains={props.allowedSourceChains}
+              allowedDestinationChains={props.allowedDestinationChains}
+            />
+          </div>
 
           <div className="grid grid-cols-[332px_166px] items-center gap-0 rounded-[20px] bg-bridge-section p-5">
             <AmountInput
@@ -166,6 +169,10 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
                 !poolInfo?.maxDepositAmount
               }
             />
+          </div>
+
+          <div className="grid grid-cols-[332px_166px] items-center gap-0 rounded-[20px] bg-bridge-section p-5">
+            <ReceiveMinimum />
           </div>
 
           {props.showChangeAddress ? <ChangeReceiverAddress /> : null}

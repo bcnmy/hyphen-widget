@@ -92,7 +92,7 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
   }, [toChain, toChainOptions]);
 
   return (
-    <div className="grid grid-cols-1 gap-5 p-5 rounded-[20px] xl:grid-cols-[1fr_40px_1fr] bg-bridge-section">
+    <>
       <div className="relative">
         {fromChainOptions ? (
           <Select
@@ -145,7 +145,7 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
           </CustomTooltip>
         )}
       </div>
-    </div>
+    </>
   );
 };
 
