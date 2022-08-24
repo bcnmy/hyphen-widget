@@ -118,7 +118,7 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
       ) : null}
 
       <ErrorModal error={executeApproveTokenError} title={'Approval Error'} />
-      <div className="max-w-xl">
+      <div className="w-auto">
         <div className="flex flex-col gap-2 rounded-10 bg-white p-6 shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
           <div className="mb-2 flex items-center justify-between">
             <div className="flex flex-col items-center">
@@ -136,7 +136,7 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
             <div className="flex">
               {props.showCloseButton ? (
                 <button
-                  className="rounded hover:bg-gray-100 ml-4"
+                  className="ml-4 rounded hover:bg-gray-100"
                   onClick={props.closeWidget}
                 >
                   <IoMdClose className="h-6 w-auto text-gray-500" />
@@ -150,7 +150,7 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
             allowedDestinationChains={props.allowedDestinationChains}
           />
 
-          <div className="grid grid-cols-2 items-center gap-12 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 hover:border-opacity-30">
+          <div className="grid grid-cols-[332px_166px] items-center gap-0 rounded-[20px] bg-bridge-section p-5">
             <AmountInput
               disabled={
                 !areChainsReady ||

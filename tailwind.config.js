@@ -31,6 +31,7 @@ module.exports = {
         'bridge-section': 'hsla(243, 53%, 58%, 0.05)',
       },
       fontSize: {
+        xxxs: '0.5rem',
         xxs: '0.625rem',
       },
       height: {

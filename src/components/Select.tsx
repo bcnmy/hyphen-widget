@@ -11,6 +11,7 @@ export interface Option {
   tooltip?: string;
 }
 export interface ISelectProps {
+  className?: string;
   options: Option[] | undefined;
   selected?: Option;
   setSelected: (option: Option) => void;
@@ -44,6 +45,7 @@ const OptionContent: React.FC<IOptionContentProps> = ({
 };
 
 export const Select: React.FC<ISelectProps> = ({
+  className,
   selected,
   setSelected,
   options,
@@ -53,12 +55,13 @@ export const Select: React.FC<ISelectProps> = ({
   return (
     <div className="flex flex-col">
       <Listbox value={selected} onChange={setSelected} disabled={disabled}>
-        <Listbox.Label className="pl-5 text-xxs font-semibold uppercase text-hyphen-gray-400">
+        <Listbox.Label className="pl-5 mb-2 text-xxs font-bold uppercase text-hyphen-gray-400">
           {label}
         </Listbox.Label>
-        <div className="relative mt-2 h-15">
+        <div className="relative h-15">
           <Listbox.Button
             className={twMerge(
+              className,
               'relative h-full w-full cursor-pointer rounded-2.5 border bg-white py-2 pl-4 pr-10 text-left focus:outline-none text-hyphen-gray-400',
               disabled && 'cursor-not-allowed bg-gray-200 text-gray-900/80'
             )}
@@ -98,7 +101,7 @@ export const Select: React.FC<ISelectProps> = ({
                   key={option.id}
                   className={({ active }) =>
                     `${active ? 'bg-hyphen-gray-100' : ''}
-              relative cursor-pointer select-none py-5 px-5 text-hyphen-gray-400`
+              relative cursor-pointer select-none py-5 px-5 text-hyphen-gray-400 hover:bg-hyphen-gray-100`
                   }
                   value={option}
                   disabled={!!option.disabled}

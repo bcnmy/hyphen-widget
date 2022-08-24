@@ -29,7 +29,7 @@ function GaslessToggle() {
             disabled={!isBiconomyAllowed}
             onToggle={(enabled) => setIsBiconomyToggledOn(enabled)}
           />
-          <span className="ml-2 text-xxxs font-bold uppercase text-hyphen-yellow-100 xl:text-xxs">
+          <span className="ml-2 text-xxxs font-bold uppercase text-hyphen-gray-400 xl:text-xxs">
             Gasless
           </span>
         </div>
