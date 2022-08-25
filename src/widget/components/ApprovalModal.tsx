@@ -1,4 +1,4 @@
-import PrimaryButtonLight from 'components/Buttons/PrimaryButtonLight';
+import PrimaryButton from 'components/Buttons/PrimaryButton';
 import { Toggle } from 'components/Toggle';
 import React, { useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
@@ -64,7 +64,7 @@ export const ApprovalModal: React.FC<IApprovalModalProps> = ({
             cross chain transfers.
           </p>
 
-          <PrimaryButtonLight
+          <PrimaryButton
             className="px-8"
             onClick={() => {
               if (!transferAmount) throw new Error('Transfer Amount Invalid');
@@ -73,7 +73,7 @@ export const ApprovalModal: React.FC<IApprovalModalProps> = ({
             }}
           >
             Proceed
-          </PrimaryButtonLight>
+          </PrimaryButton>
         </aside>
       </div>
     </Modal>

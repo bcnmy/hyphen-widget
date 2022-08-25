@@ -5,11 +5,8 @@ import { useWalletProvider } from '../context/WalletProvider';
 
 import HyphenLogoDark from 'assets/images/hyphen-logo-dark.svg';
 import WidgetBranding from 'assets/images/widget-branding.svg';
-import { HiInformationCircle } from 'react-icons/hi';
 import { IoMdClose } from 'react-icons/io';
 import { HyphenWidgetOptions } from '../';
-import CustomTooltip from '../components/CustomTooltip';
-import { Toggle } from '../components/Toggle';
 import { useBiconomy } from '../context/Biconomy';
 import { useHyphen } from '../context/Hyphen';
 import { useToken } from '../context/Token';
@@ -18,16 +15,14 @@ import { useTransaction } from '../context/Transaction';
 import useModal from '../hooks/useModal';
 import AmountInput from './components/AmountInput';
 import ApprovalModal from './components/ApprovalModal';
+import BridgeOptions from './components/BridgeOptions';
 import CallToAction from './components/CallToAction';
-import ChangeReceiverAddress from './components/ChangeReceiverAddress';
 import ErrorModal from './components/ErrorModal';
-import GasTokenSwap from './components/GasTokenSwap';
 import NetworkSelectors from './components/NetworkSelectors';
+import ReceiveMinimum from './components/ReceiveMinimum';
 import TokenSelector from './components/TokenSelector';
 import TransactionFee from './components/TransactionFee';
 import TransferModal from './components/TransferModal';
-import ReceiveMinimum from './components/ReceiveMinimum';
-import BridgeOptions from './components/BridgeOptions';
 
 interface IWidgetProps {
   closeWidget: () => void;

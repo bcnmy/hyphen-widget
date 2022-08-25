@@ -4,7 +4,6 @@ import { useChains } from 'context/Chains';
 import { useToken } from 'context/Token';
 import { useTransaction } from 'context/Transaction';
 import { BigNumber, ethers } from 'ethers';
-import { HiInformationCircle } from 'react-icons/hi';
 
 function GasTokenSwap() {
   const { toChain } = useChains()!;

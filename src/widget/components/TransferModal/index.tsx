@@ -1,4 +1,4 @@
-import PrimaryButtonLight from 'components/Buttons/PrimaryButtonLight';
+import PrimaryButton from 'components/Buttons/PrimaryButton';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { formatDistanceStrict } from 'date-fns';
 import { IoMdClose } from 'react-icons/io';
@@ -547,16 +547,16 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
             </div>
             <div className="mt-4 flex justify-center pt-3 pb-2">
               {modalErrored ? (
-                <PrimaryButtonLight
+                <PrimaryButton
                   className="px-8"
                   onClick={() => {
                     onClose();
                   }}
                 >
                   <span>Close</span>
-                </PrimaryButtonLight>
+                </PrimaryButton>
               ) : (
-                <PrimaryButtonLight
+                <PrimaryButton
                   className="px-8"
                   disabled={receivalState !== Status.SUCCESS}
                   onClick={() => {
@@ -575,7 +575,7 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
                       </>
                     )}
                   </div>
-                </PrimaryButtonLight>
+                </PrimaryButton>
               )}
             </div>
           </div>
