@@ -8,7 +8,6 @@ import { useWalletProvider } from 'context/WalletProvider';
 import { Status } from 'hooks/useLoading';
 import * as React from 'react';
 import switchNetwork from 'utils/switchNetwork';
-import CustomTooltip from 'components/CustomTooltip';
 
 export interface ICallToActionProps {
   onApproveButtonClick: () => void;
@@ -31,6 +30,7 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
     useWalletProvider()!;
   const {
     receiver: { isReceiverValid },
+    transferAmount,
     transactionAmountValidationErrors,
     enableGasTokenSwap,
     gasTokenSwapData,
@@ -64,15 +64,7 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
   if (!isReceiverValid) {
     return (
       <div className="mt-8 grid grid-cols-1">
-        <span data-tip data-for="invalidReceiverAddress">
-          <PrimaryButton disabled>Invalid receiver address</PrimaryButton>
-        </span>
-        <CustomTooltip id="invalidReceiverAddress">
-          <span>
-            This receiver address is not valid, please check the address and try
-            again.
-          </span>
-        </CustomTooltip>
+        <PrimaryButton disabled>Invalid receiver address</PrimaryButton>
       </div>
     );
   }
@@ -83,40 +75,24 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
       transactionAmountValidationErrors.length > 0 ||
       fetchSelectedTokenApprovalError ? (
         <>
-          <span data-tip data-for="whyTransferDisabled">
-            <PrimaryButton disabled>Transfer</PrimaryButton>
-          </span>
-          <CustomTooltip id="whyTransferDisabled">
-            {fetchSelectedTokenApprovalError &&
-            transactionAmountValidationErrors.length === 0 ? (
-              <span>Error trying to fetch token approval</span>
-            ) : (
-              <span>Enter a valid transfer amount</span>
-            )}
-          </CustomTooltip>
+          <PrimaryButton disabled>
+            {!transferAmount
+              ? 'Enter amount'
+              : fetchSelectedTokenApprovalError &&
+                transactionAmountValidationErrors.length === 0
+              ? 'Error in fetching approval'
+              : transactionAmountValidationErrors.length > 0
+              ? 'Please check the amount'
+              : ''}
+          </PrimaryButton>
         </>
       ) : (
         <>
           {fetchSelectedTokenApprovalStatus === Status.PENDING && (
             <>
-              <div
-                data-tip
-                data-for="whyTransferDisabled"
-                className="flex items-center"
-              >
-                {fetchSelectedTokenApprovalValue === false ? (
-                  <PrimaryButton disabled className="mr-8">
-                    Approve
-                  </PrimaryButton>
-                ) : null}
-                <PrimaryButton disabled className="flex items-center gap-2">
-                  <Spinner />
-                  Transfer
-                </PrimaryButton>
-              </div>
-              <CustomTooltip id="whyTransferDisabled">
-                <span>Approval loading</span>
-              </CustomTooltip>
+              <PrimaryButton disabled className="mr-8">
+                Checking approval
+              </PrimaryButton>
             </>
           )}
           {fetchSelectedTokenApprovalStatus === Status.SUCCESS &&
@@ -126,7 +102,7 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
                   <PrimaryButton disabled>
                     <span className="flex items-center gap-2">
                       <Spinner />
-                      <span>Approve</span>
+                      <span>Checking approval</span>
                     </span>
                   </PrimaryButton>
                 ) : (
@@ -134,12 +110,6 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
                     Approve
                   </PrimaryButton>
                 )}
-                <span data-tip data-for="whyTransferDisabled">
-                  <PrimaryButton disabled>Transfer</PrimaryButton>
-                </span>
-                <CustomTooltip id="whyTransferDisabled">
-                  <span>Approve token to enable token transfers</span>
-                </CustomTooltip>
               </>
             )}
 
@@ -150,12 +120,9 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
             (gasTokenSwapData.gasTokenPercentage === 0 ||
               gasTokenSwapData.gasTokenPercentage > 80) && (
               <>
-                <span data-tip data-for="whyTransferDisabled">
-                  <PrimaryButton disabled>Transfer</PrimaryButton>
-                </span>
-                <CustomTooltip id="whyTransferDisabled">
+                <PrimaryButton disabled>
                   Not enough funds for this transfer
-                </CustomTooltip>
+                </PrimaryButton>
               </>
             )}
 

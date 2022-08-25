@@ -209,8 +209,9 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
   // Fetch token approval when conditions change
   useEffect(() => {
     if (
-      errors.length === 0 ||
-      (executeApproveTokenStatus === Status.SUCCESS && errors.length === 0)
+      transferAmount > 0 &&
+      (errors.length === 0 ||
+        (executeApproveTokenStatus === Status.SUCCESS && errors.length === 0))
     ) {
       fetchSelectedTokenApproval(transferAmount);
     }
