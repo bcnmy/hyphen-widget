@@ -28,6 +28,9 @@ module.exports = {
           300: '#c1c1c1',
           400: '#545757',
         },
+        'hyphen-warning': {
+          DEFAULT: '#EF9400',
+        },
         'bridge-section': 'hsla(243, 53%, 58%, 0.05)',
       },
       fontSize: {

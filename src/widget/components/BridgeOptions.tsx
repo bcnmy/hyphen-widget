@@ -24,11 +24,11 @@ function BridgeOptions({
 
   return (
     <>
-      <div className="mt-2 flex items-baseline justify-between">
+      <div className="mt-2 flex flex-col items-center md:flex-row md:items-baseline md:justify-between">
         {showGasTokenSwap ? <GasTokenSwap /> : null}
         {showChangeAddress ? (
           <button
-            className="flex items-center"
+            className="mt-3 flex items-center md:mt-0"
             onClick={handleChangeRecepientClick}
           >
             <HiOutlineChevronDown

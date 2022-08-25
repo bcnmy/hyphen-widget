@@ -106,13 +106,12 @@ function GasTokenSwap() {
           }}
           variant="large"
         />
-        <span
-          className="ml-2 font-sans text-xs text-hyphen-gray-400 underline"
-          data-tip
-          data-for="gasTokenMsg"
+        <a
+          href="/"
+          className="ml-2 hidden font-sans text-xs text-hyphen-gray-400 underline md:ml-2 md:block"
         >
           How does it work?
-        </span>
+        </a>
       </div>
       {disableGasTokenSwap ? (
         <CustomTooltip id="whyGasTokenDisabled">

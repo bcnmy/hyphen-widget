@@ -92,7 +92,7 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
   }, [toChain, toChainOptions]);
 
   return (
-    <div className="grid grid-cols-1 gap-5 rounded-[20px] bg-bridge-section p-5 xl:grid-cols-[1fr_40px_1fr]">
+    <div className="grid grid-cols-1 gap-3 rounded-[20px] bg-bridge-section p-5 xl:grid-cols-[1fr_40px_1fr]">
       <div className="relative">
         {fromChainOptions ? (
           <Select

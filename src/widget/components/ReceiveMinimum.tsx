@@ -8,14 +8,15 @@ import noSelectIcon from 'assets/images/no-select-icon.svg';
 function ReceiveMinimum() {
   const { selectedToken } = useToken()!;
   const {
+    gasTokenSwapData,
     transferAmountInputValue,
     transactionFee,
     fetchTransactionFeeStatus,
   } = useTransaction()!;
 
   return (
-    <div className="grid grid-cols-[332px_166px] items-center gap-0 rounded-[20px] bg-bridge-section p-5">
-      <div className="relative flex flex-col">
+    <div className="relative grid grid-cols-[1.5fr_1fr] items-center gap-0 rounded-[20px] bg-bridge-section p-5 sm:grid-cols-[2fr_1fr]">
+      <div className="flex flex-col">
         <label className="pl-5 text-xxs font-bold uppercase text-hyphen-gray-400">
           Receive Minimum
         </label>
@@ -25,7 +26,7 @@ function ReceiveMinimum() {
             : '0.000'}
         </div>
         <div
-          className="absolute right-3 inline-flex items-center text-xxs font-bold uppercase text-hyphen-gray-300"
+          className="absolute right-8 inline-flex items-center text-xxs font-bold uppercase text-hyphen-gray-300"
           data-tip
           data-for="totalFees"
         >
@@ -62,6 +63,16 @@ function ReceiveMinimum() {
               {fetchTransactionFeeStatus === Status.SUCCESS &&
               transactionFee ? (
                 <>{`${transactionFee.transactionFeeProcessedString} ${selectedToken?.symbol}`}</>
+              ) : (
+                '...'
+              )}
+            </div>
+            <div>
+              <span>Gas token worth: </span>
+              {gasTokenSwapData ? (
+                <>{`${gasTokenSwapData?.gasTokenAmountInDepositCurrency.toFixed(
+                  5
+                )} ${selectedToken?.symbol}`}</>
               ) : (
                 '...'
               )}

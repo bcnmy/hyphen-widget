@@ -38,7 +38,11 @@ const OptionContent: React.FC<IOptionContentProps> = ({
       } flex items-center truncate`}
     >
       {option.image ? (
-        <img className="mr-2 h-5 w-5" src={option.image} alt={option.name} />
+        <img
+          className="mr-2 h-4 w-4 xl:h-5 xl:w-5"
+          src={option.image}
+          alt={option.name}
+        />
       ) : null}
       {option.name}
     </span>
@@ -63,7 +67,7 @@ export const Select: React.FC<ISelectProps> = ({
           <Listbox.Button
             className={twMerge(
               className,
-              'relative h-full w-full cursor-pointer rounded-2.5 border bg-white py-2 pl-4 pr-10 text-left text-hyphen-gray-400 focus:outline-none',
+              'relative h-full w-full cursor-pointer rounded-2.5 border bg-white py-2 pl-4 pr-6 text-left text-sm text-hyphen-gray-400 focus:outline-none md:pr-10 xl:text-base',
               disabled && 'cursor-not-allowed bg-gray-200 text-gray-900/80'
             )}
           >
@@ -72,7 +76,7 @@ export const Select: React.FC<ISelectProps> = ({
                 <>
                   {selected.image ? (
                     <img
-                      className="mr-2 h-5 w-5"
+                      className="mr-2 h-4 w-4 xl:h-5 xl:w-5"
                       src={selected.image}
                       alt={selected.name}
                     />
@@ -92,7 +96,7 @@ export const Select: React.FC<ISelectProps> = ({
             </span>
             <span className="pointer-events-none absolute inset-y-0 right-1 flex items-center pr-2">
               <HiOutlineChevronDown
-                className="h-4 w-4 text-gray-400"
+                className="h-3 w-3 text-gray-400 xl:h-4 xl:w-4"
                 aria-hidden="true"
               />
             </span>

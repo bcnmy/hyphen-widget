@@ -6,6 +6,7 @@ import { useWalletProvider } from '../context/WalletProvider';
 import HyphenLogoDark from 'assets/images/hyphen-logo-dark.svg';
 import WidgetBranding from 'assets/images/widget-branding.svg';
 import { IoMdClose } from 'react-icons/io';
+import isToChainEthereum from 'utils/isToChainEthereum';
 import { HyphenWidgetOptions } from '../';
 import { useBiconomy } from '../context/Biconomy';
 import { useHyphen } from '../context/Hyphen';
@@ -21,8 +22,8 @@ import ErrorModal from './components/ErrorModal';
 import NetworkSelectors from './components/NetworkSelectors';
 import ReceiveMinimum from './components/ReceiveMinimum';
 import TokenSelector from './components/TokenSelector';
-import TransactionFee from './components/TransactionFee';
 import TransferModal from './components/TransferModal';
+import { HiExclamation } from 'react-icons/hi';
 
 interface IWidgetProps {
   closeWidget: () => void;
@@ -90,6 +91,10 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
     })();
   }, [isLoggedIn, connect]);
 
+  const showEthereumDisclaimer = toChain
+    ? isToChainEthereum(toChain.chainId)
+    : false;
+
   return (
     <>
       {fromChain && selectedToken && transferAmount ? (
@@ -115,70 +120,76 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
       ) : null}
 
       <ErrorModal error={executeApproveTokenError} title={'Approval Error'} />
-      <div className="w-auto">
-        <div className="flex flex-col gap-2 rounded-[25px] bg-white p-6 shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
-          <div className="mb-2 flex items-center justify-between">
-            <div className="flex flex-col items-center">
-              <img
-                src={HyphenLogoDark}
-                className="h-6 w-auto"
-                alt="Hyphen Logo"
-              />
-              <img
-                src={WidgetBranding}
-                alt="Powered by biconomy"
-                className="ml-4 mt-2"
-              />
-            </div>
-            <div className="flex">
-              {props.showCloseButton ? (
-                <button
-                  className="ml-4 rounded hover:bg-gray-100"
-                  onClick={props.closeWidget}
-                >
-                  <IoMdClose className="h-6 w-auto text-gray-500" />
-                </button>
-              ) : null}
-            </div>
-          </div>
-
-          <NetworkSelectors
-            allowedSourceChains={props.allowedSourceChains}
-            allowedDestinationChains={props.allowedDestinationChains}
-          />
-
-          <div className="grid grid-cols-[332px_166px] items-center gap-0 rounded-[20px] bg-bridge-section p-5">
-            <AmountInput
-              disabled={
-                !areChainsReady ||
-                !poolInfo?.minDepositAmount ||
-                !poolInfo?.maxDepositAmount
-              }
+      <div className="flex w-auto flex-col gap-2 bg-white p-6 md:rounded-[25px] md:shadow-[0_4px_4px_rgba(229,229,229,0.5)]">
+        <div className="mb-2 flex items-center justify-between">
+          <div className="flex flex-col items-center">
+            <img
+              src={HyphenLogoDark}
+              className="h-6 w-auto"
+              alt="Hyphen Logo"
             />
-            <TokenSelector
-              allowedTokens={props.allowedTokens}
-              disabled={
-                !areChainsReady ||
-                !poolInfo?.minDepositAmount ||
-                !poolInfo?.maxDepositAmount
-              }
+            <img
+              src={WidgetBranding}
+              alt="Powered by biconomy"
+              className="ml-4 mt-2"
             />
           </div>
+          <div className="flex">
+            {props.showCloseButton ? (
+              <button
+                className="ml-4 rounded hover:bg-gray-100"
+                onClick={props.closeWidget}
+              >
+                <IoMdClose className="h-6 w-auto text-gray-500" />
+              </button>
+            ) : null}
+          </div>
+        </div>
 
-          <ReceiveMinimum />
+        <NetworkSelectors
+          allowedSourceChains={props.allowedSourceChains}
+          allowedDestinationChains={props.allowedDestinationChains}
+        />
 
-          <BridgeOptions
-            showChangeAddress={props.showChangeAddress}
-            showGasTokenSwap={props.showGasTokenSwap}
+        <div className="grid grid-cols-[1.5fr_1fr] items-center gap-0 rounded-[20px] bg-bridge-section p-5 sm:grid-cols-[2fr_1fr]">
+          <AmountInput
+            disabled={
+              !areChainsReady ||
+              !poolInfo?.minDepositAmount ||
+              !poolInfo?.maxDepositAmount
+            }
           />
-
-          <CallToAction
-            onApproveButtonClick={showApprovalModal}
-            onTransferButtonClick={handleTransferButtonClick}
+          <TokenSelector
+            allowedTokens={props.allowedTokens}
+            disabled={
+              !areChainsReady ||
+              !poolInfo?.minDepositAmount ||
+              !poolInfo?.maxDepositAmount
+            }
           />
         </div>
 
-        <TransactionFee />
+        <ReceiveMinimum />
+
+        <BridgeOptions
+          showChangeAddress={props.showChangeAddress}
+          showGasTokenSwap={props.showGasTokenSwap}
+        />
+
+        <CallToAction
+          onApproveButtonClick={showApprovalModal}
+          onTransferButtonClick={handleTransferButtonClick}
+        />
+
+        {showEthereumDisclaimer ? (
+          <article className="mt-0.5 flex h-8 items-center justify-center rounded-[10px] bg-hyphen-warning/25 px-8 text-xxxs font-bold uppercase text-hyphen-warning xl:h-9 xl:text-xxs">
+            <HiExclamation className="mr-2 h-2.5 w-auto" />
+            <p>
+              The received amount may differ due to gas price fluctuations on
+              Ethereum.
+            </p>
+          </article>
+        ) : null}
       </div>
     </>
   );
