@@ -1,7 +1,8 @@
 import { Listbox, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';
-import { HiCheck, HiOutlineChevronDown } from 'react-icons/hi';
+import { HiOutlineChevronDown } from 'react-icons/hi';
 import { twMerge } from 'tailwind-merge';
+import noSelectIcon from 'assets/images/no-select-icon.svg';
 
 export interface Option {
   name: string;
@@ -55,14 +56,14 @@ export const Select: React.FC<ISelectProps> = ({
   return (
     <div className="flex flex-col">
       <Listbox value={selected} onChange={setSelected} disabled={disabled}>
-        <Listbox.Label className="pl-5 mb-2 text-xxs font-bold uppercase text-hyphen-gray-400">
+        <Listbox.Label className="mb-2 pl-5 text-xxs font-bold uppercase text-hyphen-gray-400">
           {label}
         </Listbox.Label>
         <div className="relative h-15">
           <Listbox.Button
             className={twMerge(
               className,
-              'relative h-full w-full cursor-pointer rounded-2.5 border bg-white py-2 pl-4 pr-10 text-left focus:outline-none text-hyphen-gray-400',
+              'relative h-full w-full cursor-pointer rounded-2.5 border bg-white py-2 pl-4 pr-10 text-left text-hyphen-gray-400 focus:outline-none',
               disabled && 'cursor-not-allowed bg-gray-200 text-gray-900/80'
             )}
           >
@@ -79,7 +80,14 @@ export const Select: React.FC<ISelectProps> = ({
                   {selected.name}
                 </>
               ) : (
-                `Select ${label}`
+                <>
+                  <img
+                    src={noSelectIcon}
+                    alt={`Select ${label}`}
+                    className="mr-2 h-4 w-4 xl:h-5 xl:w-5"
+                  />
+                  Select {label}
+                </>
               )}
             </span>
             <span className="pointer-events-none absolute inset-y-0 right-1 flex items-center pr-2">

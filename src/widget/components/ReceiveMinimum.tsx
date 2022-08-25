@@ -14,7 +14,7 @@ function ReceiveMinimum() {
   } = useTransaction()!;
 
   return (
-    <>
+    <div className="grid grid-cols-[332px_166px] items-center gap-0 rounded-[20px] bg-bridge-section p-5">
       <div className="relative flex flex-col">
         <label className="pl-5 text-xxs font-bold uppercase text-hyphen-gray-400">
           Receive Minimum
@@ -30,7 +30,7 @@ function ReceiveMinimum() {
           data-for="totalFees"
         >
           <HiInformationCircle className="mr-1 h-2.5 w-2.5" />
-          {fetchTransactionFeeStatus === Status.PENDING ||
+          {fetchTransactionFeeStatus === Status.PENDING &&
           transferAmountInputValue !== ''
             ? 'Calculating Total Fees'
             : 'Total Fees'}
@@ -86,11 +86,11 @@ function ReceiveMinimum() {
               alt="No selected token"
               className="mr-2 h-4 w-4 xl:h-5 xl:w-5"
             />
-            ...
+            Select token
           </>
         )}
       </div>
-    </>
+    </div>
   );
 }
 

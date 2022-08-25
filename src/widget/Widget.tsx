@@ -27,6 +27,7 @@ import TokenSelector from './components/TokenSelector';
 import TransactionFee from './components/TransactionFee';
 import TransferModal from './components/TransferModal';
 import ReceiveMinimum from './components/ReceiveMinimum';
+import BridgeOptions from './components/BridgeOptions';
 
 interface IWidgetProps {
   closeWidget: () => void;
@@ -120,7 +121,7 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
 
       <ErrorModal error={executeApproveTokenError} title={'Approval Error'} />
       <div className="w-auto">
-        <div className="flex flex-col gap-2 rounded-10 bg-white p-6 shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
+        <div className="flex flex-col gap-2 rounded-[25px] bg-white p-6 shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
           <div className="mb-2 flex items-center justify-between">
             <div className="flex flex-col items-center">
               <img
@@ -146,12 +147,10 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-5 rounded-[20px] bg-bridge-section p-5 xl:grid-cols-[1fr_40px_1fr]">
-            <NetworkSelectors
-              allowedSourceChains={props.allowedSourceChains}
-              allowedDestinationChains={props.allowedDestinationChains}
-            />
-          </div>
+          <NetworkSelectors
+            allowedSourceChains={props.allowedSourceChains}
+            allowedDestinationChains={props.allowedDestinationChains}
+          />
 
           <div className="grid grid-cols-[332px_166px] items-center gap-0 rounded-[20px] bg-bridge-section p-5">
             <AmountInput
@@ -171,13 +170,12 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
             />
           </div>
 
-          <div className="grid grid-cols-[332px_166px] items-center gap-0 rounded-[20px] bg-bridge-section p-5">
-            <ReceiveMinimum />
-          </div>
+          <ReceiveMinimum />
 
-          {props.showChangeAddress ? <ChangeReceiverAddress /> : null}
-
-          {props.showGasTokenSwap ? <GasTokenSwap /> : null}
+          <BridgeOptions
+            showChangeAddress={props.showChangeAddress}
+            showGasTokenSwap={props.showGasTokenSwap}
+          />
 
           <CallToAction
             onApproveButtonClick={showApprovalModal}
