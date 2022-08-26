@@ -44,16 +44,6 @@ function GasTokenSwap() {
   }
 
   const { gasTokenPercentage } = gasTokenSwapData ?? {};
-  const gasTokenSymbol =
-    tokens && toChain
-      ? Object.keys(tokens).find((tokenSymbol: string) => {
-          const token = tokens[tokenSymbol];
-          return token && token[toChain.chainId]
-            ? token[toChain.chainId].address ===
-                toChain?.wrappedNativeTokenAddress
-            : undefined;
-        })
-      : undefined;
 
   let gasTokenMsg;
   if (
@@ -63,7 +53,7 @@ function GasTokenSwap() {
     gasTokenMsg = `Not enough funds to get ${ethers.utils.formatUnits(
       BigNumber.from(toChain?.gasTokenSwap.gasTokenAmount),
       toChain?.nativeDecimal
-    )} ${gasTokenSymbol} on ${toChain?.name}`;
+    )} ${toChain?.currency} on ${toChain?.name}`;
   } else if (
     gasTokenPercentage !== undefined &&
     gasTokenPercentage > 0 &&
@@ -76,11 +66,11 @@ function GasTokenSwap() {
     } for ${ethers.utils.formatUnits(
       BigNumber.from(toChain?.gasTokenSwap.gasTokenAmount),
       toChain?.nativeDecimal
-    )} ${gasTokenSymbol} on ${toChain?.name}`;
+    )} ${toChain?.currency} on ${toChain?.name}`;
   }
 
   return (
-    <div className="px-4 py-2 bg-hyphen-purple bg-opacity-[0.05] rounded-lg hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75">
+    <div className="rounded-lg bg-hyphen-purple bg-opacity-[0.05] px-4 py-2 hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75">
       <div className="flex items-center">
         <HiInformationCircle
           data-tip
@@ -90,7 +80,7 @@ function GasTokenSwap() {
         <div
           className={
             disableGasTokenSwap
-              ? 'flex items-center cursor-not-allowed opacity-50'
+              ? 'flex cursor-not-allowed items-center opacity-50'
               : 'flex items-center'
           }
           data-tip
@@ -126,7 +116,7 @@ function GasTokenSwap() {
       {enableGasTokenSwap &&
       gasTokenSwapData &&
       gasTokenSwapData?.gasTokenPercentage !== undefined ? (
-        <span className="text-xxs font-semibold text-hyphen-gray-400 ml-6">
+        <span className="ml-6 text-xxs font-semibold text-hyphen-gray-400">
           {gasTokenMsg}
         </span>
       ) : null}
