@@ -4,6 +4,7 @@ import { useChains } from 'context/Chains';
 import { useToken } from 'context/Token';
 import { useTransaction } from 'context/Transaction';
 import { BigNumber, ethers } from 'ethers';
+import { HiInformationCircle } from 'react-icons/hi';
 
 function GasTokenSwap() {
   const { toChain } = useChains()!;
@@ -89,7 +90,12 @@ function GasTokenSwap() {
         data-tip
         data-for="whyGasTokenDisabled"
       >
-        <span className="mr-2 text-base font-semibold text-hyphen-purple">
+        <HiInformationCircle
+          data-tip
+          data-for="gasTokenMsg"
+          className="mr-1 h-4 w-4 text-hyphen-purple"
+        />
+        <span className="mr-2 text-sm font-semibold text-hyphen-purple md:text-base">
           Get gas token on destination
         </span>
         <Toggle
@@ -106,12 +112,12 @@ function GasTokenSwap() {
           }}
           variant="large"
         />
-        <a
+        {/* <a
           href="/"
           className="ml-2 hidden font-sans text-xs text-hyphen-gray-400 underline md:ml-2 md:block"
         >
           How does it work?
-        </a>
+        </a> */}
       </div>
       {disableGasTokenSwap ? (
         <CustomTooltip id="whyGasTokenDisabled">

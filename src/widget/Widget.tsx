@@ -5,10 +5,10 @@ import { useWalletProvider } from '../context/WalletProvider';
 
 import HyphenLogoDark from 'assets/images/hyphen-logo-dark.svg';
 import WidgetBranding from 'assets/images/widget-branding.svg';
+import { HiExclamation } from 'react-icons/hi';
 import { IoMdClose } from 'react-icons/io';
 import isToChainEthereum from 'utils/isToChainEthereum';
 import { HyphenWidgetOptions } from '../';
-import { useBiconomy } from '../context/Biconomy';
 import { useHyphen } from '../context/Hyphen';
 import { useToken } from '../context/Token';
 import { useTokenApproval } from '../context/TokenApproval';
@@ -23,7 +23,7 @@ import NetworkSelectors from './components/NetworkSelectors';
 import ReceiveMinimum from './components/ReceiveMinimum';
 import TokenSelector from './components/TokenSelector';
 import TransferModal from './components/TransferModal';
-import { HiExclamation } from 'react-icons/hi';
+import TransferModalNew from './components/TransferModalNew';
 
 interface IWidgetProps {
   closeWidget: () => void;
@@ -49,8 +49,6 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
     if (exitHash && props.onExit) props.onExit(exitHash);
   }, [exitHash, props, props.onExit]);
 
-  const { isBiconomyAllowed, setIsBiconomyToggledOn, isBiconomyEnabled } =
-    useBiconomy()!;
   const { selectedToken } = useToken()!;
   const { isLoggedIn, connect } = useWalletProvider()!;
   const { poolInfo } = useHyphen()!;
@@ -65,6 +63,11 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
     isVisible: isTransferModalVisible,
     hideModal: hideTransferlModal,
     showModal: showTransferModal,
+  } = useModal();
+  const {
+    isVisible: isTransferModalNewVisible,
+    hideModal: hideTransferModalNew,
+    showModal: showTransferModalNew,
   } = useModal();
 
   const [transferModalData, setTransferModalData] = useState<any>();
@@ -119,19 +122,21 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
         />
       ) : null}
 
+      <TransferModalNew isOpen={true} closeModal={hideTransferModalNew} />
+
       <ErrorModal error={executeApproveTokenError} title={'Approval Error'} />
-      <div className="flex w-auto flex-col gap-2 bg-white p-6 md:rounded-[25px] md:shadow-[0_4px_4px_rgba(229,229,229,0.5)]">
+      <div className="flex w-auto flex-col gap-2 bg-white p-6 md:rounded-[25px] md:shadow-[0_24px_50px_rgba(229,229,229,0.75)]">
         <div className="mb-2 flex items-center justify-between">
-          <div className="flex flex-col items-center">
+          <div className="flex items-center">
             <img
               src={HyphenLogoDark}
-              className="h-6 w-auto"
+              className="mr-5 h-6 w-auto"
               alt="Hyphen Logo"
             />
             <img
               src={WidgetBranding}
               alt="Powered by biconomy"
-              className="ml-4 mt-2"
+              className="mt-1"
             />
           </div>
           <div className="flex">

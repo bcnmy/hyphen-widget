@@ -28,7 +28,7 @@ export const ApprovalModal: React.FC<IApprovalModalProps> = ({
 
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
-      <div className="relative z-20 mx-auto w-full overflow-hidden rounded-[25px] border border-hyphen-purple-darker/50 bg-white shadow-lg xl:w-[21.875rem]">
+      <div className="relative z-20 mx-auto w-full overflow-hidden rounded-10 border border-hyphen-purple-darker/50 bg-white shadow-lg xl:w-[21.875rem]">
         <div className="mb-7.5 px-7.5 pt-7.5 flex items-center justify-between xl:px-12.5 xl:pt-12.5">
           <Dialog.Title as="h1" className="text-xl font-semibold text-gray-700">
             Token Approval
