@@ -31,6 +31,9 @@ module.exports = {
         'hyphen-warning': {
           DEFAULT: '#EF9400',
         },
+        'hyphen-success': {
+          DEFAULT: '#03A55A',
+        },
         'bridge-section': 'hsla(243, 53%, 58%, 0.05)',
       },
       fontSize: {
