@@ -2,11 +2,14 @@ import { Dialog, Transition } from '@headlessui/react';
 import Modal from 'components/Modal';
 import { Fragment, useEffect, useState } from 'react';
 import loadingSpinner from 'assets/images/loading-spinner.svg';
+import arrowRight from 'assets/images/arrow-right.svg';
 import PrimaryButton from 'components/Buttons/PrimaryButton';
-import { HiExclamation } from 'react-icons/hi';
+import { HiExclamation, HiOutlineArrowRight } from 'react-icons/hi';
+import { FiArrowUpRight } from 'react-icons/fi';
 import { useTransaction } from 'context/Transaction';
 import { Status } from 'hooks/useLoading';
 import { useToken } from 'context/Token';
+import { useChains } from 'context/Chains';
 
 export interface ITransferModalProps {
   isOpen: boolean;
@@ -14,6 +17,8 @@ export interface ITransferModalProps {
 }
 
 function TransferModalNew({ isOpen, closeModal }: ITransferModalProps) {
+  const { fromChain, toChain } = useChains()!;
+  const { refreshSelectedTokenBalance, selectedToken } = useToken()!;
   const {
     executePreDepositCheck,
     executePreDepositCheckError,
@@ -24,8 +29,8 @@ function TransferModalNew({ isOpen, closeModal }: ITransferModalProps) {
     executeDepositError,
     checkReceival,
     receiver: { receiverAddress },
+    transferAmountInputValue,
   } = useTransaction()!;
-  const { refreshSelectedTokenBalance } = useToken()!;
 
   const [exitHash, setExitHash] = useState('');
   const [deposited, setDeposited] = useState(false);
@@ -115,14 +120,98 @@ function TransferModalNew({ isOpen, closeModal }: ITransferModalProps) {
                   Transfer Activity
                 </Dialog.Title>
 
-                <img
+                {/* Pre-deposit step */}
+                {/* <img
                   src={loadingSpinner}
                   alt="Loading..."
                   className="mx-auto mb-auto animate-spin"
                 />
 
                 <PrimaryButton className="mb-3 bg-hyphen-gray-100 text-base font-semibold text-hyphen-gray-400">
-                  Checking Available Liquidity...
+                  Checking available liquidity...
+                </PrimaryButton>
+
+                <article className="flex items-center justify-center rounded-[10px] bg-hyphen-warning bg-opacity-25 p-2 text-hyphen-warning">
+                  <HiExclamation className="mr-2 h-3 w-3" />
+                  <p className="text-xxs font-bold uppercase">
+                    Please do not refresh or change network.
+                  </p>
+                </article> */}
+
+                {/* Deposit step */}
+                <article className="mb-auto grid grid-cols-3">
+                  <div className="flex flex-col items-start">
+                    <div className="relative mb-3">
+                      <img
+                        className="h-10 w-10"
+                        src={fromChain?.image}
+                        alt={`Destination chain ${fromChain?.name}`}
+                      />
+                      <img
+                        className="absolute top-[10px] right-[-10px] h-5 w-5"
+                        src={selectedToken?.image}
+                        alt={`Selected token ${selectedToken?.symbol}`}
+                      />
+                    </div>
+                    <span className="text-sm font-semibold text-hyphen-gray-400">
+                      {transferAmountInputValue} {selectedToken?.symbol}
+                    </span>
+                    <span className="mb-5 text-sm font-semibold text-hyphen-gray-400">
+                      On {fromChain?.name}
+                    </span>
+                    <a
+                      href="/"
+                      className="flex items-center rounded-full bg-hyphen-purple px-[10px] py-1 text-xxs font-bold uppercase text-white"
+                    >
+                      Source Tx
+                      <FiArrowUpRight className="h-3 w-3" />
+                    </a>
+                  </div>
+
+                  <div className="flex flex-col items-center justify-center">
+                    <img
+                      src={arrowRight}
+                      alt="Deposit direction"
+                      className="mb-8"
+                    />
+                    <img
+                      src={loadingSpinner}
+                      alt="Loading..."
+                      className="mx-auto h-[60px] animate-spin"
+                    />
+                  </div>
+
+                  <div className="flex flex-col items-end">
+                    <div className="relative mb-3">
+                      <img
+                        className="h-10 w-10"
+                        src={fromChain?.image}
+                        alt={`Destination chain ${fromChain?.name}`}
+                      />
+                      <img
+                        className="absolute top-[10px] left-[-10px] h-5 w-5"
+                        src={selectedToken?.image}
+                        alt={`Selected token ${selectedToken?.symbol}`}
+                      />
+                    </div>
+                    <span className="text-sm font-semibold text-hyphen-gray-400">
+                      {transferAmountInputValue} {selectedToken?.symbol}
+                    </span>
+                    <span className="mb-5 text-sm font-semibold text-hyphen-gray-400">
+                      On {toChain?.name}
+                    </span>
+                    <a
+                      href="/"
+                      className="flex items-center rounded-full bg-hyphen-gray-300 px-[10px] py-1 text-xxs font-bold uppercase text-white"
+                    >
+                      Destination Tx
+                      <FiArrowUpRight className="h-3 w-3" />
+                    </a>
+                  </div>
+                </article>
+
+                <PrimaryButton className="mb-3 bg-hyphen-gray-100 text-base font-semibold text-hyphen-gray-400">
+                  Bridging in progress...
                 </PrimaryButton>
 
                 <article className="flex items-center justify-center rounded-[10px] bg-hyphen-warning bg-opacity-25 p-2 text-hyphen-warning">
