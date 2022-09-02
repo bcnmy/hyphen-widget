@@ -23,7 +23,6 @@ import NetworkSelectors from './components/NetworkSelectors';
 import ReceiveMinimum from './components/ReceiveMinimum';
 import TokenSelector from './components/TokenSelector';
 import TransferModal from './components/TransferModal';
-import TransferModalNew from './components/TransferModalNew';
 
 interface IWidgetProps {
   closeWidget: () => void;
@@ -63,11 +62,6 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
     isVisible: isTransferModalVisible,
     hideModal: hideTransferlModal,
     showModal: showTransferModal,
-  } = useModal();
-  const {
-    isVisible: isTransferModalNewVisible,
-    hideModal: hideTransferModalNew,
-    showModal: showTransferModalNew,
   } = useModal();
 
   const [transferModalData, setTransferModalData] = useState<any>();
@@ -121,8 +115,6 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
           transferModalData={transferModalData}
         />
       ) : null}
-
-      {/* <TransferModalNew isOpen={true} closeModal={hideTransferModalNew} /> */}
 
       <ErrorModal error={executeApproveTokenError} title={'Approval Error'} />
       <div className="flex w-auto flex-col gap-2 bg-white p-6 md:rounded-[25px] md:shadow-[0_24px_50px_rgba(229,229,229,0.75)]">
