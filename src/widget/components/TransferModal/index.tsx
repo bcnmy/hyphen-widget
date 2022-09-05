@@ -93,7 +93,7 @@ const PreDepositStep: React.FC<
       <PrimaryButton className="mb-3 w-full bg-hyphen-gray-300 bg-opacity-25 text-base font-semibold text-hyphen-gray-400">
         Checking available liquidity...
       </PrimaryButton>
-      <article className="flex items-center justify-center rounded-[10px] bg-hyphen-warning bg-opacity-25 p-2 text-hyphen-warning">
+      <article className="flex items-center justify-center rounded-[10px] bg-hyphen-warning bg-opacity-25 py-2 px-4 text-hyphen-warning">
         <HiExclamation className="mr-2 h-3 w-3" />
         <p className="text-xxs font-bold uppercase">
           Please do not refresh or change network.
@@ -166,7 +166,7 @@ const DepositStep: React.FC<
 
   return (
     <AnimateHeight height={active ? 'auto' : 0}>
-      <article className="mb-[50px] grid grid-cols-3">
+      <article className="grid grid-cols-3">
         <div className="flex flex-col items-start">
           <div className="relative mb-3">
             <img
@@ -186,30 +186,6 @@ const DepositStep: React.FC<
           <span className="mb-5 text-sm font-semibold text-hyphen-gray-400">
             On {fromChain?.name}
           </span>
-
-          {depositState === Status.PENDING ||
-          depositState === Status.SUCCESS ? (
-            <button
-              onClick={() => {
-                window.open(
-                  `${fromChain?.explorerUrl}/tx/${executeDepositValue.hash}`,
-                  '_blank'
-                );
-              }}
-              className="flex items-center rounded-full bg-hyphen-purple px-[10px] py-1 text-xxs font-bold uppercase text-white"
-            >
-              Source Tx
-              <FiArrowUpRight className="h-3 w-3" />
-            </button>
-          ) : (
-            <button
-              disabled
-              className="flex items-center rounded-full bg-hyphen-gray-300 px-[10px] py-1 text-xxs font-bold uppercase text-white"
-            >
-              Source Tx
-              <FiArrowUpRight className="h-3 w-3" />
-            </button>
-          )}
         </div>
 
         <div className="flex flex-col items-center justify-center">
@@ -217,7 +193,7 @@ const DepositStep: React.FC<
           <img
             src={loadingSpinner}
             alt="Loading..."
-            className="mx-auto h-[60px] animate-spin"
+            className="mx-auto h-10 w-10 animate-spin md:h-14 md:w-14"
           />
         </div>
 
@@ -240,15 +216,41 @@ const DepositStep: React.FC<
           <span className="mb-5 text-sm font-semibold text-hyphen-gray-400">
             On {toChain?.name}
           </span>
-          <button
-            disabled
-            className="flex items-center rounded-full bg-hyphen-gray-300 px-[10px] py-1 text-xxs font-bold uppercase text-white"
-          >
-            Destination Tx
-            <FiArrowUpRight className="h-3 w-3" />
-          </button>
         </div>
       </article>
+
+      <div className="mb-[50px] flex items-center justify-between">
+        {depositState === Status.PENDING || depositState === Status.SUCCESS ? (
+          <button
+            onClick={() => {
+              window.open(
+                `${fromChain?.explorerUrl}/tx/${executeDepositValue.hash}`,
+                '_blank'
+              );
+            }}
+            className="flex w-auto items-center rounded-full bg-hyphen-purple px-[10px] py-1 text-xxs font-bold uppercase text-white"
+          >
+            Source Tx
+            <FiArrowUpRight className="h-3 w-3" />
+          </button>
+        ) : (
+          <button
+            disabled
+            className="flex w-auto items-center rounded-full bg-hyphen-gray-300 px-[10px] py-1 text-xxs font-bold uppercase text-white"
+          >
+            Source Tx
+            <FiArrowUpRight className="h-3 w-3" />
+          </button>
+        )}
+        <button
+          disabled
+          className="flex w-auto items-center rounded-full bg-hyphen-gray-300 px-[10px] py-1 text-xxs font-bold uppercase text-white"
+        >
+          Exit Tx
+          <FiArrowUpRight className="h-3 w-3" />
+        </button>
+      </div>
+
       <PrimaryButton className="mb-3 w-full bg-hyphen-gray-300 bg-opacity-25 text-base font-semibold text-hyphen-gray-400">
         {executeDepositStatus === Status.PENDING
           ? 'Check your wallet...'
@@ -256,7 +258,7 @@ const DepositStep: React.FC<
           ? 'Bridging in progress...'
           : 'We encountered a glitch!'}
       </PrimaryButton>
-      <article className="flex items-center justify-center rounded-[10px] bg-hyphen-warning bg-opacity-25 p-2 text-hyphen-warning">
+      <article className="flex items-center justify-center rounded-[10px] bg-hyphen-warning bg-opacity-25 py-2 px-4 text-hyphen-warning">
         <HiExclamation className="mr-2 h-3 w-3" />
         <p className="text-xxs font-bold uppercase">
           Please do not refresh or change network.
@@ -382,7 +384,7 @@ const ReceivalStep: React.FC<
 
   return (
     <AnimateHeight height={active ? 'auto' : 0}>
-      <article className="mb-[50px] grid grid-cols-3">
+      <article className="grid grid-cols-3">
         <div className="flex flex-col items-start">
           <div className="relative mb-3">
             <img
@@ -402,18 +404,6 @@ const ReceivalStep: React.FC<
           <span className="mb-5 text-sm font-semibold text-hyphen-gray-400">
             On {fromChain?.name}
           </span>
-          <button
-            onClick={() => {
-              window.open(
-                `${fromChain?.explorerUrl}/tx/${executeDepositValue.hash}`,
-                '_blank'
-              );
-            }}
-            className="flex items-center rounded-full bg-hyphen-purple px-[10px] py-1 text-xxs font-bold uppercase text-white"
-          >
-            Source Tx
-            <FiArrowUpRight className="h-3 w-3" />
-          </button>
         </div>
 
         <div className="flex flex-col items-center justify-center">
@@ -422,13 +412,13 @@ const ReceivalStep: React.FC<
             <img
               src={bridgingCompleteArrow}
               alt="Bridging complete confirmation"
-              className="mx-auto h-[60px]"
+              className="mx-auto h-10 w-10 md:h-14 md:w-14"
             />
           ) : (
             <img
               src={loadingSpinner}
               alt="Loading..."
-              className="mx-auto h-[60px] animate-spin"
+              className="mx-auto h-10 w-10 animate-spin md:h-14 md:w-14"
             />
           )}
         </div>
@@ -452,28 +442,43 @@ const ReceivalStep: React.FC<
           <span className="mb-5 text-sm font-semibold text-hyphen-gray-400">
             On {toChain?.name}
           </span>
-          {receivalState === Status.PENDING ||
-          receivalState === Status.SUCCESS ? (
-            <button
-              onClick={() => {
-                window.open(`${toChain?.explorerUrl}/tx/${exitHash}`, '_blank');
-              }}
-              className="flex items-center rounded-full bg-hyphen-purple px-[10px] py-1 text-xxs font-bold uppercase text-white"
-            >
-              Destination Tx
-              <FiArrowUpRight className="h-3 w-3" />
-            </button>
-          ) : (
-            <button
-              disabled
-              className="flex items-center rounded-full bg-hyphen-gray-300 px-[10px] py-1 text-xxs font-bold uppercase text-white"
-            >
-              Destination Tx
-              <FiArrowUpRight className="h-3 w-3" />
-            </button>
-          )}
         </div>
       </article>
+
+      <div className="mb-[50px] flex items-center justify-between">
+        <button
+          onClick={() => {
+            window.open(
+              `${fromChain?.explorerUrl}/tx/${executeDepositValue.hash}`,
+              '_blank'
+            );
+          }}
+          className="flex w-auto items-center rounded-full bg-hyphen-purple px-[10px] py-1 text-xxs font-bold uppercase text-white"
+        >
+          Source Tx
+          <FiArrowUpRight className="h-3 w-3" />
+        </button>
+        {receivalState === Status.PENDING ||
+        receivalState === Status.SUCCESS ? (
+          <button
+            onClick={() => {
+              window.open(`${toChain?.explorerUrl}/tx/${exitHash}`, '_blank');
+            }}
+            className="flex w-auto items-center rounded-full bg-hyphen-purple px-[10px] py-1 text-xxs font-bold uppercase text-white"
+          >
+            Exit Tx
+            <FiArrowUpRight className="h-3 w-3" />
+          </button>
+        ) : (
+          <button
+            disabled
+            className="flex w-auto items-center rounded-full bg-hyphen-gray-300 px-[10px] py-1 text-xxs font-bold uppercase text-white"
+          >
+            Exit Tx
+            <FiArrowUpRight className="h-3 w-3" />
+          </button>
+        )}
+      </div>
 
       {receivalState === Status.SUCCESS ? (
         <PrimaryButton className="mb-3 w-full bg-hyphen-success bg-opacity-25 text-base font-semibold text-hyphen-gray-400">
@@ -505,7 +510,7 @@ const ReceivalStep: React.FC<
           </div>
         </div>
       ) : (
-        <article className="flex items-center justify-center rounded-[10px] bg-hyphen-warning bg-opacity-25 p-2 text-hyphen-warning">
+        <article className="flex items-center justify-center rounded-[10px] bg-hyphen-warning bg-opacity-25 py-2 px-4 text-hyphen-warning">
           <HiExclamation className="mr-2 h-3 w-3" />
           <p className="text-xxs font-bold uppercase">
             Please do not refresh or change network.
@@ -685,7 +690,7 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="flex h-[446px] w-[464px] flex-col rounded-[25px] bg-white p-12.5">
+              <div className="flex h-[446px] w-[330px] flex-col rounded-[25px] bg-white p-7.5 md:w-[464px] md:p-12.5">
                 <Dialog.Title
                   as="h3"
                   className="mb-10 text-left text-base font-semibold text-hyphen-purple"

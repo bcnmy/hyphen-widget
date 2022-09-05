@@ -179,7 +179,7 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
         />
 
         {showEthereumDisclaimer ? (
-          <article className="mt-0.5 flex h-8 items-center justify-center rounded-[10px] bg-hyphen-warning/25 px-8 text-xxxs font-bold uppercase text-hyphen-warning xl:h-9 xl:text-xxs">
+          <article className="mt-0.5 flex h-auto items-center justify-center rounded-[10px] bg-hyphen-warning/25 px-8 py-2 text-xxxs font-bold uppercase text-hyphen-warning xl:text-xxs">
             <HiExclamation className="mr-2 h-2.5 w-auto" />
             <p>
               The received amount may differ due to gas price fluctuations on
