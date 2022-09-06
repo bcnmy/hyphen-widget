@@ -34,6 +34,7 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
     transactionAmountValidationErrors,
     enableGasTokenSwap,
     gasTokenSwapData,
+    fetchTransactionFeeStatus,
   } = useTransaction()!;
   const { isBiconomyEnabled } = useBiconomy()!;
 
@@ -128,8 +129,13 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
 
           {fetchSelectedTokenApprovalStatus === Status.SUCCESS &&
             fetchSelectedTokenApprovalValue === true && (
-              <PrimaryButton onClick={onTransferButtonClick}>
-                Transfer
+              <PrimaryButton
+                onClick={onTransferButtonClick}
+                disabled={fetchTransactionFeeStatus === Status.PENDING}
+              >
+                {fetchTransactionFeeStatus === Status.PENDING
+                  ? 'Calculating total fees'
+                  : 'Transfer'}
               </PrimaryButton>
             )}
         </>

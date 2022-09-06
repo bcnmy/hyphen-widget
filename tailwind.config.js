@@ -33,6 +33,7 @@ module.exports = {
         },
         'hyphen-success': {
           DEFAULT: '#03A55A',
+          100: '#2B825A',
         },
         'bridge-section': 'hsla(243, 53%, 58%, 0.05)',
       },

@@ -27,6 +27,8 @@ import arrowRight from 'assets/images/arrow-right.svg';
 import bridgingCompleteArrow from 'assets/images/bridging-complete-arrow.svg';
 import loadingSpinner from 'assets/images/loading-spinner.svg';
 import { FiArrowUpRight } from 'react-icons/fi';
+import CustomTooltip from 'components/CustomTooltip';
+import { IoMdClose } from 'react-icons/io';
 
 export interface ITransferModalProps {
   isVisible: boolean;
@@ -88,11 +90,19 @@ const PreDepositStep: React.FC<
       <img
         src={loadingSpinner}
         alt="Loading..."
-        className="mx-auto mb-[50px] animate-spin"
+        className="mx-auto mb-[58px] animate-spin"
       />
-      <PrimaryButton className="mb-3 w-full bg-hyphen-gray-300 bg-opacity-25 text-base font-semibold text-hyphen-gray-400">
-        Checking available liquidity...
-      </PrimaryButton>
+      <span className="mb-3 block w-full rounded-[10px] bg-hyphen-gray-300 bg-opacity-25 py-4 text-sm font-semibold">
+        {executePreDepositCheckError ? (
+          <span className="text-red-400">
+            {executePreDepositCheckError.toString()}
+          </span>
+        ) : (
+          <span className="text-hyphen-gray-400">
+            Checking available liquidity...
+          </span>
+        )}
+      </span>
       <article className="flex items-center justify-center rounded-[10px] bg-hyphen-warning bg-opacity-25 py-2 px-4 text-hyphen-warning">
         <HiExclamation className="mr-2 h-3 w-3" />
         <p className="text-xxs font-bold uppercase">
@@ -131,6 +141,7 @@ const DepositStep: React.FC<
   const {
     receiver: { receiverAddress },
     transferAmountInputValue,
+    transactionFee,
   } = useTransaction()!;
 
   const [executed, setExecuted] = useState(false);
@@ -180,10 +191,10 @@ const DepositStep: React.FC<
               alt={`Selected token ${selectedToken?.symbol}`}
             />
           </div>
-          <span className="text-sm font-semibold text-hyphen-gray-400">
+          <span className="text-left text-sm font-semibold text-hyphen-gray-400">
             {transferAmountInputValue} {selectedToken?.symbol}
           </span>
-          <span className="mb-5 text-sm font-semibold text-hyphen-gray-400">
+          <span className="mb-5 text-left text-sm font-semibold text-hyphen-gray-400">
             On {fromChain?.name}
           </span>
         </div>
@@ -210,10 +221,10 @@ const DepositStep: React.FC<
               alt={`Selected token ${selectedToken?.symbol}`}
             />
           </div>
-          <span className="text-sm font-semibold text-hyphen-gray-400">
-            {transferAmountInputValue} {selectedToken?.symbol}
+          <span className="text-right text-sm font-semibold text-hyphen-gray-400">
+            {transactionFee?.amountToGetProcessedString} {selectedToken?.symbol}
           </span>
-          <span className="mb-5 text-sm font-semibold text-hyphen-gray-400">
+          <span className="mb-5 text-right text-sm font-semibold text-hyphen-gray-400">
             On {toChain?.name}
           </span>
         </div>
@@ -251,13 +262,19 @@ const DepositStep: React.FC<
         </button>
       </div>
 
-      <PrimaryButton className="mb-3 w-full bg-hyphen-gray-300 bg-opacity-25 text-base font-semibold text-hyphen-gray-400">
-        {executeDepositStatus === Status.PENDING
-          ? 'Check your wallet...'
-          : executeDepositStatus === Status.SUCCESS
-          ? 'Bridging in progress...'
-          : 'We encountered a glitch!'}
-      </PrimaryButton>
+      <span className="mb-3 block w-full rounded-[10px] bg-hyphen-gray-300 bg-opacity-25 py-4 text-sm font-semibold">
+        {executeDepositError ? (
+          <span className="text-red-400">
+            {executeDepositError?.message || executeDepositError.toString()}
+          </span>
+        ) : null}
+
+        {executeDepositStatus === Status.PENDING ? (
+          <span className="text-hyphen-gray-400">Approve transaction...</span>
+        ) : executeDepositStatus === Status.SUCCESS ? (
+          <span className="text-hyphen-gray-400">Bridging in progress...</span>
+        ) : null}
+      </span>
       <article className="flex items-center justify-center rounded-[10px] bg-hyphen-warning bg-opacity-25 py-2 px-4 text-hyphen-warning">
         <HiExclamation className="mr-2 h-3 w-3" />
         <p className="text-xxs font-bold uppercase">
@@ -276,6 +293,8 @@ const ReceivalStep: React.FC<
     setReceivalState: (state: Status) => void;
     // showManualExit: () => void;
     receivalState: Status;
+    startTime: Date | undefined;
+    endTime: Date | undefined;
   }
 > = ({
   currentStepNumber,
@@ -288,8 +307,10 @@ const ReceivalStep: React.FC<
   stepNumber,
   transferModalData,
   receivalState,
+  startTime,
+  endTime,
 }) => {
-  const active = currentStepNumber === stepNumber;
+  const active = currentStepNumber >= stepNumber;
   const completed = currentStepNumber > stepNumber;
 
   const {
@@ -299,17 +320,22 @@ const ReceivalStep: React.FC<
     gasTokenSwapData,
     transferAmountInputValue,
     executeDepositValue,
+    transactionFee,
+    fetchTransactionFeeStatus,
   } = useTransaction()!;
+
   const {
     fromChain,
     selectedToken,
     toChainRpcUrlProvider,
     toChain,
-    transactionFee,
+    // transactionFee,
   } = transferModalData;
 
   const [receivalError, setReceivalError] = useState<any>();
   const [executed, setExecuted] = useState(false);
+  const transferTime =
+    startTime && endTime ? formatDistanceStrict(endTime, startTime) : undefined;
 
   useEffect(() => {
     if (active) {
@@ -366,7 +392,7 @@ const ReceivalStep: React.FC<
           setExecuted(false);
           await tx?.wait(1);
           setReceivalState(Status.SUCCESS);
-          // onNextStep();
+          onNextStep();
         })();
       }
     } catch (e) {
@@ -377,6 +403,7 @@ const ReceivalStep: React.FC<
     active,
     executed,
     exitHash,
+    onNextStep,
     setModalErrored,
     setReceivalState,
     toChainRpcUrlProvider,
@@ -398,10 +425,10 @@ const ReceivalStep: React.FC<
               alt={`Selected token ${selectedToken?.symbol}`}
             />
           </div>
-          <span className="text-sm font-semibold text-hyphen-gray-400">
+          <span className="text-left text-sm font-semibold text-hyphen-gray-400">
             {transferAmountInputValue} {selectedToken?.symbol}
           </span>
-          <span className="mb-5 text-sm font-semibold text-hyphen-gray-400">
+          <span className="mb-5 text-left text-sm font-semibold text-hyphen-gray-400">
             On {fromChain?.name}
           </span>
         </div>
@@ -436,10 +463,10 @@ const ReceivalStep: React.FC<
               alt={`Selected token ${selectedToken?.symbol}`}
             />
           </div>
-          <span className="text-sm font-semibold text-hyphen-gray-400">
-            {transferAmountInputValue} {selectedToken?.symbol}
+          <span className="text-right text-sm font-semibold text-hyphen-gray-400">
+            {transactionFee?.amountToGetProcessedString} {selectedToken?.symbol}
           </span>
-          <span className="mb-5 text-sm font-semibold text-hyphen-gray-400">
+          <span className="mb-5 text-right text-sm font-semibold text-hyphen-gray-400">
             On {toChain?.name}
           </span>
         </div>
@@ -481,19 +508,27 @@ const ReceivalStep: React.FC<
       </div>
 
       {receivalState === Status.SUCCESS ? (
-        <PrimaryButton className="mb-3 w-full bg-hyphen-success bg-opacity-25 text-base font-semibold text-hyphen-gray-400">
-          Bridging completed! 😎
-        </PrimaryButton>
+        <span className="mb-3 block w-full rounded-[10px] bg-hyphen-success bg-opacity-25 py-4 text-sm font-semibold">
+          {receivalError ? (
+            <span className="text-red-400">
+              {receivalError?.message || receivalError.toString()}
+            </span>
+          ) : (
+            <span className="text-hyphen-success-100">
+              Bridging completed! 😎
+            </span>
+          )}
+        </span>
       ) : (
-        <PrimaryButton className="mb-3 w-full bg-hyphen-gray-300 bg-opacity-25 text-base font-semibold text-hyphen-gray-400">
+        <span className="mb-3 block w-full rounded-[10px] bg-hyphen-gray-300 bg-opacity-25 py-4 text-sm font-semibold text-hyphen-gray-400">
           {receivalState === Status.PENDING
             ? 'Checking for receival...'
             : 'Bridging in progress...'}
-        </PrimaryButton>
+        </span>
       )}
 
       {receivalState === Status.SUCCESS ? (
-        <div className="mt-1 flex items-center justify-center">
+        <div className="mt-1 flex items-center justify-center py-2 px-4">
           <span className="text-xxs font-bold uppercase text-hyphen-gray-400">
             {fromChain?.name}
           </span>
@@ -501,13 +536,56 @@ const ReceivalStep: React.FC<
           <span className="text-xxs font-bold uppercase text-hyphen-gray-400">
             {toChain?.name}
           </span>
-          <span className="mx-1 text-xxs">⚡</span>
+          <span className="mx-1 text-xxs font-bold uppercase">
+            ⚡ in {transferTime}
+          </span>
           <div className="flex items-center" data-tip data-for="totalFees">
             <HiInformationCircle className="mr-1 h-2.5 w-2.5 text-hyphen-gray-300" />
             <span className="text-xxs font-bold uppercase text-hyphen-gray-300">
               Total fees
             </span>
           </div>
+          {transactionFee ? (
+            <CustomTooltip id="totalFees">
+              <div>
+                <span>LP fee ({transactionFee.transferFeePercentage}%): </span>
+                {fetchTransactionFeeStatus === Status.SUCCESS &&
+                transactionFee ? (
+                  <>{`${transactionFee.lpFeeProcessedString} ${selectedToken?.symbol}`}</>
+                ) : (
+                  '...'
+                )}
+              </div>
+              {transactionFee && transactionFee.rewardAmountString ? (
+                <div>
+                  <span>Reward amount: </span>
+                  {fetchTransactionFeeStatus === Status.SUCCESS &&
+                  transactionFee ? (
+                    <>{`${transactionFee.rewardAmountString} ${selectedToken?.symbol}`}</>
+                  ) : (
+                    '...'
+                  )}
+                </div>
+              ) : null}
+              <div>
+                <span>Transaction fee: </span>
+                {fetchTransactionFeeStatus === Status.SUCCESS &&
+                transactionFee ? (
+                  <>{`${transactionFee.transactionFeeProcessedString} ${selectedToken?.symbol}`}</>
+                ) : (
+                  '...'
+                )}
+              </div>
+              {gasTokenSwapData ? (
+                <div>
+                  <span>Gas token worth: </span>
+                  <>{`${gasTokenSwapData?.gasTokenAmountInDepositCurrency.toFixed(
+                    5
+                  )} ${selectedToken?.symbol}`}</>
+                </div>
+              ) : null}
+            </CustomTooltip>
+          ) : null}
         </div>
       ) : (
         <article className="flex items-center justify-center rounded-[10px] bg-hyphen-warning bg-opacity-25 py-2 px-4 text-hyphen-warning">
@@ -690,13 +768,33 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="flex h-[446px] w-[330px] flex-col rounded-[25px] bg-white p-7.5 md:w-[464px] md:p-12.5">
-                <Dialog.Title
-                  as="h3"
-                  className="mb-10 text-left text-base font-semibold text-hyphen-purple"
-                >
-                  Transfer Activity
-                </Dialog.Title>
+              <div className="flex h-auto w-[330px] flex-col rounded-[25px] bg-white p-7.5 md:w-[464px] md:p-12.5">
+                <div className="mb-10 flex items-center justify-between">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-left text-base font-semibold text-hyphen-purple"
+                  >
+                    Transfer Activity
+                  </Dialog.Title>
+                  <span data-tip data-for="whyModalExitDisabled">
+                    <button
+                      className="rounded hover:bg-gray-100"
+                      onClick={() => {
+                        isExitAllowed && onClose();
+                      }}
+                      disabled={!isExitAllowed}
+                    >
+                      <IoMdClose className="h-6 w-auto text-gray-500" />
+                    </button>
+                  </span>
+                  {!isExitAllowed && (
+                    <CustomTooltip id="whyModalExitDisabled">
+                      <span>
+                        Exit is disabled because transfer is in progress
+                      </span>
+                    </CustomTooltip>
+                  )}
+                </div>
 
                 {activeStep === 1 ? (
                   <PreDepositStep
@@ -718,7 +816,7 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
                     transferModalData={transferModalData}
                   />
                 ) : null}
-                {activeStep === 3 ? (
+                {activeStep >= 3 ? (
                   <ReceivalStep
                     currentStepNumber={activeStep}
                     // hideManualExit={hideManualExit}
@@ -730,6 +828,8 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
                     stepNumber={3}
                     transferModalData={transferModalData}
                     receivalState={receivalState}
+                    startTime={startTime}
+                    endTime={endTime}
                   />
                 ) : null}
               </div>
@@ -739,233 +839,6 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
       </Dialog>
     </Transition>
   );
-
-  // return (
-  //   <Modal isVisible={isVisible} onClose={() => {}}>
-  //     <div className="mb-14">
-  //       <div className="relative z-20 rounded-3xl border border-hyphen-purple-darker/50 bg-white p-6 shadow-lg">
-  //         <div className="absolute -inset-2 -z-10 rounded-3xl bg-white/60 opacity-50 blur-lg"></div>
-  //         <div className="flex flex-col">
-  //           <div className="mb-4 flex items-center justify-between">
-  //             <Dialog.Title
-  //               as="h1"
-  //               className="text-xl font-semibold text-gray-700"
-  //             >
-  //               Transfer Activity
-  //             </Dialog.Title>
-  //             <span data-tip data-for="whyModalExitDisabled">
-  //               <button
-  //                 className="rounded hover:bg-gray-100"
-  //                 onClick={() => {
-  //                   isExitAllowed && onClose();
-  //                 }}
-  //                 disabled={!isExitAllowed}
-  //               >
-  //                 <IoMdClose className="h-6 w-auto text-gray-500" />
-  //               </button>
-  //             </span>
-  //             {!isExitAllowed && (
-  //               <CustomTooltip id="whyModalExitDisabled">
-  //                 <span>Exit is disabled because transfer is in progress</span>
-  //               </CustomTooltip>
-  //             )}
-  //           </div>
-  //           <div className="flex flex-col gap-2 pl-2">
-  //             <PreDepositStep
-  //               currentStepNumber={activeStep}
-  //               stepNumber={1}
-  //               onNextStep={nextStep}
-  //               setModalErrored={setModalErrored}
-  //               transferModalData={transferModalData}
-  //             />
-  //             <DepositStep
-  //               currentStepNumber={activeStep}
-  //               stepNumber={2}
-  //               onNextStep={nextStep}
-  //               setModalErrored={setModalErrored}
-  //               setDepositState={setDepositState}
-  //               transferModalData={transferModalData}
-  //             />
-  //             <ReceivalStep
-  //               currentStepNumber={activeStep}
-  //               // hideManualExit={hideManualExit}
-  //               setModalErrored={setModalErrored}
-  //               onNextStep={nextStep}
-  //               refreshSelectedTokenBalance={refreshSelectedTokenBalance}
-  //               setReceivalState={setReceivalState}
-  //               // showManualExit={showManualExit}
-  //               stepNumber={3}
-  //               transferModalData={transferModalData}
-  //             />
-  //           </div>
-  //           <div className="mt-4 flex justify-center pt-3 pb-2">
-  //             {modalErrored ? (
-  //               <PrimaryButton
-  //                 className="px-8"
-  //                 onClick={() => {
-  //                   onClose();
-  //                 }}
-  //               >
-  //                 <span>Close</span>
-  //               </PrimaryButton>
-  //             ) : (
-  //               <PrimaryButton
-  //                 className="px-8"
-  //                 disabled={receivalState !== Status.SUCCESS}
-  //                 onClick={() => {
-  //                   openTransferInfoModal();
-  //                 }}
-  //               >
-  //                 <div className="flex items-center gap-3">
-  //                   {receivalState !== Status.SUCCESS ? (
-  //                     <>
-  //                       {/* <Spinner /> */}
-  //                       <span>Transfer in Progress </span>
-  //                     </>
-  //                   ) : (
-  //                     <>
-  //                       <span>View Details</span>
-  //                     </>
-  //                   )}
-  //                 </div>
-  //               </PrimaryButton>
-  //             )}
-  //           </div>
-  //         </div>
-  //       </div>
-
-  //       <TransitionReact in={isBottomTrayOpen} timeout={300}>
-  //         {(state) => (
-  //           <div
-  //             className={twMerge(
-  //               'transform-gpu transition-transform',
-  //               (state === 'exiting' || state === 'exited') &&
-  //                 '-translate-y-full'
-  //             )}
-  //           >
-  //             <div className="relative mx-10">
-  //               <div className="absolute -inset-[2px] -z-10 bg-gradient-to-br from-white/10 to-hyphen-purple/30 opacity-80 blur-md"></div>
-  //               <div className="relative z-0 rounded-b-md border-x border-b border-white/20 bg-gradient-to-r from-hyphen-purple-darker via-hyphen-purple-mid to-hyphen-purple-darker p-4 shadow-lg backdrop-blur">
-  //                 <article className="mb-4 flex items-start rounded-xl bg-red-100 p-2 text-sm text-red-600">
-  //                   <HiExclamation className="mr-2 h-6 w-auto" />
-  //                   <p>
-  //                     Please do not refresh or change network while the
-  //                     transaction is in progress.
-  //                   </p>
-  //                 </article>
-  //                 <div
-  //                   className="grid gap-y-2 text-white/75"
-  //                   style={{ gridTemplateColumns: '1fr auto' }}
-  //                 >
-  //                   <span className="flex items-center gap-3 font-normal">
-  //                     Deposit on {fromChain?.name}
-  //                   </span>
-  //                   <span className="text-right">
-  //                     {depositState === Status.PENDING ||
-  //                     depositState === Status.SUCCESS ? (
-  //                       <PrimaryButtonDark
-  //                         className="px-6"
-  //                         onClick={() => {
-  //                           window.open(
-  //                             `${fromChain?.explorerUrl}/tx/${executeDepositValue.hash}`,
-  //                             '_blank'
-  //                           );
-  //                         }}
-  //                       >
-  //                         {depositState === Status.PENDING && (
-  //                           <div className="flex items-center gap-3">
-  //                             <SpinnerDark />
-  //                             <span className="flex items-center gap-2">
-  //                               <span>Pending</span>
-  //                               <span>
-  //                                 <HiOutlineArrowSmRight className="h-5 w-5 -rotate-45" />
-  //                               </span>
-  //                             </span>
-  //                           </div>
-  //                         )}
-  //                         {depositState === Status.SUCCESS && (
-  //                           <div className="flex items-center gap-2">
-  //                             <span>Confirmed</span>
-  //                             <span>
-  //                               <HiOutlineArrowSmRight className="h-5 w-5 -rotate-45" />
-  //                             </span>
-  //                           </div>
-  //                         )}
-  //                       </PrimaryButtonDark>
-  //                     ) : (
-  //                       <Skeleton
-  //                         baseColor="#ffffff10"
-  //                         highlightColor="#ffffff15"
-  //                         className="my-4 mr-2 max-w-[100px]"
-  //                       />
-  //                     )}
-  //                   </span>
-  //                   <span className="flex items-center gap-3 font-normal">
-  //                     Transfer on {toChain?.name}
-  //                     {/* {canManualExit
-  //                       ? "Transfer taking time?"
-  //                       : `Transfer on ${toChain?.name}`} */}
-  //                   </span>
-  //                   <span className="text-right">
-  //                     {
-  //                       // canManualExit ? (
-  //                       //   <PrimaryButtonDark
-  //                       //     className="px-6"
-  //                       //     onClick={triggerManualExit}
-  //                       //     disabled={isManualExitDisabled}
-  //                       //   >
-  //                       //     Click here
-  //                       //   </PrimaryButtonDark>
-  //                       // ) :
-  //                       receivalState === Status.PENDING ||
-  //                       receivalState === Status.SUCCESS ? (
-  //                         <PrimaryButtonDark
-  //                           className="px-6"
-  //                           onClick={() => {
-  //                             window.open(
-  //                               `${toChain?.explorerUrl}/tx/${exitHash}`,
-  //                               '_blank'
-  //                             );
-  //                           }}
-  //                         >
-  //                           {receivalState === Status.PENDING && (
-  //                             <div className="flex items-center gap-3">
-  //                               <SpinnerDark />
-  //                               <span className="flex items-center gap-2">
-  //                                 <span>Pending</span>
-  //                                 <span>
-  //                                   <HiOutlineArrowSmRight className="h-5 w-5 -rotate-45" />
-  //                                 </span>
-  //                               </span>
-  //                             </div>
-  //                           )}
-  //                           {receivalState === Status.SUCCESS && (
-  //                             <div className="flex items-center gap-2">
-  //                               <span>Confirmed</span>
-  //                               <span>
-  //                                 <HiOutlineArrowSmRight className="h-5 w-5 -rotate-45" />
-  //                               </span>
-  //                             </div>
-  //                           )}
-  //                         </PrimaryButtonDark>
-  //                       ) : (
-  //                         <Skeleton
-  //                           baseColor="#ffffff10"
-  //                           highlightColor="#ffffff15"
-  //                           className="my-4 mr-2 max-w-[100px]"
-  //                         />
-  //                       )
-  //                     }
-  //                   </span>
-  //                 </div>
-  //               </div>
-  //             </div>
-  //           </div>
-  //         )}
-  //       </TransitionReact>
-  //     </div>
-  //   </Modal>
-  // );
 };
 
 export default TransferModal;

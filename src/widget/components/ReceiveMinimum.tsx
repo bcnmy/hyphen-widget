@@ -67,16 +67,14 @@ function ReceiveMinimum() {
                 '...'
               )}
             </div>
-            <div>
-              <span>Gas token worth: </span>
-              {gasTokenSwapData ? (
+            {gasTokenSwapData ? (
+              <div>
+                <span>Gas token worth: </span>
                 <>{`${gasTokenSwapData?.gasTokenAmountInDepositCurrency.toFixed(
                   5
                 )} ${selectedToken?.symbol}`}</>
-              ) : (
-                '...'
-              )}
-            </div>
+              </div>
+            ) : null}
           </CustomTooltip>
         ) : null}
       </div>
