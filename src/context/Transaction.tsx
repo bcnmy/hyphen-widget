@@ -59,6 +59,7 @@ interface ITransactionContext {
         rewardAmountString: string | undefined;
         transferFeePercentage: string | undefined;
       };
+  setTransactionFee: React.Dispatch<React.SetStateAction<any | undefined>>;
   transactionAmountValidationErrors: ValidationErrors[];
   // receiver address
   receiver: { receiverAddress: string; isReceiverValid: boolean };
@@ -413,6 +414,7 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
     error: fetchTransactionFeeError,
     status: fetchTransactionFeeStatus,
     value: transactionFee,
+    setValue: setTransactionFee,
   } = useAsync(calculateTransactionFee);
 
   // this is a function, and not an effect being run on transferAmount
@@ -473,8 +475,10 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
   useEffect(() => {
     if (transferAmount) {
       fetchTransactionFee();
+    } else {
+      setTransactionFee(undefined);
     }
-  }, [errors, fetchTransactionFee, transferAmount]);
+  }, [errors, fetchTransactionFee, setTransactionFee, transferAmount]);
 
   const preDepositCheck = useCallback(async () => {
     if (!transferAmount || errors.length > 0) {
@@ -729,6 +733,7 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
         transferAmount,
         transferAmountInputValue,
         transactionFee,
+        setTransactionFee,
         changeTransferAmountInputValue,
         fetchTransactionFeeStatus,
         fetchTransactionFeeError,

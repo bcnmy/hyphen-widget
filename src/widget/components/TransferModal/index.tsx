@@ -212,8 +212,8 @@ const DepositStep: React.FC<
           <div className="relative mb-3">
             <img
               className="h-10 w-10"
-              src={fromChain?.image}
-              alt={`Destination chain ${fromChain?.name}`}
+              src={toChain?.image}
+              alt={`Destination chain ${toChain?.name}`}
             />
             <img
               className="absolute top-[10px] left-[-10px] h-5 w-5"
@@ -521,9 +521,7 @@ const ReceivalStep: React.FC<
         </span>
       ) : (
         <span className="mb-3 block w-full rounded-[10px] bg-hyphen-gray-300 bg-opacity-25 py-4 text-sm font-semibold text-hyphen-gray-400">
-          {receivalState === Status.PENDING
-            ? 'Checking for receival...'
-            : 'Bridging in progress...'}
+          Bridging in progress...
         </span>
       )}
 

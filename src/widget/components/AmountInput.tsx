@@ -1,7 +1,7 @@
 import CustomTooltip from 'components/CustomTooltip';
 import { useHyphen } from 'context/Hyphen';
 import { useToken } from 'context/Token';
-import { useTransaction } from 'context/Transaction';
+import { useTransaction, ValidationErrors } from 'context/Transaction';
 import { Status } from 'hooks/useLoading';
 import React from 'react';
 import { HiInformationCircle } from 'react-icons/hi';
@@ -15,8 +15,11 @@ const AmountInput: React.FunctionComponent<IAmountInputProps> = ({
   disabled,
 }) => {
   const { poolInfo, getPoolInfoStatus } = useHyphen()!;
-  const { changeTransferAmountInputValue, transferAmountInputValue } =
-    useTransaction()!;
+  const {
+    changeTransferAmountInputValue,
+    transferAmountInputValue,
+    transactionAmountValidationErrors,
+  } = useTransaction()!;
   const { selectedTokenBalance } = useToken()!;
 
   return (
@@ -57,7 +60,12 @@ const AmountInput: React.FunctionComponent<IAmountInputProps> = ({
         MAX
       </button>
       <div
-        className="absolute right-3 inline-flex items-center text-xxs font-bold uppercase text-hyphen-gray-300"
+        className={`absolute right-3 inline-flex items-center text-xxs font-bold uppercase text-hyphen-gray-300 
+        ${
+          transactionAmountValidationErrors.includes(
+            ValidationErrors.AMOUNT_LT_MIN || ValidationErrors.AMOUNT_GT_MAX
+          ) && 'text-red-600'
+        }`}
         data-tip
         data-for="limit"
       >
@@ -65,12 +73,12 @@ const AmountInput: React.FunctionComponent<IAmountInputProps> = ({
         Limit
       </div>
       <CustomTooltip id="limit">
-        Min:
+        Min:{' '}
         {getPoolInfoStatus === Status.SUCCESS && poolInfo?.minDepositAmount
           ? Math.trunc(poolInfo.minDepositAmount * 100000) / 100000
           : '...'}
         {' // '}
-        Max:
+        Max:{' '}
         {getPoolInfoStatus === Status.SUCCESS && poolInfo?.maxDepositAmount
           ? Math.trunc(poolInfo.maxDepositAmount * 100000) / 100000
           : '...'}

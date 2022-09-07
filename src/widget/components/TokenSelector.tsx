@@ -91,19 +91,20 @@ const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
         label={''}
         disabled={disabled}
       />
-      <div className="absolute right-3 top-[-15px] inline-flex items-center text-xxs font-bold uppercase text-hyphen-gray-300">
+      <div
+        className={`absolute right-3 top-[-15px] inline-flex items-center text-xxs font-bold uppercase text-hyphen-gray-300 
+        ${
+          transactionAmountValidationErrors.includes(
+            ValidationErrors.INADEQUATE_BALANCE
+          ) && 'text-red-600'
+        }
+      `}
+      >
         <BiWallet className="mr-1 h-2.5 w-2.5" />
         {getSelectedTokenBalanceStatus &&
         getSelectedTokenBalanceStatus === Status.SUCCESS &&
         selectedTokenBalance?.displayBalance ? (
-          <span
-            className={twMerge(
-              transactionAmountValidationErrors.includes(
-                ValidationErrors.INADEQUATE_BALANCE
-              ) && 'text-red-600',
-              'transition-colors'
-            )}
-          >
+          <span className="transition-colors">
             {selectedTokenBalance?.displayBalance || 0}
           </span>
         ) : (

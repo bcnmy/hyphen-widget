@@ -90,12 +90,9 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
       ) : (
         <>
           {fetchSelectedTokenApprovalStatus === Status.PENDING && (
-            <>
-              <PrimaryButton disabled className="mr-8">
-                Checking approval
-              </PrimaryButton>
-            </>
+            <PrimaryButton disabled>Checking approval</PrimaryButton>
           )}
+
           {fetchSelectedTokenApprovalStatus === Status.SUCCESS &&
             fetchSelectedTokenApprovalValue === false && (
               <>
@@ -120,11 +117,9 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
             gasTokenSwapData &&
             (gasTokenSwapData.gasTokenPercentage === 0 ||
               gasTokenSwapData.gasTokenPercentage > 80) && (
-              <>
-                <PrimaryButton disabled>
-                  Not enough funds for this transfer
-                </PrimaryButton>
-              </>
+              <PrimaryButton disabled>
+                Not enough funds for this transfer
+              </PrimaryButton>
             )}
 
           {fetchSelectedTokenApprovalStatus === Status.SUCCESS &&

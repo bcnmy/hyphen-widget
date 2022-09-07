@@ -21,7 +21,9 @@ function ReceiveMinimum() {
           Receive Minimum
         </label>
         <div className="mt-2 flex h-15 w-full items-center rounded-2.5 rounded-r-none border border-r-0 bg-white px-4 py-2 font-mono text-2xl text-hyphen-gray-400 focus:outline-none">
-          {fetchTransactionFeeStatus === Status.SUCCESS && transactionFee
+          {fetchTransactionFeeStatus === Status.SUCCESS &&
+          transactionFee &&
+          transferAmountInputValue !== ''
             ? transactionFee.amountToGetProcessedString
             : '0.000'}
         </div>
