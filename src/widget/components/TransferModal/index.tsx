@@ -534,12 +534,12 @@ const ReceivalStep: React.FC<
           <span className="text-xxs font-bold uppercase text-hyphen-gray-400">
             {toChain?.name}
           </span>
-          <span className="mx-1 text-xxs font-bold uppercase">
+          <span className="mx-1 text-xxs font-bold uppercase text-hyphen-gray-400">
             ⚡ in {transferTime}
           </span>
           <div className="flex items-center" data-tip data-for="totalFees">
-            <HiInformationCircle className="mr-1 h-2.5 w-2.5 text-hyphen-gray-300" />
-            <span className="text-xxs font-bold uppercase text-hyphen-gray-300">
+            <HiInformationCircle className="mr-1 h-2.5 w-2.5 text-hyphen-gray-400" />
+            <span className="text-xxs font-bold uppercase text-hyphen-gray-400">
               Total fees
             </span>
           </div>
