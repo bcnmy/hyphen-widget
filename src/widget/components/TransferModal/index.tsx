@@ -1,4 +1,3 @@
-import PrimaryButton from 'components/Buttons/PrimaryButton';
 import { formatDistanceStrict } from 'date-fns';
 import React, {
   Fragment,
@@ -11,12 +10,7 @@ import React, {
 import { Dialog, Transition } from '@headlessui/react';
 import { useToken } from 'context/Token';
 import { useTransaction } from 'context/Transaction';
-import {
-  ITransferRecord,
-  useTransactionInfoModal,
-} from 'context/TransactionInfoModal';
 import { Status } from 'hooks/useLoading';
-import AnimateHeight from 'react-animate-height';
 import {
   HiExclamation,
   HiInformationCircle,
@@ -26,8 +20,8 @@ import {
 import arrowRight from 'assets/images/arrow-right.svg';
 import bridgingCompleteArrow from 'assets/images/bridging-complete-arrow.svg';
 import loadingSpinner from 'assets/images/loading-spinner.svg';
-import { FiArrowUpRight } from 'react-icons/fi';
 import CustomTooltip from 'components/CustomTooltip';
+import { FiArrowUpRight } from 'react-icons/fi';
 import { IoMdClose } from 'react-icons/io';
 
 export interface ITransferModalProps {
@@ -53,12 +47,10 @@ const PreDepositStep: React.FC<
   transferModalData,
 }) => {
   const active = currentStepNumber === stepNumber;
-  const completed = currentStepNumber > stepNumber;
 
   // we set this to true after this step is executed
   // this is done so that stale values of value and error are not used
   const [executed, setExecuted] = useState(false);
-  const { toChain } = transferModalData;
 
   const {
     executePreDepositCheck,
@@ -86,7 +78,7 @@ const PreDepositStep: React.FC<
   }, [executed, executePreDepositCheckStatus, onNextStep, active]);
 
   return (
-    <AnimateHeight height={active ? 'auto' : 0}>
+    <>
       <img
         src={loadingSpinner}
         alt="Loading..."
@@ -109,7 +101,7 @@ const PreDepositStep: React.FC<
           Please do not refresh or change network.
         </p>
       </article>
-    </AnimateHeight>
+    </>
   );
 };
 
@@ -129,15 +121,13 @@ const DepositStep: React.FC<
   transferModalData,
 }) => {
   const active = currentStepNumber === stepNumber;
-  const completed = currentStepNumber > stepNumber;
   const {
     executeDeposit,
     executeDepositStatus,
     executeDepositValue,
     executeDepositError,
   } = useTransaction()!;
-  const { fromChain, selectedToken, transferAmount, toChain } =
-    transferModalData;
+  const { fromChain, selectedToken, toChain } = transferModalData;
   const {
     receiver: { receiverAddress },
     transferAmountInputValue,
@@ -176,7 +166,7 @@ const DepositStep: React.FC<
   ]);
 
   return (
-    <AnimateHeight height={active ? 'auto' : 0}>
+    <>
       <article className="grid grid-cols-3">
         <div className="flex flex-col items-start">
           <div className="relative mb-3">
@@ -281,7 +271,7 @@ const DepositStep: React.FC<
           Please do not refresh or change network.
         </p>
       </article>
-    </AnimateHeight>
+    </>
   );
 };
 
@@ -311,7 +301,6 @@ const ReceivalStep: React.FC<
   endTime,
 }) => {
   const active = currentStepNumber >= stepNumber;
-  const completed = currentStepNumber > stepNumber;
 
   const {
     checkReceival,
@@ -410,7 +399,7 @@ const ReceivalStep: React.FC<
   ]);
 
   return (
-    <AnimateHeight height={active ? 'auto' : 0}>
+    <>
       <article className="grid grid-cols-3">
         <div className="flex flex-col items-start">
           <div className="relative mb-3">
@@ -593,7 +582,7 @@ const ReceivalStep: React.FC<
           </p>
         </article>
       )}
-    </AnimateHeight>
+    </>
   );
 };
 
@@ -602,13 +591,7 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
   onClose,
   transferModalData,
 }) => {
-  const { fromChain, selectedToken, toChain, transferAmount, transactionFee } =
-    transferModalData;
-
   const { refreshSelectedTokenBalance } = useToken()!;
-  const { executeDepositValue, exitHash } = useTransaction()!;
-  // const { hyphen } = useHyphen()!;
-  const { showTransactionInfoModal } = useTransactionInfoModal()!;
   const [modalErrored, setModalErrored] = useState(false);
 
   useEffect(() => {
@@ -635,15 +618,6 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
     }
   }, [activeStep]);
 
-  const isBottomTrayOpen = useMemo(() => {
-    return (
-      depositState === Status.PENDING ||
-      depositState === Status.SUCCESS ||
-      receivalState === Status.PENDING ||
-      receivalState === Status.SUCCESS
-    );
-  }, [depositState, receivalState]);
-
   useEffect(() => {
     if (isVisible) setActiveStep(1);
     else {
@@ -666,48 +640,6 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
     }
     return false;
   }, [activeStep, modalErrored]);
-
-  const openTransferInfoModal = useCallback(() => {
-    if (
-      !transferAmount ||
-      !exitHash ||
-      !fromChain ||
-      !toChain ||
-      !selectedToken ||
-      !transactionFee ||
-      !endTime ||
-      !startTime
-    ) {
-      return;
-    }
-
-    let transferRecord: ITransferRecord = {
-      depositHash: executeDepositValue.hash,
-      depositAmount: transferAmount.toString(),
-      exitHash: exitHash,
-      token: selectedToken,
-      fromChain,
-      toChain,
-      lpFee: transactionFee.lpFeeProcessedString,
-      rewardAmount: transactionFee.rewardAmountString,
-      transferredAmount: transactionFee.amountToGetProcessedString,
-      transactionFee: transactionFee.transactionFeeProcessedString,
-      transferTime: formatDistanceStrict(endTime, startTime),
-    };
-
-    showTransactionInfoModal(transferRecord);
-  }, [
-    executeDepositValue?.hash,
-    exitHash,
-    fromChain,
-    selectedToken,
-    toChain,
-    transactionFee,
-    transferAmount,
-    showTransactionInfoModal,
-    startTime,
-    endTime,
-  ]);
 
   // const showManualExit = useCallback(() => {
   //   setCanManualExit(true);
@@ -742,7 +674,7 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
 
   return (
     <Transition appear show={isVisible} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={onClose}>
+      <Dialog as="div" className="relative z-10" onClose={() => {}}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"

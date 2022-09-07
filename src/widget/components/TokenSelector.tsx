@@ -1,13 +1,10 @@
+import CustomTooltip from 'components/CustomTooltip';
 import Select from 'components/Select';
 import { useChains } from 'context/Chains';
-import { useHyphen } from 'context/Hyphen';
 import { useToken } from 'context/Token';
 import { useTransaction, ValidationErrors } from 'context/Transaction';
 import { Status } from 'hooks/useLoading';
 import React, { useMemo } from 'react';
-import Skeleton from 'react-loading-skeleton';
-import { twMerge } from 'tailwind-merge';
-import CustomTooltip from 'components/CustomTooltip';
 import { BiWallet } from 'react-icons/bi';
 
 interface ITokenSelectorProps {
@@ -27,10 +24,7 @@ const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
     selectedToken,
     getSelectedTokenBalanceStatus,
   } = useToken()!;
-  const { poolInfo } = useHyphen()!;
-
-  const { changeTransferAmountInputValue, transactionAmountValidationErrors } =
-    useTransaction()!;
+  const { transactionAmountValidationErrors } = useTransaction()!;
   const { fromChain } = useChains()!;
 
   const tokenOptions = useMemo(() => {
