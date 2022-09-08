@@ -28,8 +28,17 @@ module.exports = {
           300: '#c1c1c1',
           400: '#545757',
         },
+        'hyphen-warning': {
+          DEFAULT: '#EF9400',
+        },
+        'hyphen-success': {
+          DEFAULT: '#03A55A',
+          100: '#2B825A',
+        },
+        'bridge-section': 'hsla(243, 53%, 58%, 0.05)',
       },
       fontSize: {
+        xxxs: '0.5rem',
         xxs: '0.625rem',
       },
       height: {
@@ -40,13 +49,15 @@ module.exports = {
         37.5: '9.375rem',
         84: '21rem',
         100: '25rem',
-        104.5: '26.125rem'
+        104.5: '26.125rem',
       },
       width: {
-        7.5: '1.875rem'
+        7.5: '1.875rem',
       },
       spacing: {
+        7.5: '1.875rem',
         12.5: '3.125rem',
+        170: '42.5rem',
         256: '64rem',
       },
     },
@@ -62,7 +73,7 @@ module.exports = {
         container.append(isFirefoxRule);
         isFirefoxRule.walkRules((rule) => {
           rule.selector = `.${e(
-            `firefox${separator}${rule.selector.slice(1)}`,
+            `firefox${separator}${rule.selector.slice(1)}`
           )}`;
         });
       });

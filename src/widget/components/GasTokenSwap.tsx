@@ -80,55 +80,54 @@ function GasTokenSwap() {
   }
 
   return (
-    <div className="px-4 py-2 bg-hyphen-purple bg-opacity-[0.05] rounded-lg hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75">
-      <div className="flex items-center">
+    <div className="flex items-center">
+      <div
+        className={
+          disableGasTokenSwap
+            ? 'flex cursor-not-allowed items-center opacity-50'
+            : 'flex items-center'
+        }
+        data-tip
+        data-for="whyGasTokenDisabled"
+      >
         <HiInformationCircle
           data-tip
-          data-for="gasToken"
-          className="mr-2 text-gray-500"
+          data-for="gasTokenMsg"
+          className="mr-1 h-4 w-4 text-hyphen-purple"
         />
-        <div
-          className={
-            disableGasTokenSwap
-              ? 'flex items-center cursor-not-allowed opacity-50'
-              : 'flex items-center'
-          }
-          data-tip
-          data-for="whyGasTokenDisabled"
+        <span className="mr-2 text-sm font-semibold text-hyphen-purple md:text-base">
+          Get gas token on destination
+        </span>
+        <Toggle
+          bgColor="#615CCD"
+          label="Get gas token on destination"
+          enabled={enableGasTokenSwap}
+          disabled={disableGasTokenSwap}
+          onToggle={() => {
+            // Remove any existing data.
+            if (enableGasTokenSwap) {
+              removeGasTokenSwapData();
+            }
+            setEnableGasTokenSwap(!enableGasTokenSwap);
+          }}
+          variant="large"
+        />
+        {/* <a
+          href="/"
+          className="ml-2 hidden font-sans text-xs text-hyphen-gray-400 underline md:ml-2 md:block"
         >
-          <span className="mr-2 text-xxs font-semibold uppercase text-hyphen-gray-400">
-            Get gas token on destination?
-          </span>
-          <Toggle
-            label="Gasless Mode"
-            enabled={enableGasTokenSwap}
-            disabled={disableGasTokenSwap}
-            onToggle={() => {
-              // Remove any existing data.
-              if (enableGasTokenSwap) {
-                removeGasTokenSwapData();
-              }
-              setEnableGasTokenSwap(!enableGasTokenSwap);
-            }}
-          />
-        </div>
-        {disableGasTokenSwap ? (
-          <CustomTooltip id="whyGasTokenDisabled">
-            <span>{disableGasTokenSwapMsg}</span>
-          </CustomTooltip>
-        ) : null}
-        <CustomTooltip id="gasToken">
-          <span>
-            A small amount of transferred token will be swapped for gas.
-          </span>
-        </CustomTooltip>
+          How does it work?
+        </a> */}
       </div>
+      {disableGasTokenSwap ? (
+        <CustomTooltip id="whyGasTokenDisabled">
+          <span>{disableGasTokenSwapMsg}</span>
+        </CustomTooltip>
+      ) : null}
       {enableGasTokenSwap &&
       gasTokenSwapData &&
       gasTokenSwapData?.gasTokenPercentage !== undefined ? (
-        <span className="text-xxs font-semibold text-hyphen-gray-400 ml-6">
-          {gasTokenMsg}
-        </span>
+        <CustomTooltip id="gasTokenMsg">{gasTokenMsg}</CustomTooltip>
       ) : null}
     </div>
   );

@@ -1,7 +1,8 @@
-import { Listbox, Transition } from "@headlessui/react";
-import React, { Fragment } from "react";
-import { HiCheck, HiOutlineChevronDown } from "react-icons/hi";
-import { twMerge } from "tailwind-merge";
+import { Listbox, Transition } from '@headlessui/react';
+import React, { Fragment } from 'react';
+import { HiOutlineChevronDown } from 'react-icons/hi';
+import { twMerge } from 'tailwind-merge';
+import noSelectIcon from 'assets/images/no-select-icon.svg';
 
 export interface Option {
   name: string;
@@ -11,6 +12,7 @@ export interface Option {
   tooltip?: string;
 }
 export interface ISelectProps {
+  className?: string;
   options: Option[] | undefined;
   selected?: Option;
   setSelected: (option: Option) => void;
@@ -30,33 +32,25 @@ const OptionContent: React.FC<IOptionContentProps> = ({
   selected,
 }) => {
   return (
-    <>
-      <span
-        className={`${
-          selected ? "font-medium" : "font-normal"
-        } flex items-center truncate`}
-      >
-        {option.image ? (
-          <img className="mr-2 h-5 w-5" src={option.image} alt={option.name} />
-        ) : null}
-        {option.name}
-      </span>
-      {selected ? (
-        <span
-          className={twMerge(
-            active ? "text-amber-600" : "text-amber-600",
-            "absolute inset-y-0 right-0 flex items-center pr-3",
-            option.disabled && "text-opacity-60"
-          )}
-        >
-          <HiCheck className="h-5 w-5" aria-hidden="true" />
-        </span>
+    <span
+      className={`${
+        selected ? 'font-medium' : 'font-normal'
+      } flex items-center truncate`}
+    >
+      {option.image ? (
+        <img
+          className="mr-2 h-4 w-4 xl:h-5 xl:w-5"
+          src={option.image}
+          alt={option.name}
+        />
       ) : null}
-    </>
+      {option.name}
+    </span>
   );
 };
 
 export const Select: React.FC<ISelectProps> = ({
+  className,
   selected,
   setSelected,
   options,
@@ -66,14 +60,15 @@ export const Select: React.FC<ISelectProps> = ({
   return (
     <div className="flex flex-col">
       <Listbox value={selected} onChange={setSelected} disabled={disabled}>
-        <Listbox.Label className="pl-5 text-xxs font-semibold uppercase text-hyphen-gray-400">
+        <Listbox.Label className="mb-2 pl-5 text-xxs font-bold uppercase text-hyphen-gray-400">
           {label}
         </Listbox.Label>
-        <div className="relative mt-2 h-15">
+        <div className="relative h-15">
           <Listbox.Button
             className={twMerge(
-              "relative h-full w-full cursor-pointer rounded-2.5 border bg-white py-2 pl-4 pr-10 text-left focus:outline-none text-hyphen-gray-400",
-              disabled && "cursor-not-allowed bg-gray-200 text-gray-900/80"
+              className,
+              'relative h-full w-full cursor-pointer rounded-2.5 border bg-white py-2 pl-4 pr-6 text-left text-sm text-hyphen-gray-400 focus:outline-none md:pr-10 xl:text-base',
+              disabled && 'cursor-not-allowed bg-gray-200 text-gray-900/80'
             )}
           >
             <span className="flex items-center truncate">
@@ -81,7 +76,7 @@ export const Select: React.FC<ISelectProps> = ({
                 <>
                   {selected.image ? (
                     <img
-                      className="mr-2 h-5 w-5"
+                      className="mr-2 h-4 w-4 xl:h-5 xl:w-5"
                       src={selected.image}
                       alt={selected.name}
                     />
@@ -89,12 +84,19 @@ export const Select: React.FC<ISelectProps> = ({
                   {selected.name}
                 </>
               ) : (
-                `Select ${label}`
+                <>
+                  <img
+                    src={noSelectIcon}
+                    alt={`Select ${label}`}
+                    className="mr-2 h-4 w-4 xl:h-5 xl:w-5"
+                  />
+                  Select {label}
+                </>
               )}
             </span>
             <span className="pointer-events-none absolute inset-y-0 right-1 flex items-center pr-2">
               <HiOutlineChevronDown
-                className="h-4 w-4 text-gray-400"
+                className="h-3 w-3 text-gray-400 xl:h-4 xl:w-4"
                 aria-hidden="true"
               />
             </span>
@@ -110,12 +112,8 @@ export const Select: React.FC<ISelectProps> = ({
                 <Listbox.Option
                   key={option.id}
                   className={({ active }) =>
-                    `${
-                      active
-                        ? "bg-amber-100 text-amber-900"
-                        : "text-hyphen-gray-400"
-                    }
-              relative cursor-pointer select-none py-2 pr-10 pl-4`
+                    `${active ? 'bg-hyphen-gray-100' : ''}
+              relative cursor-pointer select-none py-5 px-5 text-hyphen-gray-400 hover:bg-hyphen-gray-100`
                   }
                   value={option}
                   disabled={!!option.disabled}

@@ -5,12 +5,10 @@ import { useWalletProvider } from '../context/WalletProvider';
 
 import HyphenLogoDark from 'assets/images/hyphen-logo-dark.svg';
 import WidgetBranding from 'assets/images/widget-branding.svg';
-import { HiInformationCircle } from 'react-icons/hi';
+import { HiExclamation } from 'react-icons/hi';
 import { IoMdClose } from 'react-icons/io';
+import isToChainEthereum from 'utils/isToChainEthereum';
 import { HyphenWidgetOptions } from '../';
-import CustomTooltip from '../components/CustomTooltip';
-import { Toggle } from '../components/Toggle';
-import { useBiconomy } from '../context/Biconomy';
 import { useHyphen } from '../context/Hyphen';
 import { useToken } from '../context/Token';
 import { useTokenApproval } from '../context/TokenApproval';
@@ -18,13 +16,12 @@ import { useTransaction } from '../context/Transaction';
 import useModal from '../hooks/useModal';
 import AmountInput from './components/AmountInput';
 import ApprovalModal from './components/ApprovalModal';
+import BridgeOptions from './components/BridgeOptions';
 import CallToAction from './components/CallToAction';
-import ChangeReceiverAddress from './components/ChangeReceiverAddress';
 import ErrorModal from './components/ErrorModal';
-import GasTokenSwap from './components/GasTokenSwap';
 import NetworkSelectors from './components/NetworkSelectors';
+import ReceiveMinimum from './components/ReceiveMinimum';
 import TokenSelector from './components/TokenSelector';
-import TransactionFee from './components/TransactionFee';
 import TransferModal from './components/TransferModal';
 
 interface IWidgetProps {
@@ -51,8 +48,6 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
     if (exitHash && props.onExit) props.onExit(exitHash);
   }, [exitHash, props, props.onExit]);
 
-  const { isBiconomyAllowed, setIsBiconomyToggledOn, isBiconomyEnabled } =
-    useBiconomy()!;
   const { selectedToken } = useToken()!;
   const { isLoggedIn, connect } = useWalletProvider()!;
   const { poolInfo } = useHyphen()!;
@@ -93,6 +88,10 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
     })();
   }, [isLoggedIn, connect]);
 
+  const showEthereumDisclaimer = toChain
+    ? isToChainEthereum(toChain.chainId)
+    : false;
+
   return (
     <>
       {fromChain && selectedToken && transferAmount ? (
@@ -118,100 +117,76 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
       ) : null}
 
       <ErrorModal error={executeApproveTokenError} title={'Approval Error'} />
-      <div className="max-w-xl">
-        <div className="flex flex-col gap-2 rounded-10 bg-white p-6 shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
-          <div className="mb-2 flex items-center justify-between">
-            <div className="flex flex-col items-center">
-              <img
-                src={HyphenLogoDark}
-                className="h-6 w-auto"
-                alt="Hyphen Logo"
-              />
-              <img
-                src={WidgetBranding}
-                alt="Powered by biconomy"
-                className="ml-4 mt-2"
-              />
-            </div>
-            <div className="flex">
-              <div className="flex items-center">
-                <HiInformationCircle
-                  data-tip
-                  data-for="gaslessMode"
-                  className="mr-2 text-gray-500"
-                />
-                <CustomTooltip id="gaslessMode">
-                  <span>This transaction is sponsored by Biconomy</span>
-                </CustomTooltip>
-                <div
-                  className={
-                    !isBiconomyAllowed
-                      ? 'flex items-center cursor-not-allowed opacity-50'
-                      : 'flex items-center'
-                  }
-                  data-tip
-                  data-for="whyGaslessDisabled"
-                >
-                  <span className="mr-2 text-xxs font-semibold text-hyphen-gray-400 uppercase">
-                    Gasless Mode
-                  </span>
-                  <Toggle
-                    label="Gasless Mode"
-                    enabled={isBiconomyEnabled}
-                    onToggle={(enabled) => setIsBiconomyToggledOn(enabled)}
-                  />
-                </div>
-              </div>
-              {!isBiconomyAllowed && (
-                <CustomTooltip id="whyGaslessDisabled">
-                  <span>Disabled for selected chain</span>
-                </CustomTooltip>
-              )}
-              {props.showCloseButton ? (
-                <button
-                  className="rounded hover:bg-gray-100 ml-4"
-                  onClick={props.closeWidget}
-                >
-                  <IoMdClose className="h-6 w-auto text-gray-500" />
-                </button>
-              ) : null}
-            </div>
-          </div>
-          <div className="grid grid-cols-[1fr_34px_1fr] gap-2 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 hover:border-opacity-30">
-            <NetworkSelectors
-              allowedSourceChains={props.allowedSourceChains}
-              allowedDestinationChains={props.allowedDestinationChains}
+      <div className="flex w-auto flex-col gap-2 bg-white p-6 md:rounded-[25px] md:shadow-[0_24px_50px_rgba(229,229,229,0.75)]">
+        <div className="mb-2 flex items-center justify-between">
+          <div className="flex items-center">
+            <img
+              src={HyphenLogoDark}
+              className="mr-5 h-6 w-auto"
+              alt="Hyphen Logo"
+            />
+            <img
+              src={WidgetBranding}
+              alt="Powered by biconomy"
+              className="mt-1"
             />
           </div>
-          <div className="grid grid-cols-2 items-center gap-12 rounded-xl border border-hyphen-purple border-opacity-10 bg-hyphen-purple bg-opacity-[0.05] p-4 hover:border-opacity-30">
-            <AmountInput
-              disabled={
-                !areChainsReady ||
-                !poolInfo?.minDepositAmount ||
-                !poolInfo?.maxDepositAmount
-              }
-            />
-            <TokenSelector
-              allowedTokens={props.allowedTokens}
-              disabled={
-                !areChainsReady ||
-                !poolInfo?.minDepositAmount ||
-                !poolInfo?.maxDepositAmount
-              }
-            />
+          <div className="flex">
+            {props.showCloseButton ? (
+              <button
+                className="ml-4 rounded hover:bg-gray-100"
+                onClick={props.closeWidget}
+              >
+                <IoMdClose className="h-6 w-auto text-gray-500" />
+              </button>
+            ) : null}
           </div>
+        </div>
 
-          {props.showChangeAddress ? <ChangeReceiverAddress /> : null}
+        <NetworkSelectors
+          allowedSourceChains={props.allowedSourceChains}
+          allowedDestinationChains={props.allowedDestinationChains}
+        />
 
-          {props.showGasTokenSwap ? <GasTokenSwap /> : null}
-
-          <CallToAction
-            onApproveButtonClick={showApprovalModal}
-            onTransferButtonClick={handleTransferButtonClick}
+        <div className="grid grid-cols-[1.5fr_1fr] items-center gap-0 rounded-[20px] bg-bridge-section p-5 sm:grid-cols-[2fr_1fr]">
+          <AmountInput
+            disabled={
+              !areChainsReady ||
+              !poolInfo?.minDepositAmount ||
+              !poolInfo?.maxDepositAmount
+            }
+          />
+          <TokenSelector
+            allowedTokens={props.allowedTokens}
+            disabled={
+              !areChainsReady ||
+              !poolInfo?.minDepositAmount ||
+              !poolInfo?.maxDepositAmount
+            }
           />
         </div>
 
-        <TransactionFee />
+        <ReceiveMinimum />
+
+        <BridgeOptions
+          showChangeAddress={props.showChangeAddress}
+          showGasTokenSwap={props.showGasTokenSwap}
+        />
+
+        <CallToAction
+          onApproveButtonClick={showApprovalModal}
+          onTransferButtonClick={handleTransferButtonClick}
+        />
+
+        {showEthereumDisclaimer ? (
+          <article className="mt-0.5 flex h-auto items-center justify-center rounded-[10px] bg-hyphen-warning/25 px-8 py-2 text-xxxs font-bold uppercase text-hyphen-warning xl:text-xxs">
+            <HiExclamation className="mr-2 h-2.5 w-auto" />
+            <p>
+              The received amount may differ due to gas price fluctuations on
+              Ethereum.
+            </p>
+          </article>
+        ) : null}
       </div>
     </>
   );

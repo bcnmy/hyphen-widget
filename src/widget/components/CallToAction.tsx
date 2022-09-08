@@ -1,5 +1,4 @@
-import PrimaryButtonLight from 'components/Buttons/PrimaryButtonLight';
-import SecondaryButtonLight from 'components/Buttons/SecondaryButtonLight';
+import PrimaryButton from 'components/Buttons/PrimaryButton';
 import Spinner from 'components/Buttons/Spinner';
 import { useBiconomy } from 'context/Biconomy';
 import { useChains } from 'context/Chains';
@@ -9,7 +8,6 @@ import { useWalletProvider } from 'context/WalletProvider';
 import { Status } from 'hooks/useLoading';
 import * as React from 'react';
 import switchNetwork from 'utils/switchNetwork';
-import CustomTooltip from 'components/CustomTooltip';
 
 export interface ICallToActionProps {
   onApproveButtonClick: () => void;
@@ -32,26 +30,26 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
     useWalletProvider()!;
   const {
     receiver: { isReceiverValid },
+    transferAmount,
     transactionAmountValidationErrors,
     enableGasTokenSwap,
     gasTokenSwapData,
+    fetchTransactionFeeStatus,
   } = useTransaction()!;
   const { isBiconomyEnabled } = useBiconomy()!;
 
   if (!isLoggedIn) {
     return (
-      <div className="mt-4 flex justify-center gap-8">
-        <PrimaryButtonLight onClick={() => connect()}>
-          Connect Wallet
-        </PrimaryButtonLight>
+      <div className="mt-8 grid grid-cols-1">
+        <PrimaryButton onClick={() => connect()}>Connect Wallet</PrimaryButton>
       </div>
     );
   }
 
   if (!isBiconomyEnabled && fromChain?.chainId !== currentChainId) {
     return (
-      <div className="mt-4 flex justify-center gap-8">
-        <PrimaryButtonLight
+      <div className="mt-8 grid grid-cols-1">
+        <PrimaryButton
           onClick={() => {
             if (!walletProvider || !fromChain)
               throw new Error('Prerequisites missing');
@@ -59,95 +57,57 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
           }}
         >
           Switch to {fromChain?.name}
-        </PrimaryButtonLight>
+        </PrimaryButton>
       </div>
     );
   }
 
   if (!isReceiverValid) {
     return (
-      <div className="mt-4 flex justify-center gap-8">
-        <span data-tip data-for="invalidReceiverAddress">
-          <PrimaryButtonLight disabled>
-            Invalid receiver address
-          </PrimaryButtonLight>
-        </span>
-        <CustomTooltip id="invalidReceiverAddress">
-          <span>
-            This receiver address is not valid, please check the address and try
-            again.
-          </span>
-        </CustomTooltip>
+      <div className="mt-8 grid grid-cols-1">
+        <PrimaryButton disabled>Invalid receiver address</PrimaryButton>
       </div>
     );
   }
 
   return (
-    <div className="mt-4 flex justify-center gap-8">
+    <div className="mt-8 grid grid-cols-1">
       {fetchSelectedTokenApprovalStatus === Status.IDLE ||
       transactionAmountValidationErrors.length > 0 ||
       fetchSelectedTokenApprovalError ? (
         <>
-          <span data-tip data-for="whyTransferDisabled">
-            <PrimaryButtonLight disabled>Transfer</PrimaryButtonLight>
-          </span>
-          <CustomTooltip id="whyTransferDisabled">
-            {fetchSelectedTokenApprovalError &&
-            transactionAmountValidationErrors.length === 0 ? (
-              <span>Error trying to fetch token approval</span>
-            ) : (
-              <span>Enter a valid transfer amount</span>
-            )}
-          </CustomTooltip>
+          <PrimaryButton disabled>
+            {!transferAmount
+              ? 'Enter amount'
+              : fetchSelectedTokenApprovalError &&
+                transactionAmountValidationErrors.length === 0
+              ? 'Error in fetching approval'
+              : transactionAmountValidationErrors.length > 0
+              ? 'Please check the amount'
+              : ''}
+          </PrimaryButton>
         </>
       ) : (
         <>
           {fetchSelectedTokenApprovalStatus === Status.PENDING && (
-            <>
-              <div
-                data-tip
-                data-for="whyTransferDisabled"
-                className="flex items-center"
-              >
-                {fetchSelectedTokenApprovalValue === false ? (
-                  <SecondaryButtonLight disabled className="mr-8">
-                    Approve
-                  </SecondaryButtonLight>
-                ) : null}
-                <PrimaryButtonLight
-                  disabled
-                  className="flex items-center gap-2"
-                >
-                  <Spinner />
-                  Transfer
-                </PrimaryButtonLight>
-              </div>
-              <CustomTooltip id="whyTransferDisabled">
-                <span>Approval loading</span>
-              </CustomTooltip>
-            </>
+            <PrimaryButton disabled>Checking approval</PrimaryButton>
           )}
+
           {fetchSelectedTokenApprovalStatus === Status.SUCCESS &&
             fetchSelectedTokenApprovalValue === false && (
               <>
                 {executeApproveTokenStatus === Status.PENDING ? (
-                  <SecondaryButtonLight disabled>
+                  <PrimaryButton disabled>
                     <span className="flex items-center gap-2">
                       <Spinner />
-                      <span>Approve</span>
+                      <span>Checking approval</span>
                     </span>
-                  </SecondaryButtonLight>
+                  </PrimaryButton>
                 ) : (
-                  <SecondaryButtonLight onClick={onApproveButtonClick}>
+                  <PrimaryButton onClick={onApproveButtonClick}>
                     Approve
-                  </SecondaryButtonLight>
+                  </PrimaryButton>
                 )}
-                <span data-tip data-for="whyTransferDisabled">
-                  <PrimaryButtonLight disabled>Transfer</PrimaryButtonLight>
-                </span>
-                <CustomTooltip id="whyTransferDisabled">
-                  <span>Approve token to enable token transfers</span>
-                </CustomTooltip>
               </>
             )}
 
@@ -157,21 +117,21 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
             gasTokenSwapData &&
             (gasTokenSwapData.gasTokenPercentage === 0 ||
               gasTokenSwapData.gasTokenPercentage > 80) && (
-              <>
-                <span data-tip data-for="whyTransferDisabled">
-                  <PrimaryButtonLight disabled>Transfer</PrimaryButtonLight>
-                </span>
-                <CustomTooltip id="whyTransferDisabled">
-                  Not enough funds for this transfer
-                </CustomTooltip>
-              </>
+              <PrimaryButton disabled>
+                Not enough funds for this transfer
+              </PrimaryButton>
             )}
 
           {fetchSelectedTokenApprovalStatus === Status.SUCCESS &&
             fetchSelectedTokenApprovalValue === true && (
-              <PrimaryButtonLight onClick={onTransferButtonClick}>
-                Transfer
-              </PrimaryButtonLight>
+              <PrimaryButton
+                onClick={onTransferButtonClick}
+                disabled={fetchTransactionFeeStatus === Status.PENDING}
+              >
+                {fetchTransactionFeeStatus === Status.PENDING
+                  ? 'Calculating total fees'
+                  : 'Transfer'}
+              </PrimaryButton>
             )}
         </>
       )}

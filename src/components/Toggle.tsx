@@ -1,39 +1,56 @@
-import { Switch } from "@headlessui/react";
-
+import { Switch } from '@headlessui/react';
 interface IToggleProps {
-  label: string;
+  bgColor: string;
   enabled: boolean;
   disabled?: boolean;
+  label: string;
   onToggle: (enabled: boolean) => void;
+  variant?: string;
 }
 
 export const Toggle: React.FC<IToggleProps> = ({
-  label,
+  bgColor,
   enabled,
   disabled,
+  label,
   onToggle,
+  variant = 'small',
 }) => {
   return (
-    <Switch.Group>
-      <div className="flex flex-col">
-        <Switch
-          checked={enabled}
-          disabled={disabled}
-          onChange={onToggle}
-          className={`${
-            enabled ? "bg-hyphen-purple" : "bg-hyphen-purple-dark/20"
-          } 
-          ${disabled ? "cursor-not-allowed" : "cursor-pointer"}
-          relative inline-flex items-center flex-shrink-0 h-[24px] w-[40px] border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
-        >
-          <span className="sr-only">{label}</span>
-          <span
-            aria-hidden="true"
-            className={`${enabled ? "translate-x-[18px]" : "translate-x-[4px]"}
-            pointer-events-none inline-block h-[14px] w-[14px] rounded-full bg-white shadow-lg transform ring-0 transition ease-in-out duration-200`}
-          />
-        </Switch>
-      </div>
-    </Switch.Group>
+    <Switch
+      checked={enabled}
+      disabled={disabled}
+      onChange={onToggle}
+      className={`
+        relative inline-flex flex-shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75
+        ${enabled ? bgColor : `${bgColor}/60`}
+        ${variant === 'small' ? 'h-[10px] w-[20px]' : 'h-[20px] w-[40px]'}
+      `}
+      style={{
+        backgroundColor: enabled ? bgColor : `${bgColor}60`,
+      }}
+    >
+      <span className="sr-only">{label}</span>
+      <span
+        aria-hidden="true"
+        className={`
+          pointer-events-none inline-block transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out
+          ${
+            variant === 'small'
+              ? enabled
+                ? 'h-[7px] w-[7px] translate-x-[11.5px]'
+                : 'h-[7px] w-[7px] translate-x-[1.25px]'
+              : ''
+          }
+          ${
+            variant === 'large'
+              ? enabled
+                ? 'h-[14px] w-[14px] translate-x-[23px]'
+                : 'h-[14px] w-[14px] translate-x-[3px]'
+              : ''
+          }
+        `}
+      />
+    </Switch>
   );
 };
