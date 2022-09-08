@@ -1,6 +1,6 @@
 {
   "name": "@biconomy/hyphen-widget",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "author": "Biconomy",
   "license": "MIT",
   "main": "dist/index.js",
@@ -32,7 +32,6 @@
     "graphql-request": "^4.2.0",
     "https-browserify": "^1.0.0",
     "os-browserify": "^0.3.0",
-    "react-animate-height": "^2.0.23",
     "react-icons": "^4.3.1",
     "react-loading-skeleton": "^3.0.1",
     "react-notifications-component": "^3.1.0",
