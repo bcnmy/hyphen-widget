@@ -29,7 +29,7 @@ export const ApprovalModal: React.FC<IApprovalModalProps> = ({
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
       <div className="tw-hw-relative tw-hw-z-20 tw-hw-mx-auto tw-hw-w-[330px] tw-hw-overflow-hidden tw-hw-rounded-10 tw-hw-border tw-hw-border-hyphen-purple-darker/50 tw-hw-bg-white tw-hw-shadow-lg">
-        <div className="tw-hw-mb-7.5 tw-hw-flex tw-hw-items-center tw-hw-justify-between tw-hw-px-7.5 tw-hw-pt-7.5 xl:tw-hw-px-12.5 xl:tw-hw-pt-12.5">
+        <div className="tw-hw-mb-7.5 tw-hw-flex tw-hw-items-center tw-hw-justify-between tw-hw-px-7.5 tw-hw-pt-7.5 md:tw-hw-px-12.5 md:tw-hw-pt-12.5">
           <Dialog.Title
             as="h1"
             className="tw-hw-text-xl tw-hw-font-semibold tw-hw-text-gray-700"
@@ -44,7 +44,7 @@ export const ApprovalModal: React.FC<IApprovalModalProps> = ({
           </button>
         </div>
 
-        <aside className="tw-hw-flex tw-hw-flex-col tw-hw-items-start tw-hw-px-7.5 tw-hw-pb-7.5 xl:tw-hw-px-12.5 xl:tw-hw-pb-12.5">
+        <aside className="tw-hw-flex tw-hw-flex-col tw-hw-items-start tw-hw-px-7.5 tw-hw-pb-7.5 md:tw-hw-px-12.5 md:tw-hw-pb-12.5">
           <p className="tw-hw-mb-7.5 tw-hw-text-base tw-hw-text-hyphen-purple">
             Allow Hyphen to spend {selectedTokenName} on {selectedChainName}
           </p>

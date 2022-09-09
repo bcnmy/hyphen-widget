@@ -119,7 +119,7 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
       <ErrorModal error={executeApproveTokenError} title={'Approval Error'} />
       <div className="tw-hw-flex tw-hw-w-auto tw-hw-flex-col tw-hw-gap-2 tw-hw-bg-white tw-hw-p-6 md:tw-hw-rounded-[25px] md:tw-hw-shadow-[0_24px_50px_rgba(229,229,229,0.75)]">
         <div className="tw-hw-mb-2 tw-hw-flex tw-hw-items-center tw-hw-justify-between">
-          <div className="tw-hw-flex tw-hw-items-center">
+          <div className="tw-hw-flex tw-hw-flex-col tw-hw-items-center md:tw-hw-flex-row">
             <img
               src={HyphenLogoDark}
               className="tw-hw-mr-5 tw-hw-h-6 tw-hw-w-auto"
@@ -128,7 +128,7 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
             <img
               src={WidgetBranding}
               alt="Powered by biconomy"
-              className="tw-hw-mt-1"
+              className="tw-hw-mt-3 md:tw-hw-mt-0"
             />
           </div>
           <div className="tw-hw-flex">
@@ -148,7 +148,7 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
           allowedDestinationChains={props.allowedDestinationChains}
         />
 
-        <div className="tw-hw-grid tw-hw-grid-cols-[1.5fr_1fr] tw-hw-items-center tw-hw-gap-0 tw-hw-rounded-[20px] tw-hw-bg-bridge-section tw-hw-p-5 sm:tw-hw-grid-cols-[2fr_1fr]">
+        <div className="tw-hw-grid tw-hw-grid-cols-1 tw-hw-items-center tw-hw-gap-3 tw-hw-rounded-[20px] tw-hw-bg-bridge-section tw-hw-p-5 md:tw-hw-grid-cols-[2fr_1fr] md:tw-hw-gap-0">
           <AmountInput
             disabled={
               !areChainsReady ||
@@ -179,7 +179,7 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
         />
 
         {showEthereumDisclaimer ? (
-          <article className="tw-hw-mt-0.5 tw-hw-flex tw-hw-h-auto tw-hw-items-center tw-hw-justify-center tw-hw-rounded-[10px] tw-hw-bg-hyphen-warning/25 tw-hw-px-8 tw-hw-py-2 tw-hw-text-xxxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-hyphen-warning xl:tw-hw-text-xxs">
+          <article className="tw-hw-mt-0.5 tw-hw-flex tw-hw-h-auto tw-hw-items-center tw-hw-justify-center tw-hw-rounded-[10px] tw-hw-bg-hyphen-warning/25 tw-hw-px-8 tw-hw-py-2 tw-hw-text-xxxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-hyphen-warning md:tw-hw-text-xxs">
             <HiExclamation className="tw-hw-mr-2 tw-hw-h-2.5 tw-hw-w-auto" />
             <p>
               The received amount may differ due to gas price fluctuations on

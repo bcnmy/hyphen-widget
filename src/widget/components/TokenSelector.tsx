@@ -65,7 +65,7 @@ const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
       data-for="tokenSelect"
     >
       <Select
-        className="tw-hw-rounded-l-none"
+        className="md:tw-hw-rounded-l-none"
         options={tokenOptions}
         selected={
           selectedToken &&

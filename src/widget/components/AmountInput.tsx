@@ -38,7 +38,7 @@ const AmountInput: React.FunctionComponent<IAmountInputProps> = ({
         value={transferAmountInputValue}
         onChange={(e) => changeTransferAmountInputValue(e.target.value)}
         className={twMerge(
-          'tw-hw-mt-2 tw-hw-inline-block tw-hw-h-15 tw-hw-w-full tw-hw-rounded-2.5 tw-hw-rounded-r-none tw-hw-border tw-hw-border-r-0 tw-hw-bg-white tw-hw-px-4 tw-hw-py-2 tw-hw-font-mono tw-hw-text-2xl tw-hw-text-hyphen-gray-400 focus:tw-hw-outline-none',
+          'tw-hw-mt-2 tw-hw-inline-block tw-hw-h-15 tw-hw-w-full tw-hw-rounded-2.5 tw-hw-border tw-hw-bg-white tw-hw-px-4 tw-hw-py-2 tw-hw-font-mono tw-hw-text-2xl tw-hw-text-hyphen-gray-400 focus:tw-hw-outline-none md:tw-hw-rounded-r-none md:tw-hw-border-r-0',
           disabled && 'tw-hw-cursor-not-allowed tw-hw-bg-gray-200'
         )}
         disabled={disabled}

@@ -39,7 +39,7 @@ const OptionContent: React.FC<IOptionContentProps> = ({
     >
       {option.image ? (
         <img
-          className="tw-hw-mr-2 tw-hw-h-4 tw-hw-w-4 xl:tw-hw-h-5 xl:tw-hw-w-5"
+          className="tw-hw-mr-2 tw-hw-h-4 tw-hw-w-4 md:tw-hw-h-5 md:tw-hw-w-5"
           src={option.image}
           alt={option.name}
         />
@@ -67,7 +67,7 @@ export const Select: React.FC<ISelectProps> = ({
           <Listbox.Button
             className={twMerge(
               className,
-              'tw-hw-relative tw-hw-h-full tw-hw-w-full tw-hw-cursor-pointer tw-hw-rounded-2.5 tw-hw-border tw-hw-bg-white tw-hw-py-2 tw-hw-pl-4 tw-hw-pr-6 tw-hw-text-left tw-hw-text-sm tw-hw-text-hyphen-gray-400 focus:tw-hw-outline-none md:tw-hw-pr-10 xl:tw-hw-text-base',
+              'tw-hw-relative tw-hw-h-full tw-hw-w-full tw-hw-cursor-pointer tw-hw-rounded-2.5 tw-hw-border tw-hw-bg-white tw-hw-py-2 tw-hw-pl-4 tw-hw-pr-6 tw-hw-text-left tw-hw-text-sm tw-hw-text-hyphen-gray-400 focus:tw-hw-outline-none md:tw-hw-pr-10 md:tw-hw-text-base',
               disabled &&
                 'tw-hw-cursor-not-allowed tw-hw-bg-gray-200 tw-hw-text-gray-900/80'
             )}
@@ -77,7 +77,7 @@ export const Select: React.FC<ISelectProps> = ({
                 <>
                   {selected.image ? (
                     <img
-                      className="tw-hw-mr-2 tw-hw-h-4 tw-hw-w-4 xl:tw-hw-h-5 xl:tw-hw-w-5"
+                      className="tw-hw-mr-2 tw-hw-h-4 tw-hw-w-4 md:tw-hw-h-5 md:tw-hw-w-5"
                       src={selected.image}
                       alt={selected.name}
                     />
@@ -89,7 +89,7 @@ export const Select: React.FC<ISelectProps> = ({
                   <img
                     src={noSelectIcon}
                     alt={`Select ${label}`}
-                    className="tw-hw-mr-2 tw-hw-h-4 tw-hw-w-4 xl:tw-hw-h-5 xl:tw-hw-w-5"
+                    className="tw-hw-mr-2 tw-hw-h-4 tw-hw-w-4 md:tw-hw-h-5 md:tw-hw-w-5"
                   />
                   Select {label}
                 </>
@@ -97,7 +97,7 @@ export const Select: React.FC<ISelectProps> = ({
             </span>
             <span className="tw-hw-pointer-events-none tw-hw-absolute tw-hw-inset-y-0 tw-hw-right-1 tw-hw-flex tw-hw-items-center tw-hw-pr-2">
               <HiOutlineChevronDown
-                className="tw-hw-h-3 tw-hw-w-3 tw-hw-text-gray-400 xl:tw-hw-h-4 xl:tw-hw-w-4"
+                className="tw-hw-h-3 tw-hw-w-3 tw-hw-text-gray-400 md:tw-hw-h-4 md:tw-hw-w-4"
                 aria-hidden="true"
               />
             </span>

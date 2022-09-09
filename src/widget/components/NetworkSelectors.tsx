@@ -92,7 +92,7 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
   }, [toChain, toChainOptions]);
 
   return (
-    <div className="tw-hw-grid tw-hw-grid-cols-1 tw-hw-gap-3 tw-hw-rounded-[20px] tw-hw-bg-bridge-section tw-hw-p-5 xl:tw-hw-grid-cols-[1fr_40px_1fr]">
+    <div className="tw-hw-grid tw-hw-grid-cols-1 tw-hw-gap-3 tw-hw-rounded-[20px] tw-hw-bg-bridge-section tw-hw-p-5 md:tw-hw-grid-cols-[1fr_40px_1fr]">
       <div className="tw-hw-relative">
         {fromChainOptions ? (
           <Select
@@ -113,12 +113,12 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
           <GaslessToggle />
         </div>
       </div>
-      <div className="tw-hw-flex tw-hw-items-end tw-hw-justify-center xl:tw-hw-mb-3">
+      <div className="tw-hw-flex tw-hw-items-end tw-hw-justify-center md:tw-hw-mb-3">
         <button onClick={switchChains}>
           <img
             src={transferArrow}
             alt="Direction of transfer"
-            className="tw-hw-h-7.5 tw-hw-w-7.5 tw-hw-rotate-90 xl:tw-hw-h-auto xl:tw-hw-w-auto xl:tw-hw-rotate-0"
+            className="tw-hw-h-7.5 tw-hw-w-7.5 tw-hw-rotate-90 md:tw-hw-h-auto md:tw-hw-w-auto md:tw-hw-rotate-0"
           />
         </button>
       </div>

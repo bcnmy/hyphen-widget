@@ -15,12 +15,12 @@ function ReceiveMinimum() {
   } = useTransaction()!;
 
   return (
-    <div className="tw-hw-relative tw-hw-grid tw-hw-grid-cols-[1.5fr_1fr] tw-hw-items-center tw-hw-gap-0 tw-hw-rounded-[20px] tw-hw-bg-bridge-section tw-hw-p-5 sm:tw-hw-grid-cols-[2fr_1fr]">
+    <div className="tw-hw-relative tw-hw-grid tw-hw-grid-cols-1 tw-hw-items-center tw-hw-gap-5 tw-hw-rounded-[20px] tw-hw-bg-bridge-section tw-hw-p-5 md:tw-hw-grid-cols-[2fr_1fr] md:tw-hw-gap-0">
       <div className="tw-hw-flex tw-hw-flex-col">
         <label className="tw-hw-pl-5 tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-hyphen-gray-400">
           Receive Minimum
         </label>
-        <div className="tw-hw-mt-2 tw-hw-flex tw-hw-h-15 tw-hw-w-full tw-hw-items-center tw-hw-rounded-2.5 tw-hw-rounded-r-none tw-hw-border tw-hw-border-r-0 tw-hw-bg-white tw-hw-px-4 tw-hw-py-2 tw-hw-font-mono tw-hw-text-2xl tw-hw-text-hyphen-gray-400 focus:tw-hw-outline-none">
+        <div className="tw-hw-mt-2 tw-hw-flex tw-hw-h-15 tw-hw-w-full tw-hw-items-center tw-hw-rounded-2.5 tw-hw-border tw-hw-bg-white tw-hw-px-4 tw-hw-py-2 tw-hw-font-mono tw-hw-text-2xl tw-hw-text-hyphen-gray-400 focus:tw-hw-outline-none md:tw-hw-rounded-r-none md:tw-hw-border-r-0">
           {fetchTransactionFeeStatus === Status.SUCCESS &&
           transactionFee &&
           transferAmountInputValue !== ''
@@ -80,11 +80,11 @@ function ReceiveMinimum() {
           </CustomTooltip>
         ) : null}
       </div>
-      <div className="tw-hw-mt-[23px] tw-hw-flex tw-hw-h-15 tw-hw-w-full tw-hw-items-center tw-hw-rounded-2.5 tw-hw-rounded-l-none tw-hw-border tw-hw-bg-white tw-hw-px-4 tw-hw-py-2 tw-hw-text-sm tw-hw-text-hyphen-gray-400 focus:tw-hw-outline-none xl:tw-hw-text-base">
+      <div className="tw-hw-flex tw-hw-h-15 tw-hw-w-full tw-hw-items-center tw-hw-rounded-2.5 tw-hw-border tw-hw-bg-white tw-hw-px-4 tw-hw-py-2 tw-hw-text-sm tw-hw-text-hyphen-gray-400 focus:tw-hw-outline-none md:tw-hw-mt-[23px] md:tw-hw-rounded-l-none md:tw-hw-text-base">
         {selectedToken ? (
           <>
             <img
-              className="tw-hw-mr-2 tw-hw-h-4 tw-hw-w-4 xl:tw-hw-h-5 xl:tw-hw-w-5"
+              className="tw-hw-mr-2 tw-hw-h-4 tw-hw-w-4 md:tw-hw-h-5 md:tw-hw-w-5"
               src={selectedToken.image}
               alt={selectedToken.symbol}
             />
@@ -95,7 +95,7 @@ function ReceiveMinimum() {
             <img
               src={noSelectIcon}
               alt="No selected token"
-              className="tw-hw-mr-2 tw-hw-h-4 tw-hw-w-4 xl:tw-hw-h-5 xl:tw-hw-w-5"
+              className="tw-hw-mr-2 tw-hw-h-4 tw-hw-w-4 md:tw-hw-h-5 md:tw-hw-w-5"
             />
             Select token
           </>
