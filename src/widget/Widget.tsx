@@ -128,7 +128,7 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
             <img
               src={WidgetBranding}
               alt="Powered by biconomy"
-              className="tw-hw-mt-3 md:tw-hw-mt-0"
+              className="tw-hw-mt-3 md:tw-hw-mt-1"
             />
           </div>
           <div className="tw-hw-flex">
