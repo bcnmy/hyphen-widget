@@ -40,7 +40,7 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
 
   if (!isLoggedIn) {
     return (
-      <div className="mt-8 grid grid-cols-1">
+      <div className="tw-hw-mt-8 tw-hw-grid tw-hw-grid-cols-1">
         <PrimaryButton onClick={() => connect()}>Connect Wallet</PrimaryButton>
       </div>
     );
@@ -48,7 +48,7 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
 
   if (!isBiconomyEnabled && fromChain?.chainId !== currentChainId) {
     return (
-      <div className="mt-8 grid grid-cols-1">
+      <div className="tw-hw-mt-8 tw-hw-grid tw-hw-grid-cols-1">
         <PrimaryButton
           onClick={() => {
             if (!walletProvider || !fromChain)
@@ -64,14 +64,14 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
 
   if (!isReceiverValid) {
     return (
-      <div className="mt-8 grid grid-cols-1">
+      <div className="tw-hw-mt-8 tw-hw-grid tw-hw-grid-cols-1">
         <PrimaryButton disabled>Invalid receiver address</PrimaryButton>
       </div>
     );
   }
 
   return (
-    <div className="mt-8 grid grid-cols-1">
+    <div className="tw-hw-mt-8 tw-hw-grid tw-hw-grid-cols-1">
       {fetchSelectedTokenApprovalStatus === Status.IDLE ||
       transactionAmountValidationErrors.length > 0 ||
       fetchSelectedTokenApprovalError ? (
@@ -98,7 +98,7 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
               <>
                 {executeApproveTokenStatus === Status.PENDING ? (
                   <PrimaryButton disabled>
-                    <span className="flex items-center gap-2">
+                    <span className="tw-hw-flex tw-hw-items-center tw-hw-gap-2">
                       <Spinner />
                       <span>Checking approval</span>
                     </span>

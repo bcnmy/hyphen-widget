@@ -117,27 +117,27 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
       ) : null}
 
       <ErrorModal error={executeApproveTokenError} title={'Approval Error'} />
-      <div className="flex w-auto flex-col gap-2 bg-white p-6 md:rounded-[25px] md:shadow-[0_24px_50px_rgba(229,229,229,0.75)]">
-        <div className="mb-2 flex items-center justify-between">
-          <div className="flex items-center">
+      <div className="tw-hw-flex tw-hw-w-auto tw-hw-flex-col tw-hw-gap-2 tw-hw-bg-white tw-hw-p-6 md:tw-hw-rounded-[25px] md:tw-hw-shadow-[0_24px_50px_rgba(229,229,229,0.75)]">
+        <div className="tw-hw-mb-2 tw-hw-flex tw-hw-items-center tw-hw-justify-between">
+          <div className="tw-hw-flex tw-hw-items-center">
             <img
               src={HyphenLogoDark}
-              className="mr-5 h-6 w-auto"
+              className="tw-hw-mr-5 tw-hw-h-6 tw-hw-w-auto"
               alt="Hyphen Logo"
             />
             <img
               src={WidgetBranding}
               alt="Powered by biconomy"
-              className="mt-1"
+              className="tw-hw-mt-1"
             />
           </div>
-          <div className="flex">
+          <div className="tw-hw-flex">
             {props.showCloseButton ? (
               <button
-                className="ml-4 rounded hover:bg-gray-100"
+                className="tw-hw-ml-4 tw-hw-rounded hover:tw-hw-bg-gray-100"
                 onClick={props.closeWidget}
               >
-                <IoMdClose className="h-6 w-auto text-gray-500" />
+                <IoMdClose className="tw-hw-h-6 tw-hw-w-auto tw-hw-text-gray-500" />
               </button>
             ) : null}
           </div>
@@ -148,7 +148,7 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
           allowedDestinationChains={props.allowedDestinationChains}
         />
 
-        <div className="grid grid-cols-[1.5fr_1fr] items-center gap-0 rounded-[20px] bg-bridge-section p-5 sm:grid-cols-[2fr_1fr]">
+        <div className="tw-hw-grid tw-hw-grid-cols-[1.5fr_1fr] tw-hw-items-center tw-hw-gap-0 tw-hw-rounded-[20px] tw-hw-bg-bridge-section tw-hw-p-5 sm:tw-hw-grid-cols-[2fr_1fr]">
           <AmountInput
             disabled={
               !areChainsReady ||
@@ -179,8 +179,8 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
         />
 
         {showEthereumDisclaimer ? (
-          <article className="mt-0.5 flex h-auto items-center justify-center rounded-[10px] bg-hyphen-warning/25 px-8 py-2 text-xxxs font-bold uppercase text-hyphen-warning xl:text-xxs">
-            <HiExclamation className="mr-2 h-2.5 w-auto" />
+          <article className="tw-hw-mt-0.5 tw-hw-flex tw-hw-h-auto tw-hw-items-center tw-hw-justify-center tw-hw-rounded-[10px] tw-hw-bg-hyphen-warning/25 tw-hw-px-8 tw-hw-py-2 tw-hw-text-xxxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-hyphen-warning xl:tw-hw-text-xxs">
+            <HiExclamation className="tw-hw-mr-2 tw-hw-h-2.5 tw-hw-w-auto" />
             <p>
               The received amount may differ due to gas price fluctuations on
               Ethereum.

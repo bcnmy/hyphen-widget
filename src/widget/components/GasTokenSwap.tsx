@@ -80,12 +80,12 @@ function GasTokenSwap() {
   }
 
   return (
-    <div className="flex items-center">
+    <div className="tw-hw-flex tw-hw-items-center">
       <div
         className={
           disableGasTokenSwap
-            ? 'flex cursor-not-allowed items-center opacity-50'
-            : 'flex items-center'
+            ? 'tw-hw-flex tw-hw-cursor-not-allowed tw-hw-items-center tw-hw-opacity-50'
+            : 'tw-hw-flex tw-hw-items-center'
         }
         data-tip
         data-for="whyGasTokenDisabled"
@@ -93,9 +93,9 @@ function GasTokenSwap() {
         <HiInformationCircle
           data-tip
           data-for="gasTokenMsg"
-          className="mr-1 h-4 w-4 text-hyphen-purple"
+          className="tw-hw-mr-1 tw-hw-h-4 tw-hw-w-4 tw-hw-text-hyphen-purple"
         />
-        <span className="mr-2 text-sm font-semibold text-hyphen-purple md:text-base">
+        <span className="tw-hw-mr-2 tw-hw-text-sm tw-hw-font-semibold tw-hw-text-hyphen-purple md:tw-hw-text-base">
           Get gas token on destination
         </span>
         <Toggle
@@ -114,7 +114,7 @@ function GasTokenSwap() {
         />
         {/* <a
           href="/"
-          className="ml-2 hidden font-sans text-xs text-hyphen-gray-400 underline md:ml-2 md:block"
+          className="tw-hw-ml-2 tw-hw-hidden tw-hw-font-sans tw-hw-text-xs text-hyphen-gray-400 tw-hw-underline md:tw-hw-ml-2 md:tw-hw-block"
         >
           How does it work?
         </a> */}
