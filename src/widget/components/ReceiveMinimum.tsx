@@ -15,12 +15,12 @@ function ReceiveMinimum() {
   } = useTransaction()!;
 
   return (
-    <div className="relative grid grid-cols-[1.5fr_1fr] items-center gap-0 rounded-[20px] bg-bridge-section p-5 sm:grid-cols-[2fr_1fr]">
-      <div className="flex flex-col">
-        <label className="pl-5 text-xxs font-bold uppercase text-hyphen-gray-400">
+    <div className="tw-hw-relative tw-hw-grid tw-hw-grid-cols-1 tw-hw-items-center tw-hw-gap-5 tw-hw-rounded-[20px] tw-hw-bg-bridge-section tw-hw-p-5 md:tw-hw-grid-cols-[2fr_1fr] md:tw-hw-gap-0">
+      <div className="tw-hw-flex tw-hw-flex-col">
+        <label className="tw-hw-pl-5 tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-hyphen-gray-400">
           Receive Minimum
         </label>
-        <div className="mt-2 flex h-15 w-full items-center rounded-2.5 rounded-r-none border border-r-0 bg-white px-4 py-2 font-mono text-2xl text-hyphen-gray-400 focus:outline-none">
+        <div className="tw-hw-mt-2 tw-hw-flex tw-hw-h-15 tw-hw-w-full tw-hw-items-center tw-hw-rounded-2.5 tw-hw-border tw-hw-bg-white tw-hw-px-4 tw-hw-py-2 tw-hw-font-mono tw-hw-text-2xl tw-hw-text-hyphen-gray-400 focus:tw-hw-outline-none md:tw-hw-rounded-r-none md:tw-hw-border-r-0">
           {fetchTransactionFeeStatus === Status.SUCCESS &&
           transactionFee &&
           transferAmountInputValue !== ''
@@ -28,11 +28,11 @@ function ReceiveMinimum() {
             : '0.000'}
         </div>
         <div
-          className="absolute right-8 inline-flex items-center text-xxs font-bold uppercase text-hyphen-gray-300"
+          className="tw-hw-absolute tw-hw-right-8 tw-hw-inline-flex tw-hw-items-center tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-hyphen-gray-300"
           data-tip
           data-for="totalFees"
         >
-          <HiInformationCircle className="mr-1 h-2.5 w-2.5" />
+          <HiInformationCircle className="tw-hw-mr-1 tw-hw-h-2.5 tw-hw-w-2.5" />
           {fetchTransactionFeeStatus === Status.PENDING &&
           transferAmountInputValue !== ''
             ? 'Calculating Total Fees'
@@ -80,11 +80,11 @@ function ReceiveMinimum() {
           </CustomTooltip>
         ) : null}
       </div>
-      <div className="mt-[23px] flex h-15 w-full items-center rounded-2.5 rounded-l-none border bg-white px-4 py-2 text-sm text-hyphen-gray-400 focus:outline-none xl:text-base">
+      <div className="tw-hw-flex tw-hw-h-15 tw-hw-w-full tw-hw-items-center tw-hw-rounded-2.5 tw-hw-border tw-hw-bg-white tw-hw-px-4 tw-hw-py-2 tw-hw-text-sm tw-hw-text-hyphen-gray-400 focus:tw-hw-outline-none md:tw-hw-mt-[23px] md:tw-hw-rounded-l-none md:tw-hw-text-base">
         {selectedToken ? (
           <>
             <img
-              className="mr-2 h-4 w-4 xl:h-5 xl:w-5"
+              className="tw-hw-mr-2 tw-hw-h-4 tw-hw-w-4 md:tw-hw-h-5 md:tw-hw-w-5"
               src={selectedToken.image}
               alt={selectedToken.symbol}
             />
@@ -95,7 +95,7 @@ function ReceiveMinimum() {
             <img
               src={noSelectIcon}
               alt="No selected token"
-              className="mr-2 h-4 w-4 xl:h-5 xl:w-5"
+              className="tw-hw-mr-2 tw-hw-h-4 tw-hw-w-4 md:tw-hw-h-5 md:tw-hw-w-5"
             />
             Select token
           </>

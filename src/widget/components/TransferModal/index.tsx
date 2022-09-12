@@ -82,22 +82,22 @@ const PreDepositStep: React.FC<
       <img
         src={loadingSpinner}
         alt="Loading..."
-        className="mx-auto mb-[58px] animate-spin"
+        className="tw-hw-mx-auto tw-hw-mb-[58px] tw-hw-animate-spin"
       />
-      <span className="mb-3 block w-full rounded-[10px] bg-hyphen-gray-300 bg-opacity-25 py-4 text-sm font-semibold">
+      <span className="tw-hw-mb-3 tw-hw-block tw-hw-w-full tw-hw-rounded-[10px] tw-hw-bg-hyphen-gray-300 tw-hw-bg-opacity-25 tw-hw-py-4 tw-hw-text-sm tw-hw-font-semibold">
         {executePreDepositCheckError ? (
-          <span className="text-red-400">
+          <span className="tw-hw-text-red-400">
             {executePreDepositCheckError.toString()}
           </span>
         ) : (
-          <span className="text-hyphen-gray-400">
+          <span className="tw-hw-text-hyphen-gray-400">
             Checking available liquidity...
           </span>
         )}
       </span>
-      <article className="flex items-center justify-center rounded-[10px] bg-hyphen-warning bg-opacity-25 py-2 px-4 text-hyphen-warning">
-        <HiExclamation className="mr-2 h-3 w-3" />
-        <p className="text-xxs font-bold uppercase">
+      <article className="tw-hw-flex tw-hw-items-center tw-hw-justify-center tw-hw-rounded-[10px] tw-hw-bg-hyphen-warning tw-hw-bg-opacity-25 tw-hw-py-2 tw-hw-px-4 tw-hw-text-hyphen-warning">
+        <HiExclamation className="tw-hw-mr-2 tw-hw-h-3 tw-hw-w-3" />
+        <p className="tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase">
           Please do not refresh or change network.
         </p>
       </article>
@@ -167,60 +167,64 @@ const DepositStep: React.FC<
 
   return (
     <>
-      <article className="grid grid-cols-3">
-        <div className="flex flex-col items-start">
-          <div className="relative mb-3">
+      <article className="tw-hw-grid tw-hw-grid-cols-3">
+        <div className="tw-hw-flex tw-hw-flex-col tw-hw-items-start">
+          <div className="tw-hw-relative tw-hw-mb-3">
             <img
-              className="h-10 w-10"
+              className="tw-hw-h-10 tw-hw-w-10"
               src={fromChain?.image}
               alt={`Destination chain ${fromChain?.name}`}
             />
             <img
-              className="absolute top-[10px] right-[-10px] h-5 w-5"
+              className="tw-hw-absolute tw-hw-right-[-10px] tw-hw-top-[10px] tw-hw-h-5 tw-hw-w-5"
               src={selectedToken?.image}
               alt={`Selected token ${selectedToken?.symbol}`}
             />
           </div>
-          <span className="text-left text-sm font-semibold text-hyphen-gray-400">
+          <span className="tw-hw-text-left tw-hw-text-sm tw-hw-font-semibold tw-hw-text-hyphen-gray-400">
             {transferAmountInputValue} {selectedToken?.symbol}
           </span>
-          <span className="mb-5 text-left text-sm font-semibold text-hyphen-gray-400">
+          <span className="tw-hw-mb-5 tw-hw-text-left tw-hw-text-sm tw-hw-font-semibold tw-hw-text-hyphen-gray-400">
             On {fromChain?.name}
           </span>
         </div>
 
-        <div className="flex flex-col items-center justify-center">
-          <img src={arrowRight} alt="Deposit direction" className="mb-8" />
+        <div className="tw-hw-flex tw-hw-flex-col tw-hw-items-center tw-hw-justify-center">
+          <img
+            src={arrowRight}
+            alt="Deposit direction"
+            className="tw-hw-mb-8"
+          />
           <img
             src={loadingSpinner}
             alt="Loading..."
-            className="mx-auto h-10 w-10 animate-spin md:h-14 md:w-14"
+            className="tw-hw-mx-auto tw-hw-h-10 tw-hw-w-10 tw-hw-animate-spin md:tw-hw-h-14 md:tw-hw-w-14"
           />
         </div>
 
-        <div className="flex flex-col items-end">
-          <div className="relative mb-3">
+        <div className="tw-hw-flex tw-hw-flex-col tw-hw-items-end">
+          <div className="tw-hw-relative tw-hw-mb-3">
             <img
-              className="h-10 w-10"
+              className="tw-hw-h-10 tw-hw-w-10"
               src={toChain?.image}
               alt={`Destination chain ${toChain?.name}`}
             />
             <img
-              className="absolute top-[10px] left-[-10px] h-5 w-5"
+              className="tw-hw-absolute tw-hw-left-[-10px] tw-hw-top-[10px] tw-hw-h-5 tw-hw-w-5"
               src={selectedToken?.image}
               alt={`Selected token ${selectedToken?.symbol}`}
             />
           </div>
-          <span className="text-right text-sm font-semibold text-hyphen-gray-400">
+          <span className="tw-hw-text-right tw-hw-text-sm tw-hw-font-semibold tw-hw-text-hyphen-gray-400">
             {transactionFee?.amountToGetProcessedString} {selectedToken?.symbol}
           </span>
-          <span className="mb-5 text-right text-sm font-semibold text-hyphen-gray-400">
+          <span className="tw-hw-mb-5 tw-hw-text-right tw-hw-text-sm tw-hw-font-semibold tw-hw-text-hyphen-gray-400">
             On {toChain?.name}
           </span>
         </div>
       </article>
 
-      <div className="mb-[50px] flex items-center justify-between">
+      <div className="tw-hw-mb-[50px] tw-hw-flex tw-hw-items-center tw-hw-justify-between">
         {depositState === Status.PENDING || depositState === Status.SUCCESS ? (
           <button
             onClick={() => {
@@ -229,45 +233,49 @@ const DepositStep: React.FC<
                 '_blank'
               );
             }}
-            className="flex w-auto items-center rounded-full bg-hyphen-purple px-[10px] py-1 text-xxs font-bold uppercase text-white"
+            className="tw-hw-flex tw-hw-w-auto tw-hw-items-center tw-hw-rounded-full tw-hw-bg-hyphen-purple tw-hw-px-[10px] tw-hw-py-1 tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-white"
           >
             Source Tx
-            <FiArrowUpRight className="h-3 w-3" />
+            <FiArrowUpRight className="tw-hw-h-3 tw-hw-w-3" />
           </button>
         ) : (
           <button
             disabled
-            className="flex w-auto items-center rounded-full bg-hyphen-gray-300 px-[10px] py-1 text-xxs font-bold uppercase text-white"
+            className="tw-hw-flex tw-hw-w-auto tw-hw-items-center tw-hw-rounded-full tw-hw-bg-hyphen-gray-300 tw-hw-px-[10px] tw-hw-py-1 tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-white"
           >
             Source Tx
-            <FiArrowUpRight className="h-3 w-3" />
+            <FiArrowUpRight className="tw-hw-h-3 tw-hw-w-3" />
           </button>
         )}
         <button
           disabled
-          className="flex w-auto items-center rounded-full bg-hyphen-gray-300 px-[10px] py-1 text-xxs font-bold uppercase text-white"
+          className="tw-hw-flex tw-hw-w-auto tw-hw-items-center tw-hw-rounded-full tw-hw-bg-hyphen-gray-300 tw-hw-px-[10px] tw-hw-py-1 tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-white"
         >
           Exit Tx
-          <FiArrowUpRight className="h-3 w-3" />
+          <FiArrowUpRight className="tw-hw-h-3 tw-hw-w-3" />
         </button>
       </div>
 
-      <span className="mb-3 block w-full rounded-[10px] bg-hyphen-gray-300 bg-opacity-25 py-4 text-sm font-semibold">
+      <span className="tw-hw-mb-3 tw-hw-block tw-hw-w-full tw-hw-rounded-[10px] tw-hw-bg-hyphen-gray-300 tw-hw-bg-opacity-25 tw-hw-py-4 tw-hw-text-sm tw-hw-font-semibold">
         {executeDepositError ? (
-          <span className="text-red-400">
+          <span className="tw-hw-text-red-400">
             {executeDepositError?.message || executeDepositError.toString()}
           </span>
         ) : null}
 
         {executeDepositStatus === Status.PENDING ? (
-          <span className="text-hyphen-gray-400">Approve transaction...</span>
+          <span className="tw-hw-text-hyphen-gray-400">
+            Approve transaction...
+          </span>
         ) : executeDepositStatus === Status.SUCCESS ? (
-          <span className="text-hyphen-gray-400">Bridging in progress...</span>
+          <span className="tw-hw-text-hyphen-gray-400">
+            Bridging in progress...
+          </span>
         ) : null}
       </span>
-      <article className="flex items-center justify-center rounded-[10px] bg-hyphen-warning bg-opacity-25 py-2 px-4 text-hyphen-warning">
-        <HiExclamation className="mr-2 h-3 w-3" />
-        <p className="text-xxs font-bold uppercase">
+      <article className="tw-hw-flex tw-hw-items-center tw-hw-justify-center tw-hw-rounded-[10px] tw-hw-bg-hyphen-warning tw-hw-bg-opacity-25 tw-hw-py-2 tw-hw-px-4 tw-hw-text-hyphen-warning">
+        <HiExclamation className="tw-hw-mr-2 tw-hw-h-3 tw-hw-w-3" />
+        <p className="tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase">
           Please do not refresh or change network.
         </p>
       </article>
@@ -400,68 +408,72 @@ const ReceivalStep: React.FC<
 
   return (
     <>
-      <article className="grid grid-cols-3">
-        <div className="flex flex-col items-start">
-          <div className="relative mb-3">
+      <article className="tw-hw-grid tw-hw-grid-cols-3">
+        <div className="tw-hw-flex tw-hw-flex-col tw-hw-items-start">
+          <div className="tw-hw-relative tw-hw-mb-3">
             <img
-              className="h-10 w-10"
+              className="tw-hw-h-10 tw-hw-w-10"
               src={fromChain?.image}
               alt={`Destination chain ${fromChain?.name}`}
             />
             <img
-              className="absolute top-[10px] right-[-10px] h-5 w-5"
+              className="tw-hw-absolute tw-hw-right-[-10px] tw-hw-top-[10px] tw-hw-h-5 tw-hw-w-5"
               src={selectedToken?.image}
               alt={`Selected token ${selectedToken?.symbol}`}
             />
           </div>
-          <span className="text-left text-sm font-semibold text-hyphen-gray-400">
+          <span className="tw-hw-text-left tw-hw-text-sm tw-hw-font-semibold tw-hw-text-hyphen-gray-400">
             {transferAmountInputValue} {selectedToken?.symbol}
           </span>
-          <span className="mb-5 text-left text-sm font-semibold text-hyphen-gray-400">
+          <span className="tw-hw-mb-5 tw-hw-text-left tw-hw-text-sm tw-hw-font-semibold tw-hw-text-hyphen-gray-400">
             On {fromChain?.name}
           </span>
         </div>
 
-        <div className="flex flex-col items-center justify-center">
-          <img src={arrowRight} alt="Deposit direction" className="mb-8" />
+        <div className="tw-hw-flex tw-hw-flex-col tw-hw-items-center tw-hw-justify-center">
+          <img
+            src={arrowRight}
+            alt="Deposit direction"
+            className="tw-hw-mb-8"
+          />
           {receivalState === Status.SUCCESS ? (
             <img
               src={bridgingCompleteArrow}
               alt="Bridging complete confirmation"
-              className="mx-auto h-10 w-10 md:h-14 md:w-14"
+              className="tw-hw-mx-auto tw-hw-h-10 tw-hw-w-10 md:tw-hw-h-14 md:tw-hw-w-14"
             />
           ) : (
             <img
               src={loadingSpinner}
               alt="Loading..."
-              className="mx-auto h-10 w-10 animate-spin md:h-14 md:w-14"
+              className="tw-hw-mx-auto tw-hw-h-10 tw-hw-w-10 tw-hw-animate-spin md:tw-hw-h-14 md:tw-hw-w-14"
             />
           )}
         </div>
 
-        <div className="flex flex-col items-end">
-          <div className="relative mb-3">
+        <div className="tw-hw-flex tw-hw-flex-col tw-hw-items-end">
+          <div className="tw-hw-relative tw-hw-mb-3">
             <img
-              className="h-10 w-10"
+              className="tw-hw-h-10 tw-hw-w-10"
               src={toChain?.image}
               alt={`Destination chain ${toChain?.name}`}
             />
             <img
-              className="absolute top-[10px] left-[-10px] h-5 w-5"
+              className="tw-hw-absolute tw-hw-left-[-10px] tw-hw-top-[10px] tw-hw-h-5 tw-hw-w-5"
               src={selectedToken?.image}
               alt={`Selected token ${selectedToken?.symbol}`}
             />
           </div>
-          <span className="text-right text-sm font-semibold text-hyphen-gray-400">
+          <span className="tw-hw-text-right tw-hw-text-sm tw-hw-font-semibold tw-hw-text-hyphen-gray-400">
             {transactionFee?.amountToGetProcessedString} {selectedToken?.symbol}
           </span>
-          <span className="mb-5 text-right text-sm font-semibold text-hyphen-gray-400">
+          <span className="tw-hw-mb-5 tw-hw-text-right tw-hw-text-sm tw-hw-font-semibold tw-hw-text-hyphen-gray-400">
             On {toChain?.name}
           </span>
         </div>
       </article>
 
-      <div className="mb-[50px] flex items-center justify-between">
+      <div className="tw-hw-mb-[50px] tw-hw-flex tw-hw-items-center tw-hw-justify-between">
         <button
           onClick={() => {
             window.open(
@@ -469,10 +481,10 @@ const ReceivalStep: React.FC<
               '_blank'
             );
           }}
-          className="flex w-auto items-center rounded-full bg-hyphen-purple px-[10px] py-1 text-xxs font-bold uppercase text-white"
+          className="tw-hw-flex tw-hw-w-auto tw-hw-items-center tw-hw-rounded-full tw-hw-bg-hyphen-purple tw-hw-px-[10px] tw-hw-py-1 tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-white"
         >
           Source Tx
-          <FiArrowUpRight className="h-3 w-3" />
+          <FiArrowUpRight className="tw-hw-h-3 tw-hw-w-3" />
         </button>
         {receivalState === Status.PENDING ||
         receivalState === Status.SUCCESS ? (
@@ -480,55 +492,59 @@ const ReceivalStep: React.FC<
             onClick={() => {
               window.open(`${toChain?.explorerUrl}/tx/${exitHash}`, '_blank');
             }}
-            className="flex w-auto items-center rounded-full bg-hyphen-purple px-[10px] py-1 text-xxs font-bold uppercase text-white"
+            className="tw-hw-flex tw-hw-w-auto tw-hw-items-center tw-hw-rounded-full tw-hw-bg-hyphen-purple tw-hw-px-[10px] tw-hw-py-1 tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-white"
           >
             Exit Tx
-            <FiArrowUpRight className="h-3 w-3" />
+            <FiArrowUpRight className="tw-hw-h-3 tw-hw-w-3" />
           </button>
         ) : (
           <button
             disabled
-            className="flex w-auto items-center rounded-full bg-hyphen-gray-300 px-[10px] py-1 text-xxs font-bold uppercase text-white"
+            className="tw-hw-flex tw-hw-w-auto tw-hw-items-center tw-hw-rounded-full tw-hw-bg-hyphen-gray-300 tw-hw-px-[10px] tw-hw-py-1 tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-white"
           >
             Exit Tx
-            <FiArrowUpRight className="h-3 w-3" />
+            <FiArrowUpRight className="tw-hw-h-3 tw-hw-w-3" />
           </button>
         )}
       </div>
 
       {receivalState === Status.SUCCESS ? (
-        <span className="mb-3 block w-full rounded-[10px] bg-hyphen-success bg-opacity-25 py-4 text-sm font-semibold">
+        <span className="tw-hw-mb-3 tw-hw-block tw-hw-w-full tw-hw-rounded-[10px] tw-hw-bg-hyphen-success tw-hw-bg-opacity-25 tw-hw-py-4 tw-hw-text-sm tw-hw-font-semibold">
           {receivalError ? (
-            <span className="text-red-400">
+            <span className="tw-hw-text-red-400">
               {receivalError?.message || receivalError.toString()}
             </span>
           ) : (
-            <span className="text-hyphen-success-100">
+            <span className="tw-hw-text-hyphen-success-100">
               Bridging completed! 😎
             </span>
           )}
         </span>
       ) : (
-        <span className="mb-3 block w-full rounded-[10px] bg-hyphen-gray-300 bg-opacity-25 py-4 text-sm font-semibold text-hyphen-gray-400">
+        <span className="tw-hw-mb-3 tw-hw-block tw-hw-w-full tw-hw-rounded-[10px] tw-hw-bg-hyphen-gray-300 tw-hw-bg-opacity-25 tw-hw-py-4 tw-hw-text-sm tw-hw-font-semibold tw-hw-text-hyphen-gray-400">
           Bridging in progress...
         </span>
       )}
 
       {receivalState === Status.SUCCESS ? (
-        <div className="mt-1 flex items-center justify-center py-2 px-4">
-          <span className="text-xxs font-bold uppercase text-hyphen-gray-400">
+        <div className="tw-hw-mt-1 tw-hw-flex tw-hw-items-center tw-hw-justify-center tw-hw-py-2 tw-hw-px-4">
+          <span className="tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-hyphen-gray-400">
             {fromChain?.name}
           </span>
-          <HiOutlineArrowSmRight className="mx-1 h-3 w-3 text-hyphen-purple" />
-          <span className="text-xxs font-bold uppercase text-hyphen-gray-400">
+          <HiOutlineArrowSmRight className="tw-hw-mx-1 tw-hw-h-3 tw-hw-w-3 tw-hw-text-hyphen-purple" />
+          <span className="tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-hyphen-gray-400">
             {toChain?.name}
           </span>
-          <span className="mx-1 text-xxs font-bold uppercase text-hyphen-gray-400">
+          <span className="tw-hw-mx-1 tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-hyphen-gray-400">
             ⚡ in {transferTime}
           </span>
-          <div className="flex items-center" data-tip data-for="totalFees">
-            <HiInformationCircle className="mr-1 h-2.5 w-2.5 text-hyphen-gray-400" />
-            <span className="text-xxs font-bold uppercase text-hyphen-gray-400">
+          <div
+            className="tw-hw-flex tw-hw-items-center"
+            data-tip
+            data-for="totalFees"
+          >
+            <HiInformationCircle className="tw-hw-mr-1 tw-hw-h-2.5 tw-hw-w-2.5 tw-hw-text-hyphen-gray-400" />
+            <span className="tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-hyphen-gray-400">
               Total fees
             </span>
           </div>
@@ -575,9 +591,9 @@ const ReceivalStep: React.FC<
           ) : null}
         </div>
       ) : (
-        <article className="flex items-center justify-center rounded-[10px] bg-hyphen-warning bg-opacity-25 py-2 px-4 text-hyphen-warning">
-          <HiExclamation className="mr-2 h-3 w-3" />
-          <p className="text-xxs font-bold uppercase">
+        <article className="tw-hw-flex tw-hw-items-center tw-hw-justify-center tw-hw-rounded-[10px] tw-hw-bg-hyphen-warning tw-hw-bg-opacity-25 tw-hw-py-2 tw-hw-px-4 tw-hw-text-hyphen-warning">
+          <HiExclamation className="tw-hw-mr-2 tw-hw-h-3 tw-hw-w-3" />
+          <p className="tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase">
             Please do not refresh or change network.
           </p>
         </article>
@@ -674,47 +690,47 @@ export const TransferModal: React.FC<ITransferModalProps> = ({
 
   return (
     <Transition appear show={isVisible} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={() => {}}>
+      <Dialog as="div" className="tw-hw-relative tw-hw-z-10" onClose={() => {}}>
         <Transition.Child
           as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
+          enter="tw-hw-ease-out tw-hw-duration-300"
+          enterFrom="tw-hw-opacity-0"
+          enterTo="tw-hw-opacity-100"
+          leave="tw-hw-ease-in tw-hw-duration-200"
+          leaveFrom="tw-hw-opacity-100"
+          leaveTo="tw-hw-opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-25" />
+          <div className="tw-hw-fixed tw-hw-inset-0 tw-hw-bg-black tw-hw-bg-opacity-25" />
         </Transition.Child>
 
-        <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4 text-center">
+        <div className="tw-hw-fixed tw-hw-inset-0 tw-hw-overflow-y-auto">
+          <div className="tw-hw-flex tw-hw-min-h-full tw-hw-items-center tw-hw-justify-center tw-hw-p-4 tw-hw-text-center">
             <Transition.Child
               as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
+              enter="tw-hw-ease-out tw-hw-duration-300"
+              enterFrom="tw-hw-opacity-0 tw-hw-scale-95"
+              enterTo="tw-hw-opacity-100 tw-hw-scale-100"
+              leave="tw-hw-ease-in tw-hw-duration-200"
+              leaveFrom="tw-hw-opacity-100 tw-hw-scale-100"
+              leaveTo="tw-hw-opacity-0 tw-hw-scale-95"
             >
-              <div className="flex h-auto w-[330px] flex-col rounded-[25px] bg-white p-7.5 md:w-[464px] md:p-12.5">
-                <div className="mb-10 flex items-center justify-between">
+              <div className="tw-hw-flex tw-hw-h-auto tw-hw-w-[330px] tw-hw-flex-col tw-hw-rounded-[25px] tw-hw-bg-white tw-hw-p-7.5 md:tw-hw-w-[464px] md:tw-hw-p-12.5">
+                <div className="tw-hw-mb-10 tw-hw-flex tw-hw-items-center tw-hw-justify-between">
                   <Dialog.Title
                     as="h3"
-                    className="text-left text-base font-semibold text-hyphen-purple"
+                    className="tw-hw-text-left tw-hw-text-base tw-hw-font-semibold tw-hw-text-hyphen-purple"
                   >
                     Transfer Activity
                   </Dialog.Title>
                   <span data-tip data-for="whyModalExitDisabled">
                     <button
-                      className="rounded hover:bg-gray-100"
+                      className="tw-hw-rounded hover:tw-hw-bg-gray-100"
                       onClick={() => {
                         isExitAllowed && onClose();
                       }}
                       disabled={!isExitAllowed}
                     >
-                      <IoMdClose className="h-6 w-auto text-gray-500" />
+                      <IoMdClose className="tw-hw-h-6 tw-hw-w-auto tw-hw-text-gray-500" />
                     </button>
                   </span>
                   {!isExitAllowed && (

@@ -47,18 +47,18 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
       {(state) => (
         <div
           className={twMerge(
-            'invisible transition-opacity',
-            state === 'entering' && 'visible opacity-100',
-            state === 'entered' && 'visible opacity-100',
-            state === 'exiting' && 'visible opacity-0',
-            state === 'exited' && 'invisible opacity-0'
+            'tw-hw-invisible tw-hw-transition-opacity',
+            state === 'entering' && 'tw-hw-visible tw-hw-opacity-100',
+            state === 'entered' && 'tw-hw-visible tw-hw-opacity-100',
+            state === 'exiting' && 'tw-hw-visible tw-hw-opacity-0',
+            state === 'exited' && 'tw-hw-invisible tw-hw-opacity-0'
           )}
         >
-          <div className="mx-10 rounded-b-lg border-x border-b border-white/10 bg-gray-700">
-            <div className="flex flex-col gap-y-2 p-4 text-sm text-white/75">
+          <div className="tw-hw-mx-10 tw-hw-rounded-b-lg tw-hw-border-x tw-hw-border-b tw-hw-border-white/10 tw-hw-bg-gray-700">
+            <div className="tw-hw-flex tw-hw-flex-col tw-hw-gap-y-2 tw-hw-p-4 tw-hw-text-sm tw-hw-text-white/75">
               {showEthereumDisclaimer ? (
-                <article className="mb-2 flex items-start rounded-xl bg-red-100 p-2 text-sm text-red-600">
-                  <HiExclamation className="mr-2 h-6 w-auto" />
+                <article className="tw-hw-mb-2 tw-hw-flex tw-hw-items-start tw-hw-rounded-xl tw-hw-bg-red-100 tw-hw-p-2 tw-hw-text-sm tw-hw-text-red-600">
+                  <HiExclamation className="tw-hw-mr-2 tw-hw-h-6 tw-hw-w-auto" />
                   <p>
                     The received amount may differ due to gas price fluctuations
                     on Ethereum.
@@ -66,12 +66,12 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
                 </article>
               ) : null}
 
-              <div className="flex items-center justify-between font-medium">
-                <div className="flex items-center">
+              <div className="tw-hw-flex tw-hw-items-center tw-hw-justify-between tw-hw-font-medium">
+                <div className="tw-hw-flex tw-hw-items-center">
                   <HiInformationCircle
                     data-tip
                     data-for="lpFee"
-                    className="mr-2"
+                    className="tw-hw-mr-2"
                   />
                   {transactionFee ? (
                     <CustomTooltip id="lpFee">
@@ -87,7 +87,7 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
                             baseColor="#ffffff10"
                             enableAnimation
                             highlightColor="#615ccd05"
-                            className="!w-12"
+                            className="!tw-hw-w-12"
                           />
                         )}
                       </div>
@@ -102,7 +102,7 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
                               baseColor="#ffffff10"
                               enableAnimation
                               highlightColor="#615ccd05"
-                              className="!w-12"
+                              className="!tw-hw-w-12"
                             />
                           )}
                         </div>
@@ -117,7 +117,7 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
                             baseColor="#ffffff10"
                             enableAnimation
                             highlightColor="#615ccd05"
-                            className="!w-12"
+                            className="!tw-hw-w-12"
                           />
                         )}
                       </div>
@@ -125,7 +125,7 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
                   ) : null}
                   Total fee
                 </div>
-                <div className="text-right font-mono">
+                <div className="tw-hw-text-right tw-hw-font-mono">
                   {fetchTransactionFeeStatus === Status.SUCCESS &&
                   transactionFee ? (
                     <>{`${totalFee?.toFixed(5)} ${selectedToken?.symbol}`}</>
@@ -134,18 +134,18 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
                       baseColor="#ffffff10"
                       enableAnimation
                       highlightColor="#615ccd05"
-                      className="!w-32"
+                      className="!tw-hw-w-32"
                     />
                   )}
                 </div>
               </div>
 
-              <div className="flex items-center justify-between font-medium">
-                <div className="flex items-center">
+              <div className="tw-hw-flex tw-hw-items-center tw-hw-justify-between tw-hw-font-medium">
+                <div className="tw-hw-flex tw-hw-items-center">
                   <HiInformationCircle
                     data-tip
                     data-for="minimumFunds"
-                    className="mr-2"
+                    className="tw-hw-mr-2"
                   />
                   {toChain ? (
                     <CustomTooltip id="minimumFunds">
@@ -157,7 +157,7 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
                   ) : null}
                   You get minimum
                 </div>
-                <div className="text-right font-mono">
+                <div className="tw-hw-text-right tw-hw-font-mono">
                   {fetchTransactionFeeStatus === Status.SUCCESS &&
                   transactionFee ? (
                     <>{`${transactionFee.amountToGetProcessedString} ${selectedToken?.symbol}`}</>
@@ -166,7 +166,7 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
                       baseColor="#ffffff10"
                       enableAnimation
                       highlightColor="#615ccd05"
-                      className="!w-32"
+                      className="!tw-hw-w-32"
                     />
                   )}
                 </div>
@@ -174,12 +174,12 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
 
               {gasTokenSwapData &&
               gasTokenSwapData?.gasTokenAmountInDepositCurrency ? (
-                <div className="flex items-center justify-between font-medium">
-                  <div className="flex items-center">
+                <div className="tw-hw-flex tw-hw-items-center tw-hw-justify-between tw-hw-font-medium">
+                  <div className="tw-hw-flex tw-hw-items-center">
                     <HiInformationCircle
                       data-tip
                       data-for="gasTokenWorth"
-                      className="mr-2"
+                      className="tw-hw-mr-2"
                     />
                     {toChain ? (
                       <CustomTooltip id="gasTokenWorth">
@@ -191,7 +191,7 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
                     ) : null}
                     Gas token worth
                   </div>
-                  <div className="text-right font-mono">
+                  <div className="tw-hw-text-right tw-hw-font-mono">
                     {gasTokenSwapData ? (
                       <>{`${gasTokenSwapData?.gasTokenAmountInDepositCurrency.toFixed(
                         5
@@ -201,7 +201,7 @@ const TransactionFee: React.FunctionComponent<ITransactionFeeProps> = () => {
                         baseColor="#ffffff10"
                         enableAnimation
                         highlightColor="#615ccd05"
-                        className="!w-32"
+                        className="!tw-hw-w-32"
                       />
                     )}
                   </div>

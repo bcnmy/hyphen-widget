@@ -24,19 +24,19 @@ function BridgeOptions({
 
   return (
     <>
-      <div className="mt-2 flex flex-col items-center md:flex-row md:items-baseline md:justify-between">
+      <div className="tw-hw-mt-2 tw-hw-flex tw-hw-flex-col tw-hw-items-center md:tw-hw-flex-row md:tw-hw-items-baseline md:tw-hw-justify-between">
         {showGasTokenSwap ? <GasTokenSwap /> : null}
         {showChangeAddress ? (
           <button
-            className="mt-3 flex items-center md:mt-0"
+            className="tw-hw-mt-3 tw-hw-flex tw-hw-items-center md:tw-hw-mt-0"
             onClick={handleChangeRecepientClick}
           >
             <HiOutlineChevronDown
               className={`${
-                showRecepientInput ? 'rotate-180 transform' : ''
-              } mr-1 h-3 w-3 text-hyphen-gray-400`}
+                showRecepientInput ? 'tw-hw-rotate-180 tw-hw-transform' : ''
+              } tw-hw-mr-1 tw-hw-h-3 tw-hw-w-3 tw-hw-text-hyphen-gray-400`}
             />
-            <span className="text-xxs font-bold uppercase text-hyphen-gray-400">
+            <span className="tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-hyphen-gray-400">
               Change recepient
             </span>
           </button>
@@ -47,7 +47,7 @@ function BridgeOptions({
           type="text"
           value={receiverAddress}
           onChange={changeReceiver}
-          className="mt-2 h-12 w-full rounded-lg border border-gray-200 px-4 text-base text-hyphen-gray-400 focus:border-gray-500 focus-visible:outline-none"
+          className="tw-hw-mt-2 tw-hw-h-12 tw-hw-w-full tw-hw-rounded-lg tw-hw-border tw-hw-border-gray-200 tw-hw-px-4 tw-hw-text-base tw-hw-text-hyphen-gray-400 focus:tw-hw-border-gray-500 focus-visible:tw-hw-outline-none"
         />
       ) : null}
     </>

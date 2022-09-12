@@ -28,23 +28,29 @@ export const ApprovalModal: React.FC<IApprovalModalProps> = ({
 
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
-      <div className="relative z-20 mx-auto w-[330px] overflow-hidden rounded-10 border border-hyphen-purple-darker/50 bg-white shadow-lg">
-        <div className="mb-7.5 flex items-center justify-between px-7.5 pt-7.5 xl:px-12.5 xl:pt-12.5">
-          <Dialog.Title as="h1" className="text-xl font-semibold text-gray-700">
+      <div className="tw-hw-relative tw-hw-z-20 tw-hw-mx-auto tw-hw-w-[330px] tw-hw-overflow-hidden tw-hw-rounded-10 tw-hw-border tw-hw-border-hyphen-purple-darker/50 tw-hw-bg-white tw-hw-shadow-lg">
+        <div className="tw-hw-mb-7.5 tw-hw-flex tw-hw-items-center tw-hw-justify-between tw-hw-px-7.5 tw-hw-pt-7.5 md:tw-hw-px-12.5 md:tw-hw-pt-12.5">
+          <Dialog.Title
+            as="h1"
+            className="tw-hw-text-xl tw-hw-font-semibold tw-hw-text-gray-700"
+          >
             Token Approval
           </Dialog.Title>
-          <button onClick={onClose} className="rounded hover:bg-gray-100">
-            <IoMdClose className="h-6 w-auto text-gray-500" />
+          <button
+            onClick={onClose}
+            className="tw-hw-rounded hover:tw-hw-bg-gray-100"
+          >
+            <IoMdClose className="tw-hw-h-6 tw-hw-w-auto tw-hw-text-gray-500" />
           </button>
         </div>
 
-        <aside className="flex flex-col items-start px-7.5 pb-7.5 xl:px-12.5 xl:pb-12.5">
-          <p className="mb-7.5 text-base text-hyphen-purple">
+        <aside className="tw-hw-flex tw-hw-flex-col tw-hw-items-start tw-hw-px-7.5 tw-hw-pb-7.5 md:tw-hw-px-12.5 md:tw-hw-pb-12.5">
+          <p className="tw-hw-mb-7.5 tw-hw-text-base tw-hw-text-hyphen-purple">
             Allow Hyphen to spend {selectedTokenName} on {selectedChainName}
           </p>
 
-          <div className="mb-7.5 flex items-center justify-center gap-4">
-            <span className="flex items-center gap-2 text-xxs font-bold uppercase text-hyphen-purple">
+          <div className="tw-hw-mb-7.5 tw-hw-flex tw-hw-items-center tw-hw-justify-center tw-hw-gap-4">
+            <span className="tw-hw-flex tw-hw-items-center tw-hw-gap-2 tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-hyphen-purple">
               <FaInfoCircle />
               Infinite Approval
             </span>
@@ -58,14 +64,14 @@ export const ApprovalModal: React.FC<IApprovalModalProps> = ({
             />
           </div>
 
-          <p className="mb-7.5 text-base text-hyphen-gray-300">
+          <p className="tw-hw-mb-7.5 tw-hw-text-base tw-hw-text-hyphen-gray-300">
             Note: This approval will only be used when you deposit your{' '}
             {selectedTokenName} in Hyphen contracts on {selectedChainName} for
             cross chain transfers.
           </p>
 
           <PrimaryButton
-            className="w-full px-8"
+            className="tw-hw-w-full tw-hw-px-8"
             onClick={() => {
               if (!transferAmount) throw new Error('Transfer Amount Invalid');
               executeTokenApproval(infiniteApproval, transferAmount);

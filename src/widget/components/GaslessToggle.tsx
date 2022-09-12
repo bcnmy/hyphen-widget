@@ -1,4 +1,3 @@
-import { HiInformationCircle } from 'react-icons/hi';
 import { useBiconomy } from 'context/Biconomy';
 import CustomTooltip from 'components/CustomTooltip';
 import { Toggle } from 'components/Toggle';
@@ -10,13 +9,13 @@ function GaslessToggle() {
   const { toChain } = useChains()!;
 
   return (
-    <div className="mb-2 flex items-center justify-end">
-      <div className="flex items-center">
+    <div className="tw-hw-mb-2 tw-hw-flex tw-hw-items-center tw-hw-justify-end">
+      <div className="tw-hw-flex tw-hw-items-center">
         <div
           className={
             !isBiconomyAllowed
-              ? 'flex cursor-not-allowed items-center opacity-50'
-              : 'flex cursor-pointer items-center'
+              ? 'tw-hw-flex tw-hw-cursor-not-allowed tw-hw-items-center tw-hw-opacity-50'
+              : 'tw-hw-flex tw-hw-cursor-pointer tw-hw-items-center'
           }
           data-tip
           data-for="gaslessToggleTooltip"
@@ -29,7 +28,7 @@ function GaslessToggle() {
             disabled={!isBiconomyAllowed}
             onToggle={(enabled) => setIsBiconomyToggledOn(enabled)}
           />
-          <span className="ml-2 text-xxxs font-bold uppercase text-hyphen-gray-400 xl:text-xxs">
+          <span className="tw-hw-ml-2 tw-hw-text-xxxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-hyphen-gray-400 md:tw-hw-text-xxs">
             Gasless
           </span>
         </div>

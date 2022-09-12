@@ -14,7 +14,7 @@ const PrimaryButton: React.FunctionComponent<IPrimaryButtonProps> = ({
   return (
     <button
       className={twMerge(
-        `rounded-[10px] bg-hyphen-purple p-[18px] font-semibold text-white disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-hyphen-gray-300`,
+        `tw-hw-rounded-[10px] tw-hw-bg-hyphen-purple tw-hw-p-[18px] tw-hw-font-semibold tw-hw-text-white disabled:tw-hw-cursor-not-allowed disabled:tw-hw-bg-gray-100 disabled:tw-hw-text-hyphen-gray-300`,
         className || ''
       )}
       {...props}

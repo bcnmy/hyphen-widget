@@ -60,12 +60,12 @@ const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
 
   return (
     <div
-      className="relative mt-[15px] flex flex-col justify-between"
+      className="tw-hw-relative tw-hw-mt-[15px] tw-hw-flex tw-hw-flex-col tw-hw-justify-between"
       data-tip
       data-for="tokenSelect"
     >
       <Select
-        className="rounded-l-none"
+        className="md:tw-hw-rounded-l-none"
         options={tokenOptions}
         selected={
           selectedToken &&
@@ -86,19 +86,19 @@ const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
         disabled={disabled}
       />
       <div
-        className={`absolute right-3 top-[-15px] inline-flex items-center text-xxs font-bold uppercase text-hyphen-gray-300 
+        className={`tw-hw-absolute tw-hw-top-[-15px] tw-hw-right-3 tw-hw-inline-flex tw-hw-items-center tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-hyphen-gray-300 
         ${
           transactionAmountValidationErrors.includes(
             ValidationErrors.INADEQUATE_BALANCE
-          ) && 'text-red-600'
+          ) && 'tw-hw-text-red-600'
         }
       `}
       >
-        <BiWallet className="mr-1 h-2.5 w-2.5" />
+        <BiWallet className="tw-hw-mr-1 tw-hw-h-2.5 tw-hw-w-2.5" />
         {getSelectedTokenBalanceStatus &&
         getSelectedTokenBalanceStatus === Status.SUCCESS &&
         selectedTokenBalance?.displayBalance ? (
-          <span className="transition-colors">
+          <span className="tw-hw-transition-colors">
             {selectedTokenBalance?.displayBalance || 0}
           </span>
         ) : (

@@ -91,7 +91,7 @@ class HyphenWidget extends React.Component<
     return showWidget ? (
       <>
         {this.props.skipToastContainer ? null : (
-          <ToastContainer className="font-sans font-semibold" />
+          <ToastContainer className="tw-hw-font-sans tw-hw-font-semibold" />
         )}
         <AppProviders options={this.props.options}>
           <Widget {...this.state} closeWidget={() => this.close()} />
