@@ -90,25 +90,14 @@ export const CallToAction: React.FC<ICallToActionProps> = ({
       ) : (
         <>
           {fetchSelectedTokenApprovalStatus === Status.PENDING && (
-            <PrimaryButton disabled>Checking approval</PrimaryButton>
+            <PrimaryButton disabled>Checking approval...</PrimaryButton>
           )}
 
           {fetchSelectedTokenApprovalStatus === Status.SUCCESS &&
             fetchSelectedTokenApprovalValue === false && (
-              <>
-                {executeApproveTokenStatus === Status.PENDING ? (
-                  <PrimaryButton disabled>
-                    <span className="tw-hw-flex tw-hw-items-center tw-hw-gap-2">
-                      <Spinner />
-                      <span>Checking approval</span>
-                    </span>
-                  </PrimaryButton>
-                ) : (
-                  <PrimaryButton onClick={onApproveButtonClick}>
-                    Approve
-                  </PrimaryButton>
-                )}
-              </>
+              <PrimaryButton onClick={onApproveButtonClick}>
+                Approve
+              </PrimaryButton>
             )}
 
           {fetchSelectedTokenApprovalStatus === Status.SUCCESS &&
