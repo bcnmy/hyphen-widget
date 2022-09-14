@@ -23,6 +23,7 @@ import NetworkSelectors from './components/NetworkSelectors';
 import ReceiveMinimum from './components/ReceiveMinimum';
 import TokenSelector from './components/TokenSelector';
 import TransferModal from './components/TransferModal';
+import config from 'config';
 
 interface IWidgetProps {
   closeWidget: () => void;
@@ -117,31 +118,33 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
       ) : null}
 
       <ErrorModal error={executeApproveTokenError} title={'Approval Error'} />
-      <div className="tw-hw-flex tw-hw-w-auto tw-hw-flex-col tw-hw-gap-2 tw-hw-bg-white tw-hw-p-6 md:tw-hw-rounded-[25px] md:tw-hw-shadow-[0_24px_50px_rgba(229,229,229,0.75)]">
-        <div className="tw-hw-mb-2 tw-hw-flex tw-hw-items-center tw-hw-justify-between">
-          <div className="tw-hw-flex tw-hw-flex-col tw-hw-items-center md:tw-hw-flex-row">
-            <img
-              src={HyphenLogoDark}
-              className="tw-hw-mr-5 tw-hw-h-6 tw-hw-w-auto"
-              alt="Hyphen Logo"
-            />
-            <img
-              src={WidgetBranding}
-              alt="Powered by biconomy"
-              className="tw-hw-mt-3 md:tw-hw-mt-1"
-            />
+      <div className="tw-hw-flex tw-hw-w-auto tw-hw-flex-col tw-hw-gap-2 tw-hw-bg-white tw-hw-p-6 md:tw-hw-rounded-[25px] md:tw-hw-shadow-[0_24px_50px_rgba(0,0,0,0.25)]">
+        {props.tag !== config.constants.DEPOSIT_TAG ? (
+          <div className="tw-hw-mb-2 tw-hw-flex tw-hw-items-center tw-hw-justify-between">
+            <div className="tw-hw-flex tw-hw-flex-col tw-hw-items-center md:tw-hw-flex-row">
+              <img
+                src={HyphenLogoDark}
+                className="tw-hw-mr-5 tw-hw-h-6 tw-hw-w-auto"
+                alt="Hyphen Logo"
+              />
+              <img
+                src={WidgetBranding}
+                alt="Powered by biconomy"
+                className="tw-hw-mt-3 md:tw-hw-mt-1"
+              />
+            </div>
+            <div className="tw-hw-flex">
+              {props.showCloseButton ? (
+                <button
+                  className="tw-hw-ml-4 tw-hw-rounded hover:tw-hw-bg-gray-100"
+                  onClick={props.closeWidget}
+                >
+                  <IoMdClose className="tw-hw-h-6 tw-hw-w-auto tw-hw-text-gray-500" />
+                </button>
+              ) : null}
+            </div>
           </div>
-          <div className="tw-hw-flex">
-            {props.showCloseButton ? (
-              <button
-                className="tw-hw-ml-4 tw-hw-rounded hover:tw-hw-bg-gray-100"
-                onClick={props.closeWidget}
-              >
-                <IoMdClose className="tw-hw-h-6 tw-hw-w-auto tw-hw-text-gray-500" />
-              </button>
-            ) : null}
-          </div>
-        </div>
+        ) : null}
 
         <NetworkSelectors
           allowedSourceChains={props.allowedSourceChains}
