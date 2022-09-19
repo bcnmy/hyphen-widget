@@ -1,6 +1,6 @@
 {
   "name": "@biconomy/hyphen-widget",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Biconomy",
   "license": "MIT",
   "main": "dist/index.js",
