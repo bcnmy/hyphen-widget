@@ -5,20 +5,20 @@ import {
   useEffect,
   useMemo,
   useState,
-} from "react";
+} from 'react';
 
-import { config } from "config";
-import { useChains } from "context/Chains";
-import { useWalletProvider } from "context/WalletProvider";
-import { BigNumber, ethers } from "ethers";
+import { config } from 'config';
+import { useChains } from 'context/Chains';
+import { useWalletProvider } from 'context/WalletProvider';
+import { BigNumber, ethers } from 'ethers';
 
-import erc20ABI from "abis/erc20.abi.json";
-import { DEFAULT_FIXED_DECIMAL_POINT } from "config/constants";
-import useAsync, { Status } from "hooks/useLoading";
-import { Network } from "hooks/useNetworks";
-import useTokens, { Token } from "hooks/useTokens";
-import formatRawEthValue from "utils/formatRawEthValue";
-import toFixed from "utils/toFixed";
+import erc20ABI from 'abis/erc20.abi.json';
+import { DEFAULT_FIXED_DECIMAL_POINT } from 'config/constants';
+import useAsync, { Status } from 'hooks/useLoading';
+import { Network } from 'hooks/useNetworks';
+import useTokens, { Token } from 'hooks/useTokens';
+import formatRawEthValue from 'utils/formatRawEthValue';
+import toFixed from 'utils/toFixed';
 
 interface ITokenBalance {
   formattedBalance: string;
@@ -51,7 +51,10 @@ function isTokenValidForChains(
 ) {
   // return true if token has config available for both from and to chains
   // else return false
-  return !!(token[fromChain.chainId] && token[toChain.chainId]);
+  return !!(
+    token[fromChain.chainId]?.isSupportedOnBridge &&
+    token[toChain.chainId]?.isSupportedOnBridge
+  );
 }
 
 interface ITokenProviderProps {
@@ -154,7 +157,7 @@ const TokenProvider: React.FC<ITokenProviderProps> = (props) => {
 
       const token = tokens![tokenSymbol];
       if (!isTokenValidForChains(token, fromChain, toChain)) {
-        throw Error("Provided token is invalid choice for current chains");
+        throw Error('Provided token is invalid choice for current chains');
       }
       setSelectedToken(token);
     },
@@ -172,7 +175,7 @@ const TokenProvider: React.FC<ITokenProviderProps> = (props) => {
       !accounts ||
       !accounts[0]
     ) {
-      throw new Error("Prerequisites not met");
+      throw new Error('Prerequisites not met');
     }
     let formattedBalance: string;
     let userRawBalance: BigNumber;
