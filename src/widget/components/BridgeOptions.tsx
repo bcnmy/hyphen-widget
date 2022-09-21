@@ -24,7 +24,7 @@ function BridgeOptions({
 
   return (
     <>
-      <div className="tw-hw-mt-2 tw-hw-flex tw-hw-flex-col tw-hw-items-center md:tw-hw-flex-row md:tw-hw-items-baseline md:tw-hw-justify-between">
+      <div className="tw-hw-flex tw-hw-flex-col tw-hw-items-center md:tw-hw-flex-row md:tw-hw-items-baseline md:tw-hw-justify-between">
         {showGasTokenSwap ? <GasTokenSwap /> : null}
         {showChangeAddress ? (
           <button
