@@ -92,7 +92,7 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
   }, [toChain, toChainOptions]);
 
   return (
-    <div className="tw-hw-grid tw-hw-grid-cols-1 tw-hw-gap-3 tw-hw-rounded-[20px] tw-hw-bg-bridge-section tw-hw-p-5 md:tw-hw-grid-cols-[1fr_40px_1fr]">
+    <div className="tw-hw-grid tw-hw-grid-cols-1 tw-hw-gap-3 md:tw-hw-grid-cols-[1fr_40px_1fr]">
       <div className="tw-hw-relative">
         {fromChainOptions ? (
           <Select

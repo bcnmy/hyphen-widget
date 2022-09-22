@@ -15,7 +15,7 @@ function ReceiveMinimum() {
   } = useTransaction()!;
 
   return (
-    <div className="tw-hw-relative tw-hw-grid tw-hw-grid-cols-1 tw-hw-items-center tw-hw-gap-5 tw-hw-rounded-[20px] tw-hw-bg-bridge-section tw-hw-p-5 md:tw-hw-grid-cols-[2fr_1fr] md:tw-hw-gap-0">
+    <>
       <div className="tw-hw-flex tw-hw-flex-col">
         <label className="tw-hw-pl-5 tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-hyphen-gray-400">
           Receive Minimum
@@ -28,7 +28,7 @@ function ReceiveMinimum() {
             : '0.000'}
         </div>
         <div
-          className="tw-hw-absolute tw-hw-right-8 tw-hw-inline-flex tw-hw-items-center tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-hyphen-gray-300"
+          className="tw-hw-absolute tw-hw-right-3 tw-hw-inline-flex tw-hw-items-center tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-hyphen-gray-300"
           data-tip
           data-for="totalFees"
         >
@@ -101,7 +101,7 @@ function ReceiveMinimum() {
           </>
         )}
       </div>
-    </div>
+    </>
   );
 }
 

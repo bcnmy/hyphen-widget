@@ -3,15 +3,13 @@ import { Toggle } from 'components/Toggle';
 import { useChains } from 'context/Chains';
 import { useToken } from 'context/Token';
 import { useTransaction } from 'context/Transaction';
-import { BigNumber, ethers } from 'ethers';
 import { HiInformationCircle } from 'react-icons/hi';
 
 function GasTokenSwap() {
   const { toChain } = useChains()!;
-  const { selectedToken, tokens } = useToken()!;
+  const { selectedToken } = useToken()!;
   const {
     enableGasTokenSwap,
-    gasTokenSwapData,
     setEnableGasTokenSwap,
     transferAmount,
     removeGasTokenSwapData,
@@ -43,42 +41,6 @@ function GasTokenSwap() {
     disableGasTokenSwapMsg = '';
   }
 
-  const { gasTokenPercentage } = gasTokenSwapData ?? {};
-  const gasTokenSymbol =
-    tokens && toChain
-      ? Object.keys(tokens).find((tokenSymbol: string) => {
-          const token = tokens[tokenSymbol];
-          return token && token[toChain.chainId]
-            ? token[toChain.chainId].address ===
-                toChain?.wrappedNativeTokenAddress
-            : undefined;
-        })
-      : undefined;
-
-  let gasTokenMsg;
-  if (
-    gasTokenPercentage !== undefined &&
-    (gasTokenPercentage === 0 || gasTokenPercentage > 80)
-  ) {
-    gasTokenMsg = `Not enough funds to get ${ethers.utils.formatUnits(
-      BigNumber.from(toChain?.gasTokenSwap.gasTokenAmount),
-      toChain?.nativeDecimal
-    )} ${gasTokenSymbol} on ${toChain?.name}`;
-  } else if (
-    gasTokenPercentage !== undefined &&
-    gasTokenPercentage > 0 &&
-    gasTokenPercentage <= 80
-  ) {
-    gasTokenMsg = `Swapping ~${gasTokenSwapData.gasTokenPercentage.toFixed(
-      3
-    )}% of ${transferAmount} ${
-      selectedToken?.symbol
-    } for ${ethers.utils.formatUnits(
-      BigNumber.from(toChain?.gasTokenSwap.gasTokenAmount),
-      toChain?.nativeDecimal
-    )} ${gasTokenSymbol} on ${toChain?.name}`;
-  }
-
   return (
     <div className="tw-hw-flex tw-hw-items-center">
       <div
@@ -92,7 +54,7 @@ function GasTokenSwap() {
       >
         <HiInformationCircle
           data-tip
-          data-for="gasTokenMsg"
+          data-for="gasTokenDefinition"
           className="tw-hw-mr-1 tw-hw-h-4 tw-hw-w-4 tw-hw-text-hyphen-purple"
         />
         <span className="tw-hw-mr-2 tw-hw-text-sm tw-hw-font-semibold tw-hw-text-hyphen-purple md:tw-hw-text-base">
@@ -112,23 +74,16 @@ function GasTokenSwap() {
           }}
           variant="large"
         />
-        {/* <a
-          href="/"
-          className="tw-hw-ml-2 tw-hw-hidden tw-hw-font-sans tw-hw-text-xs text-hyphen-gray-400 tw-hw-underline md:tw-hw-ml-2 md:tw-hw-block"
-        >
-          How does it work?
-        </a> */}
       </div>
       {disableGasTokenSwap ? (
         <CustomTooltip id="whyGasTokenDisabled">
           <span>{disableGasTokenSwapMsg}</span>
         </CustomTooltip>
       ) : null}
-      {enableGasTokenSwap &&
-      gasTokenSwapData &&
-      gasTokenSwapData?.gasTokenPercentage !== undefined ? (
-        <CustomTooltip id="gasTokenMsg">{gasTokenMsg}</CustomTooltip>
-      ) : null}
+      <CustomTooltip id="gasTokenDefinition">
+        A percentage of source chain amount which will be swapped for gas tokens
+        on the destination chain.
+      </CustomTooltip>
     </div>
   );
 }

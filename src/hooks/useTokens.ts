@@ -1,6 +1,6 @@
-import config from "config";
-import { useQuery } from "react-query";
-import useNetworks from "./useNetworks";
+import config from 'config';
+import { useQuery } from 'react-query';
+import useNetworks from './useNetworks';
 
 export type Token = {
   symbol: string;
@@ -14,6 +14,8 @@ export type Token = {
     chainColor: string;
     allowGasSwap: boolean;
     isSupported?: boolean;
+    isSupportedOnBridge: boolean;
+    isSupportedOnPool: boolean;
     metaTransactionData: {
       supportsEip2612: boolean;
       eip2612Data: {
@@ -45,7 +47,7 @@ function fetchTokens(env: string): Promise<{
     );
 }
 
-function useTokens(env = "", apiKeys = {}, rpcUrls = {}) {
+function useTokens(env = '', apiKeys = {}, rpcUrls = {}) {
   const { data: networks } = useNetworks();
 
   return useQuery<
@@ -53,7 +55,7 @@ function useTokens(env = "", apiKeys = {}, rpcUrls = {}) {
       [key: string]: Token;
     },
     Error
-  >(["tokens", env], () => fetchTokens(env), {
+  >(['tokens', env], () => fetchTokens(env), {
     enabled: !!networks,
   });
 }
