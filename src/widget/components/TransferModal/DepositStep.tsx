@@ -182,7 +182,8 @@ function DepositStep({
       {executeDepositError && fromChain.chainId === currentChainId ? (
         <TransferStatus>
           <span className="tw-hw-text-red-400">
-            {executeDepositError?.message || executeDepositError.toString()}
+            We were not able to perform deposit for this transaction. Please try
+            again.
           </span>
         </TransferStatus>
       ) : null}

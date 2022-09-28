@@ -57,7 +57,8 @@ function PredepositStep({
       <span className="tw-hw-mb-3 tw-hw-block tw-hw-w-full tw-hw-rounded-[10px] tw-hw-bg-hyphen-gray-300 tw-hw-bg-opacity-25 tw-hw-py-4 tw-hw-text-sm tw-hw-font-semibold">
         {executePreDepositCheckError ? (
           <span className="tw-hw-text-red-400">
-            {executePreDepositCheckError.toString()}
+            We were not able to perform pre deposit checks for this transaction.
+            Please try again.
           </span>
         ) : (
           <span className="tw-hw-text-hyphen-gray-400">

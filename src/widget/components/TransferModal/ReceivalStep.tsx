@@ -247,7 +247,8 @@ function ReceivalStep({
       {receivalError ? (
         <TransferStatus>
           <span className="tw-hw-text-red-400">
-            {receivalError?.message || receivalError.toString()}
+            We were not able to confirm receival for this transaction. Please
+            reach out to us if you haven't received your funds.
           </span>
         </TransferStatus>
       ) : null}
