@@ -175,7 +175,10 @@ function DepositStep({
         //   Switch to {fromChain?.name}
         // </PrimaryButton>
         <TransferStatus>
-          <span className="tw-hw-text-hyphen-gray-400">Bridging paused...</span>
+          <span className="tw-hw-text-hyphen-gray-400">
+            Your wallet's network should be set to the source chain selected for
+            this transaction.
+          </span>
         </TransferStatus>
       ) : null}
 
@@ -217,8 +220,7 @@ function DepositStep({
         <article className="tw-hw-flex tw-hw-items-center tw-hw-justify-center tw-hw-rounded-[10px] tw-hw-bg-red-300 tw-hw-bg-opacity-25 tw-hw-p-2 tw-hw-text-red-700">
           <HiExclamation className="tw-hw-mr-3 tw-hw-h-3 tw-hw-w-3" />
           <p className="tw-hw-text-left tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase">
-            Your wallet's network seems to have been changed. Please check the
-            network.
+            You have changed your wallet's network.
           </p>
         </article>
       )}
