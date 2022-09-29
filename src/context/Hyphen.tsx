@@ -1,23 +1,15 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 // @ts-ignore
 import { Hyphen, SIGNATURE_TYPES } from '@biconomy/hyphen';
 
-import { useWalletProvider } from './WalletProvider';
+import { Environment } from '@biconomy/hyphen/dist/types';
+import { useQuery } from 'react-query';
+import { ENV } from 'types/environment';
+import { useBiconomy } from './Biconomy';
 import { useChains } from './Chains';
 import { useToken } from './Token';
-import useAsync, { Status } from 'hooks/useLoading';
-import { useBiconomy } from './Biconomy';
-import { ENV } from 'types/environment';
-import { Environment } from '@biconomy/hyphen/dist/types';
-import { config } from 'config';
+import { useWalletProvider } from './WalletProvider';
 
 type PoolInfo = {
   minDepositAmount: number;
@@ -29,7 +21,7 @@ type PoolInfo = {
 interface IHyphenContext {
   hyphen: any;
   poolInfo: PoolInfo | undefined;
-  getPoolInfoStatus: Status;
+  isPoolInfoAvailable: boolean;
 }
 
 const HyphenContext = createContext<IHyphenContext | null>(null);
@@ -38,8 +30,7 @@ const HyphenProvider: React.FC<{ env?: string }> = (props) => {
   const { rawEthereumProvider, walletProvider } = useWalletProvider()!;
   const { selectedToken } = useToken()!;
   const { isBiconomyEnabled } = useBiconomy()!;
-  const { fromChainRpcUrlProvider, fromChain, toChain, areChainsReady } =
-    useChains()!;
+  const { fromChainRpcUrlProvider, fromChain, toChain } = useChains()!;
   const [hyphen, setHyphen] = useState<any>(undefined);
 
   useEffect(() => {
@@ -94,45 +85,27 @@ const HyphenProvider: React.FC<{ env?: string }> = (props) => {
     walletProvider,
   ]);
 
-  // recreate the async pool info getter everytime pool conditions change
-  const getPoolInfo: () => Promise<PoolInfo> = useCallback(() => {
-    if (
-      !fromChain ||
-      !toChain ||
-      !hyphen ||
-      !areChainsReady ||
-      !selectedToken ||
-      !selectedToken[fromChain.chainId] ||
-      !selectedToken[toChain.chainId]
-    ) {
-      throw new Error('Prerequisites not met');
+  const { data: poolInfo, isSuccess: isPoolInfoAvailable } = useQuery(
+    [fromChain?.chainId, toChain?.chainId, selectedToken?.symbol],
+    () => {
+      if (hyphen && fromChain && toChain && selectedToken) {
+        return hyphen.liquidityPool.getPoolInformation(
+          selectedToken[fromChain.chainId].address,
+          fromChain.chainId,
+          toChain.chainId
+        );
+      }
+    },
+    {
+      enabled: !!(hyphen && fromChain && toChain && selectedToken),
     }
-    return hyphen.liquidityPool.getPoolInformation(
-      selectedToken[fromChain.chainId].address,
-      fromChain.chainId,
-      toChain.chainId
-    );
-  }, [fromChain, toChain, selectedToken, hyphen, areChainsReady]);
-
-  const {
-    value: poolInfo,
-    execute: refreshPoolInfo,
-    status: getPoolInfoStatus,
-    // TODO: error handling
-    // error,
-  } = useAsync(getPoolInfo);
-
-  useEffect(() => {
-    if (refreshPoolInfo) {
-      refreshPoolInfo();
-    }
-  }, [refreshPoolInfo, getPoolInfo]);
+  );
 
   return (
     <HyphenContext.Provider
       value={{
         hyphen,
-        getPoolInfoStatus,
+        isPoolInfoAvailable,
         poolInfo,
       }}
       {...props}

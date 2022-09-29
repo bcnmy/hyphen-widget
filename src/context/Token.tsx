@@ -140,6 +140,7 @@ const TokenProvider: React.FC<ITokenProviderProps> = (props) => {
   }, [
     compatibleTokensForCurrentChains,
     fromChain,
+    props.allowedTokens,
     props.defaultToken,
     toChain,
   ]);

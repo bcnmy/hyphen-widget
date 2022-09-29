@@ -52,7 +52,7 @@ const Widget: React.FC<HyphenWidgetOptions & IWidgetProps> = (props) => {
     if (exitHash && props.onExit) props.onExit(exitHash);
   }, [exitHash, props, props.onExit]);
 
-  const { selectedToken, tokens } = useToken()!;
+  const { selectedToken } = useToken()!;
   const { isLoggedIn, connect } = useWalletProvider()!;
   const { poolInfo } = useHyphen()!;
   const { executeApproveTokenError, executeApproveToken } = useTokenApproval()!;
