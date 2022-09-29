@@ -25,11 +25,11 @@ interface ITokenApprovalContext {
   checkSelectedTokenApproval: (amount: number) => Promise<boolean>;
   approveToken: (
     isInfiniteApproval: boolean,
-    tokenAmount: number,
+    tokenAmount: number
   ) => Promise<void>;
   executeApproveToken: (
     isInfiniteApproval: boolean,
-    tokenAmount: number,
+    tokenAmount: number
   ) => void;
   executeApproveTokenStatus: Status;
   executeApproveTokenError: Error | undefined;
@@ -45,7 +45,7 @@ const TokenApprovalProvider: React.FC = ({ ...props }) => {
   const { accounts } = useWalletProvider()!;
   const { selectedToken } = useToken()!;
   const { isBiconomyEnabled } = useBiconomy()!;
-  const { hyphen, poolInfo, getPoolInfoStatus } = useHyphen()!;
+  const { hyphen, poolInfo, isPoolInfoAvailable } = useHyphen()!;
   const { fromChain } = useChains()!;
   const { addTxNotification } = useNotifications()!;
 
@@ -75,11 +75,11 @@ const TokenApprovalProvider: React.FC = ({ ...props }) => {
         tokenAllowance = await hyphen.tokens.getERC20Allowance(
           selectedToken[fromChain.chainId].address,
           accounts[0],
-          poolInfo.fromLPManagerAddress,
+          poolInfo.fromLPManagerAddress
         );
 
         tokenDecimals = await hyphen.tokens.getERC20TokenDecimals(
-          selectedToken[fromChain.chainId].address,
+          selectedToken[fromChain.chainId].address
         );
       } catch (err) {
         console.error(err);
@@ -99,7 +99,7 @@ const TokenApprovalProvider: React.FC = ({ ...props }) => {
         return true;
       }
     },
-    [hyphen, accounts, fromChain, poolInfo, selectedToken],
+    [hyphen, accounts, fromChain, poolInfo, selectedToken]
   );
 
   const {
@@ -112,8 +112,7 @@ const TokenApprovalProvider: React.FC = ({ ...props }) => {
   const approveToken = useCallback(
     async (isInfiniteApproval: boolean, tokenAmount: number) => {
       if (!hyphen) throw new Error('Hyphen not ready');
-      if (getPoolInfoStatus !== Status.SUCCESS)
-        throw new Error('Pool Info not loaded yet');
+      if (!isPoolInfoAvailable) throw new Error('Pool Info not loaded yet');
 
       if (
         !selectedToken ||
@@ -124,19 +123,19 @@ const TokenApprovalProvider: React.FC = ({ ...props }) => {
       ) {
         // console.log({ selectedToken, fromChain, poolInfo, accounts });
         throw new Error(
-          'Unable to proceed with approval. Some information is missing. Check console for more info',
+          'Unable to proceed with approval. Some information is missing. Check console for more info'
         );
       }
 
       try {
         let tokenDecimals = await hyphen.tokens.getERC20TokenDecimals(
-          selectedToken[fromChain.chainId].address,
+          selectedToken[fromChain.chainId].address
         );
 
         // this takes a user friendly value like 0.12 ETH and then returns a BN equal to 0.12 * 10^tokenDecimals
         let rawAmount = ethers.utils.parseUnits(
           tokenAmount.toString(),
-          tokenDecimals,
+          tokenDecimals
         );
         let rawAmountHexString = rawAmount.toHexString();
 
@@ -146,7 +145,7 @@ const TokenApprovalProvider: React.FC = ({ ...props }) => {
           rawAmountHexString,
           accounts[0],
           isInfiniteApproval,
-          isBiconomyEnabled,
+          isBiconomyEnabled
         );
 
         // trackTransactionHash(approveTx.hash, { isApprovalTransaction: true });
@@ -163,7 +162,7 @@ const TokenApprovalProvider: React.FC = ({ ...props }) => {
         addTxNotification(
           approveTx,
           'Approval',
-          `${fromChain.explorerUrl}/tx/${approveTx.hash}`,
+          `${fromChain.explorerUrl}/tx/${approveTx.hash}`
         );
         return await approveTx.wait(1);
 
@@ -192,13 +191,13 @@ const TokenApprovalProvider: React.FC = ({ ...props }) => {
     [
       accounts,
       fromChain,
-      getPoolInfoStatus,
+      isPoolInfoAvailable,
       hyphen,
       isBiconomyEnabled,
       poolInfo,
       selectedToken,
       addTxNotification,
-    ],
+    ]
   );
 
   const {

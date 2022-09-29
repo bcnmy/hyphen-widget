@@ -14,7 +14,7 @@ interface IAmountInputProps {
 const AmountInput: React.FunctionComponent<IAmountInputProps> = ({
   disabled,
 }) => {
-  const { poolInfo, getPoolInfoStatus } = useHyphen()!;
+  const { poolInfo, isPoolInfoAvailable } = useHyphen()!;
   const {
     changeTransferAmountInputValue,
     transferAmountInputValue,
@@ -78,12 +78,12 @@ const AmountInput: React.FunctionComponent<IAmountInputProps> = ({
       </div>
       <CustomTooltip id="limit">
         Min:{' '}
-        {getPoolInfoStatus === Status.SUCCESS && poolInfo?.minDepositAmount
+        {isPoolInfoAvailable && poolInfo?.minDepositAmount
           ? Math.trunc(poolInfo.minDepositAmount * 100000) / 100000
           : '...'}
         {' // '}
         Max:{' '}
-        {getPoolInfoStatus === Status.SUCCESS && poolInfo?.maxDepositAmount
+        {isPoolInfoAvailable && poolInfo?.maxDepositAmount
           ? Math.trunc(poolInfo.maxDepositAmount * 100000) / 100000
           : '...'}
       </CustomTooltip>

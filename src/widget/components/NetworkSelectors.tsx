@@ -2,6 +2,7 @@ import transferArrow from 'assets/images/transfer-arrow.svg';
 import CustomTooltip from 'components/CustomTooltip';
 import Select from 'components/Select';
 import { useChains } from 'context/Chains';
+import { useToken } from 'context/Token';
 import { useWalletProvider } from 'context/WalletProvider';
 import React, { useMemo } from 'react';
 import GaslessToggle from './GaslessToggle';
@@ -24,6 +25,7 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
     changeToChain,
     switchChains,
   } = useChains()!;
+  const { changeSelectedToken } = useToken()!;
 
   const fromChainOptions = useMemo(() => {
     let sourceChains = networks;
@@ -99,10 +101,14 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
             options={fromChainOptions}
             selected={selectedFromChain}
             setSelected={(opt) => {
-              networks &&
+              if (networks) {
+                // Reset the selected token
+                changeSelectedToken(undefined);
+                // Set new source chain
                 changeFromChain(
                   networks.find((network) => network.chainId === opt.id)!
                 );
+              }
             }}
             label={'source'}
           />
@@ -129,10 +135,14 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
             options={toChainOptions}
             selected={selectedToChain}
             setSelected={(opt) => {
-              networks &&
+              if (networks) {
+                // Reset the selected token
+                changeSelectedToken(undefined);
+                // Set new destination chain
                 changeToChain(
                   networks.find((network) => network.chainId === opt.id)!
                 );
+              }
             }}
             label={'destination'}
           />
