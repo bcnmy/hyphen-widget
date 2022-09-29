@@ -1,22 +1,15 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 // @ts-ignore
 import { Hyphen, SIGNATURE_TYPES } from '@biconomy/hyphen';
 
 import { Environment } from '@biconomy/hyphen/dist/types';
-import useAsync, { Status } from 'hooks/useLoading';
+import { useQuery } from 'react-query';
 import { ENV } from 'types/environment';
 import { useBiconomy } from './Biconomy';
 import { useChains } from './Chains';
 import { useToken } from './Token';
 import { useWalletProvider } from './WalletProvider';
-import { useQuery } from 'react-query';
 
 type PoolInfo = {
   minDepositAmount: number;
@@ -37,8 +30,7 @@ const HyphenProvider: React.FC<{ env?: string }> = (props) => {
   const { rawEthereumProvider, walletProvider } = useWalletProvider()!;
   const { selectedToken } = useToken()!;
   const { isBiconomyEnabled } = useBiconomy()!;
-  const { fromChainRpcUrlProvider, fromChain, toChain, areChainsReady } =
-    useChains()!;
+  const { fromChainRpcUrlProvider, fromChain, toChain } = useChains()!;
   const [hyphen, setHyphen] = useState<any>(undefined);
 
   useEffect(() => {
