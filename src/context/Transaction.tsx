@@ -256,7 +256,6 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
         throw new Error('App not initialised');
 
       if (isNaN(transferAmount)) throw new Error('Transfer amount is invalid');
-      console.log('calculate fee for amount', transferAmount);
 
       let fixedDecimalPoint = DEFAULT_FIXED_DECIMAL_POINT;
       if (!selectedToken || !toChain || !transferAmount) {
@@ -509,8 +508,6 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
       tokenDecimals
     );
 
-    console.log('Total amount to  be transfered: ', amount.toString());
-
     let transferStatus = await hyphen.depositManager.preDepositStatus({
       tokenAddress: selectedToken[fromChain.chainId].address,
       amount: amount.toString(),
@@ -670,11 +667,8 @@ const TransactionProvider: React.FC<{ tag: string; env?: string }> = (
     });
     if (data.statusCode === 1 && data.exitHash && data.exitHash !== '') {
       // Exit hash found but transaction is not yet confirmed
-      console.log(`Exit hash on chainId ${data.toChainId} is ${data.exitHash}`);
       return data.exitHash;
     } else if (data.statusCode === 2 && data.exitHash && data.exitHash !== '') {
-      console.log('Funds transfer successful');
-      console.log(`Exit hash on chainId ${data.toChainId} is ${data.exitHash}`);
       return data.exitHash;
     } else {
       return null;

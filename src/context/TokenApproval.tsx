@@ -1,24 +1,12 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-
-// @ts-ignore
-import { Hyphen, RESPONSE_CODES, SIGNATURE_TYPES } from '@biconomy/hyphen';
-
-import { useWalletProvider } from 'context/WalletProvider';
-import { useChains } from 'context/Chains';
-import { useToken } from 'context/Token';
-import useAsync, { Status } from 'hooks/useLoading';
-import { useBiconomy } from 'context/Biconomy';
-import { useHyphen } from 'context/Hyphen';
-import { BigNumber, ethers } from 'ethers';
 import { NATIVE_ADDRESS } from 'config/constants';
-import { WebpackError } from 'webpack';
+import { useBiconomy } from 'context/Biconomy';
+import { useChains } from 'context/Chains';
+import { useHyphen } from 'context/Hyphen';
+import { useToken } from 'context/Token';
+import { useWalletProvider } from 'context/WalletProvider';
+import { ethers } from 'ethers';
+import useAsync, { Status } from 'hooks/useLoading';
+import { createContext, useCallback, useContext } from 'react';
 import { useNotifications } from './Notifications';
 
 interface ITokenApprovalContext {
@@ -91,8 +79,6 @@ const TokenApprovalProvider: React.FC = ({ ...props }) => {
 
       if (!tokenAllowance)
         throw new Error('Unable to check for token approval');
-      console.log('Token allowance is ', tokenAllowance);
-      console.log('Token amount', rawAmount);
       if (tokenAllowance.lt(rawAmountHexString)) {
         return false;
       } else {
@@ -204,7 +190,6 @@ const TokenApprovalProvider: React.FC = ({ ...props }) => {
     execute: executeApproveToken,
     status: executeApproveTokenStatus,
     error: executeApproveTokenError,
-    value: executeApproveTokenResult,
   } = useAsync(approveToken);
 
   return (
