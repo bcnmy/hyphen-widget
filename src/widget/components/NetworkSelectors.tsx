@@ -101,7 +101,7 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
             options={fromChainOptions}
             selected={selectedFromChain}
             setSelected={(opt) => {
-              if (networks) {
+              if (networks && (!fromChain || fromChain.chainId !== opt.id)) {
                 // Reset the selected token
                 changeSelectedToken(undefined);
                 // Set new source chain
@@ -135,7 +135,7 @@ const NetworkSelectors: React.FC<INetworkSelectorsProps> = ({
             options={toChainOptions}
             selected={selectedToChain}
             setSelected={(opt) => {
-              if (networks) {
+              if (networks && (!toChain || toChain.chainId !== opt.id)) {
                 // Reset the selected token
                 changeSelectedToken(undefined);
                 // Set new destination chain
