@@ -39,7 +39,10 @@ function GaslessToggle() {
         </CustomTooltip>
       ) : (
         <CustomTooltip id="gaslessToggleTooltip">
-          <span>Gasless transactions on {fromChain?.name} ✨</span>
+          <span>
+            Gasless transactions on{' '}
+            <span className="whitespace-nowrap">{fromChain?.name} ✨</span>
+          </span>
         </CustomTooltip>
       )}
     </div>

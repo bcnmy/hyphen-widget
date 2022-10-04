@@ -39,7 +39,10 @@ const AmountInput: React.FunctionComponent<IAmountInputProps> = ({
         onChange={(e) => changeTransferAmountInputValue(e.target.value)}
         className={twMerge(
           'tw-hw-mt-2 tw-hw-inline-block tw-hw-h-15 tw-hw-w-full tw-hw-rounded-2.5 tw-hw-border tw-hw-bg-white tw-hw-px-4 tw-hw-py-2 tw-hw-font-mono tw-hw-text-2xl tw-hw-text-hyphen-gray-400 focus:tw-hw-outline-none md:tw-hw-rounded-r-none md:tw-hw-border-r-0',
-          disabled && 'tw-hw-cursor-not-allowed tw-hw-bg-gray-200'
+          disabled && 'tw-hw-cursor-not-allowed tw-hw-bg-gray-200',
+          transactionAmountValidationErrors.includes(
+            ValidationErrors.AMOUNT_LT_MIN || ValidationErrors.AMOUNT_GT_MAX
+          ) && 'tw-hw-border-red-600'
         )}
         disabled={disabled}
       />
