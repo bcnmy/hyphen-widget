@@ -28,7 +28,13 @@ function ReceiveMinimum() {
             : '0.000'}
         </div>
         <div
-          className="tw-hw-absolute tw-hw-right-3 tw-hw-inline-flex tw-hw-items-center tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase tw-hw-text-hyphen-gray-300"
+          className={`tw-hw-absolute tw-hw-right-3 tw-hw-inline-flex tw-hw-items-center tw-hw-text-xxs tw-hw-font-bold tw-hw-uppercase ${
+            transactionFee &&
+            fetchTransactionFeeStatus !== Status.PENDING &&
+            transferAmountInputValue !== ''
+              ? 'tw-hw-text-hyphen-gray-400'
+              : 'tw-hw-text-hyphen-gray-300'
+          }`}
           data-tip
           data-for="totalFees"
         >

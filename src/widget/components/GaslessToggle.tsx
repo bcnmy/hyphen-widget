@@ -6,7 +6,7 @@ import { useChains } from 'context/Chains';
 function GaslessToggle() {
   const { isBiconomyAllowed, isBiconomyEnabled, setIsBiconomyToggledOn } =
     useBiconomy()!;
-  const { toChain } = useChains()!;
+  const { fromChain } = useChains()!;
 
   return (
     <div className="tw-hw-mb-2 tw-hw-flex tw-hw-items-center tw-hw-justify-end">
@@ -39,7 +39,10 @@ function GaslessToggle() {
         </CustomTooltip>
       ) : (
         <CustomTooltip id="gaslessToggleTooltip">
-          <span>Gasless transactions on ${toChain?.name} ✨</span>
+          <span>
+            Gasless transactions on{' '}
+            <span className="whitespace-nowrap">{fromChain?.name} ✨</span>
+          </span>
         </CustomTooltip>
       )}
     </div>

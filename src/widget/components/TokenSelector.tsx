@@ -65,7 +65,11 @@ const TokenSelector: React.FunctionComponent<ITokenSelectorProps> = ({
       data-for="tokenSelect"
     >
       <Select
-        className="md:tw-hw-rounded-l-none"
+        className={`md:tw-hw-rounded-l-none ${
+          transactionAmountValidationErrors.includes(
+            ValidationErrors.AMOUNT_LT_MIN || ValidationErrors.AMOUNT_GT_MAX
+          ) && 'tw-hw-border-red-600'
+        }`}
         options={tokenOptions}
         selected={
           selectedToken &&
